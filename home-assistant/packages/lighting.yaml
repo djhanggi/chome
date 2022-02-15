@@ -1,5 +1,7 @@
-circadian_lighting:
-  sunset_offset: 02:00:00
+adaptive_lighting:
+  name: ""
+  lights:
+    - light.all_lights
 
 switch:
   - platform: circadian_lighting
@@ -12,7 +14,8 @@ group:
     entities:
       - light.all_lights
       - switch.lamp
-      - switch.circadian_lighting
+      - switch.adaptive_lighting
+      - switch.adaptive_lighting_adapt_brightness
 
 light:
   - platform: group
