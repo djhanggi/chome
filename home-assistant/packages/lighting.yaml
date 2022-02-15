@@ -1,12 +1,7 @@
 adaptive_lighting:
-  name: ""
+  name: All Lights
   lights:
     - light.all_lights
-
-switch:
-  - platform: circadian_lighting
-    lights_ct:
-      - light.all_lights
 
 group:
   lighting:
@@ -14,8 +9,8 @@ group:
     entities:
       - light.all_lights
       - switch.lamp
-      - switch.adaptive_lighting
-      - switch.adaptive_lighting_adapt_brightness
+      - switch.adaptive_lighting_all_lights
+      - switch.adaptive_lighting_adapt_brightness_all_lights
 
 light:
   - platform: group

@@ -2,7 +2,7 @@ scene:
   - id: daytime
     name: Daytime
     entities:
-      switch.circadian_lighting_circadian_lighting:
+      switch.adaptive_lighting_all_lights:
         state: on
       light.all_lights:
         state: on
@@ -10,9 +10,6 @@ scene:
         state: on
       switch.monitor:
         state: on
-      # remote.harmony:
-      #   current_activity: TV
-      #   state: on
       switch.humidifier:
         state: on
     icon: mdi:weather-sunny
@@ -23,15 +20,12 @@ scene:
         state: on
       switch.lamp:
         state: on
-      switch.circadian_lighting_circadian_lighting:
+      switch.adaptive_lighting_all_lights:
         state: on
       switch.humidifier:
         state: on
       switch.monitor:
         state: on
-      # remote.harmony:
-      #   current_activity: TV
-      #   state: on
     icon: mdi:weather-sunset-up
   - id: evening
     name: Evening
@@ -50,7 +44,7 @@ scene:
         brightness: 2.5
         color_temp: 552
         state: on
-      switch.circadian_lighting_circadian_lighting:
+      switch.adaptive_lighting_all_lights:
         state: off
       switch.monitor:
         state: off
@@ -62,7 +56,7 @@ scene:
         state: off
       switch.lamp:
         state: off
-      switch.circadian_lighting_circadian_lighting:
+      switch.adaptive_lighting_all_lights:
         state: off
       switch.humidifier:
         state: off
@@ -85,7 +79,7 @@ scene:
         state: off
       switch.lamp:
         state: off
-      switch.circadian_lighting_circadian_lighting:
+      switch.adaptive_lighting_all_lights:
         state: off
       remote.harmony:
         current_activity: PowerOff
