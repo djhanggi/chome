@@ -51,12 +51,12 @@ input_datetime:
     name: Evening Start Time
     has_time: true
     initial: '21:30'
-    icon: mid:weather-night
+    icon: mdi:weather-night
   sleep_start_time:
     name: Sleep Start Time
     has_time: true
     initial: '00:00'
-    icon: mid:weather-night
+    icon: mdi:weather-night
 
 automation:
   - id: scenes_set_morning_start_time
