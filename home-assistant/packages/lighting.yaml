@@ -20,6 +20,7 @@ group:
 light:
   - platform: group
     name: All Lights
+    unique_id: all_lights
     entities:
       - light.ceiling_e
       - light.ceiling_w
@@ -28,24 +29,20 @@ light:
       - light.bathroom_e
       - light.bathroom_w
   - platform: group
-    name: Living Room Lights
-    entities:
-      - light.ceiling_e
-      - light.ceiling_w
-      - light.hallway_e
-      - light.hallway_w
-  - platform: group
     name: Ceiling Lights
+    unique_id: ceiling_lights
     entities:
       - light.ceiling_e
       - light.ceiling_w
   - platform: group
     name: Hallway Lights
+    unique_id: hallway_lights
     entities:
       - light.hallway_e
       - light.hallway_w
   - platform: group
     name: Bathroom Lights
+    unique_id: bathroom_lights
     entities:
       - light.bathroom_e
       - light.bathroom_w
