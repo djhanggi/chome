@@ -1,0 +1,22 @@
+services:
+  pihole:
+    image: pihole/pihole:latest
+    container_name: pihole
+    ports:
+      - $HOST_IP:53:53/tcp
+      - $HOST_IP:53:53/udp
+      - $HOST_IP:81:80/tcp
+    environment:
+      TZ: $TIMEZONE
+      WEBPASSWORD: $PIHOLE_PASSWORD
+      ServerIP: $HOST_IP
+      PIHOLE_DNS_: 8.8.8.8;8.8.4.4
+      DNSMASQ_LISTENING: all
+      TEMPERATUREUNIT: k
+      QUERY_LOGGING: 'true'
+    volumes:
+      - ./volumes/pihole/etc/pihole/:/etc/pihole/
+      - ./volumes/pihole/etc/dnsmasq.d/:/etc/dnsmasq.d/
+    cap_add:
+      - NET_ADMIN
+    restart: unless-stopped

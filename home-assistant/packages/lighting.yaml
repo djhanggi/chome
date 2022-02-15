@@ -1,0 +1,48 @@
+circadian_lighting:
+  sunset_offset: 02:00:00
+
+switch:
+  - platform: circadian_lighting
+    lights_ct:
+      - light.all_lights
+
+group:
+  lighting:
+    name: Lighting System
+    entities:
+      - light.all_lights
+      - switch.lamp
+      - switch.circadian_lighting
+
+light:
+  - platform: group
+    name: All Lights
+    entities:
+      - light.ceiling_e
+      - light.ceiling_w
+      - light.hallway_e
+      - light.hallway_w
+      - light.bathroom_e
+      - light.bathroom_w
+  - platform: group
+    name: Living Room Lights
+    entities:
+      - light.ceiling_e
+      - light.ceiling_w
+      - light.hallway_e
+      - light.hallway_w
+  - platform: group
+    name: Ceiling Lights
+    entities:
+      - light.ceiling_e
+      - light.ceiling_w
+  - platform: group
+    name: Hallway Lights
+    entities:
+      - light.hallway_e
+      - light.hallway_w
+  - platform: group
+    name: Bathroom Lights
+    entities:
+      - light.bathroom_e
+      - light.bathroom_w

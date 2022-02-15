@@ -1,0 +1,13 @@
+services:
+  homeassistant:
+    container_name: homeassistant
+    image: ghcr.io/home-assistant/home-assistant:stable
+    network_mode: host
+    volumes:
+      - ./volumes/home-assistant/config/:/config/
+      - ./home-assistant/configuration.yaml:/config/configuration.yaml
+      - ./home-assistant/secrets.yaml:/config/secrets.yaml
+      - ./home-assistant/configurations/:/config/configurations/
+      - ./home-assistant/packages/:/config/packages/
+    restart: unless-stopped
+    privileged: true

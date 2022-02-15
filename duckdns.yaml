@@ -1,0 +1,13 @@
+services:
+  duckdns:
+    image: ghcr.io/linuxserver/duckdns
+    container_name: duckdns
+    network_mode: host
+    environment:
+      - TZ=$TIMEZONE
+      - SUBDOMAINS=$DUCKDNS_SUBDOMAIN
+      - TOKEN=$DUCKDNS_TOKEN
+      - LOG_FILE=true
+    volumes:
+      - ./volumes/duckdns/config/:/config/
+    restart: unless-stopped

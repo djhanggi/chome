@@ -1,0 +1,93 @@
+scene:
+  - id: daytime
+    name: Daytime
+    entities:
+      switch.circadian_lighting_circadian_lighting:
+        state: on
+      light.all_lights:
+        state: on
+      switch.lamp:
+        state: on
+      switch.monitor:
+        state: on
+      # remote.harmony:
+      #   current_activity: TV
+      #   state: on
+      switch.humidifier:
+        state: on
+    icon: mdi:weather-sunny
+  - id: morning
+    name: Morning
+    entities:
+      light.all_lights:
+        state: on
+      switch.lamp:
+        state: on
+      switch.circadian_lighting_circadian_lighting:
+        state: on
+      switch.humidifier:
+        state: on
+      switch.monitor:
+        state: on
+      # remote.harmony:
+      #   current_activity: TV
+      #   state: on
+    icon: mdi:weather-sunset-up
+  - id: evening
+    name: Evening
+    entities:
+      light.all_lights:
+        state: off
+      light.ceiling_e:
+          brightness: 2.5
+          color_temp: 552
+          state: on
+      light.hallway_e:
+          brightness: 2.5
+          color_temp: 552
+          state: on
+      light.bathroom_e:
+        brightness: 2.5
+        color_temp: 552
+        state: on
+      switch.circadian_lighting_circadian_lighting:
+        state: off
+      switch.monitor:
+        state: off
+    icon: mdi:weather-sunset
+  - id: sleep
+    name: Sleep
+    entities:
+      light.all_lights:
+        state: off
+      switch.lamp:
+        state: off
+      switch.circadian_lighting_circadian_lighting:
+        state: off
+      switch.humidifier:
+        state: off
+      switch.monitor:
+        state: off
+      remote.harmony:
+        current_activity: PowerOff
+        state: off
+      media_player.spotify_djhanggi:
+        state: paused
+      fan.dyson_fan:
+        state: off
+      switch.bike_stand:
+        state: off
+    icon: mdi:bed
+  - id: away
+    name: Away
+    entities:
+      light.all_lights:
+        state: off
+      switch.lamp:
+        state: off
+      switch.circadian_lighting_circadian_lighting:
+        state: off
+      remote.harmony:
+        current_activity: PowerOff
+        state: off
+    icon: mdi:exit-run

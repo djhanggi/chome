@@ -1,0 +1,23 @@
+services:
+  wireguard:
+    image: ghcr.io/linuxserver/wireguard
+    container_name: wireguard
+    environment:
+      - PUID=$CHOME_UID
+      - PGID=$CHOME_GID
+      - TZ=$TIMEZONE
+      - SERVERURL=$WIREGUARD_SERVER_URL
+      - SERVERPORT=51820
+      - PEERS=$WIREGUARD_PEERS
+      - PEERDNS=$HOST_IP
+    ports:
+      - 51820:51820/udp
+    volumes:
+      - ./volumes/wireguard/config/:/config/
+      - /lib/modules/:/lib/modules/
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    restart: unless-stopped

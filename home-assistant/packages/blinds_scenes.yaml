@@ -1,0 +1,22 @@
+scene:
+  - id: open_blinds
+    name: Open Blinds
+    entities:
+      cover.smart_roller_shade_curtain:
+        current_position: 100
+        state: open
+    icon: mdi:blinds-open
+  - id: ajar_blinds
+    name: Ajar Blinds
+    entities:
+      cover.smart_roller_shade_curtain:
+        current_position: 50
+        state: open
+    icon: mdi:blinds-open
+  - id: closed_blinds
+    name: Closed Blinds
+    entities:
+      cover.smart_roller_shade_curtain:
+        current_position: 0
+        state: closed
+    icon: mdi:curtains-closed

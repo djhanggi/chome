@@ -1,0 +1,173 @@
+homeassistant:
+  customize:
+    package.node_anchors:
+      harmony_dyson_fan_device: &HARMONY_DYSON_FAN_DEVICE
+        device: !secret harmony_dyson_fan_device_id
+
+fan:
+  - platform: template
+    fans:
+      dyson_fan:
+        friendly_name: Dyson Fan
+        value_template: >
+          {{ states('input_boolean.dyson_fan_power') }}
+        oscillating_template: >
+          {{ is_state('input_boolean.dyson_fan_oscillating', 'on') }}
+        percentage_template: >
+          {{ states('input_number.dyson_fan_speed') | int * 10 }}
+        turn_on:
+          service: script.dyson_fan_turn_on
+        turn_off:
+          service: script.dyson_fan_turn_off
+        set_oscillating:
+          service: script.dyson_fan_toggle_oscillate
+          data:
+            oscillating: >
+              {{ oscillating }}
+        set_percentage:
+          service: script.dyson_fan_set_speed
+          data:
+            percentage: >
+              {{ percentage }}
+        speed_count: 10
+
+input_boolean:
+  dyson_fan_power:
+    name: Dyson Fan - Power
+    initial: off
+    icon: mdi:fan
+  dyson_fan_oscillating:
+    name: Dyson Fan - Oscillating
+    initial: off
+    icon: mdi:fan
+
+input_number:
+  dyson_fan_speed:
+    name: Dyson Fan - Speed
+    initial: 1
+    min: 1
+    max: 10
+    step: 1
+    icon: mdi:fan
+
+script:
+  dyson_fan_turn_on:
+    alias: Dyson Fan - Turn On
+    sequence:
+    - service: remote.send_command
+      target:
+        entity_id: remote.harmony
+      data:
+        command: PowerToggle
+        << : *HARMONY_DYSON_FAN_DEVICE
+    - service: input_boolean.turn_on
+      target:
+        entity_id: input_boolean.dyson_fan_power
+    mode: single
+    icon: mdi:fan
+  dyson_fan_turn_off:
+    alias: Dyson Fan - Turn Off
+    sequence:
+    - service: remote.send_command
+      target:
+        entity_id: remote.harmony
+      data:
+        command: PowerToggle
+        << : *HARMONY_DYSON_FAN_DEVICE
+    - service: input_boolean.turn_off
+      target:
+        entity_id:
+        - input_boolean.dyson_fan_power
+        - input_boolean.dyson_fan_oscillating
+    mode: single
+    icon: mdi:fan
+  dyson_fan_turn_on_oscillate:
+    alias: Dyson Fan - Turn On Oscillate
+    sequence:
+    - service: remote.send_command
+      target:
+        entity_id: remote.harmony
+      data:
+        command: Oscillate
+        << : *HARMONY_DYSON_FAN_DEVICE
+    - service: input_boolean.turn_on
+      target:
+        entity_id: input_boolean.dyson_fan_oscillating
+    mode: single
+    icon: mdi:fan
+  dyson_fan_turn_off_oscillate:
+    alias: Dyson Fan - Turn Off Oscillate
+    sequence:
+    - service: remote.send_command
+      target:
+        entity_id: remote.harmony
+      data:
+        command: Oscillate
+        << : *HARMONY_DYSON_FAN_DEVICE
+    - service: input_boolean.turn_off
+      target:
+        entity_id: input_boolean.dyson_fan_oscillating
+    mode: single
+    icon: mdi:fan
+  dyson_fan_toggle_oscillate:
+    alias: Dyson Fan - Toggle Oscillate
+    sequence:
+      - service_template: >
+          {% if is_state('input_boolean.dyson_fan_oscillating', 'on') %}
+            script.dyson_fan_turn_on_oscillate
+          {% else %}
+            script.dyson_fan_turn_off_oscillate
+          {% endif %}
+    mode: single
+    icon: mdi:fan
+  dyson_fan_increase_speed:
+    alias: Dyson Fan - Increase Speed
+    sequence:
+    - service: remote.send_command
+      target:
+        entity_id: remote.harmony
+      data:
+        command: FanModeUp
+        << : *HARMONY_DYSON_FAN_DEVICE
+    - service: input_number.increment
+      target:
+        entity_id: input_number.dyson_fan_speed
+    mode: queued
+    icon: mdi:fan-plus
+    max: 10
+  dyson_fan_decrease_speed:
+    alias: Dyson Fan - Decrease Speed
+    sequence:
+    - service: remote.send_command
+      target:
+        entity_id: remote.harmony
+      data:
+        command: FanModeDown
+        << : *HARMONY_DYSON_FAN_DEVICE
+    - service: input_number.decrement
+      target:
+        entity_id: input_number.dyson_fan_speed
+    mode: queued
+    icon: mdi:fan-minus
+    max: 10
+  dyson_fan_set_speed:
+    alias: Dyson Fan - Set Speed
+    mode: restart
+    sequence:
+      - repeat:
+          until:
+            - condition: template
+              value_template: >
+                {{
+                  states('input_number.dyson_fan_speed') | int * 10 == percentage
+                  or
+                  repeat.index == 10
+                }}
+          sequence:
+            - service_template: >
+                {% if states('input_number.dyson_fan_speed') | int * 10 < percentage %}
+                  script.dyson_fan_increase_speed
+                {% else %}
+                  script.dyson_fan_decrease_speed
+                {% endif %}
+    icon: mdi:fan

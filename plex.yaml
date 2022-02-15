@@ -1,0 +1,14 @@
+services:
+  plex:
+    container_name: plex
+    image: lscr.io/linuxserver/plex
+    network_mode: host
+    environment:
+      - PUID=$CHOME_UID
+      - PGID=$CHOME_GID
+      - VERSION=docker
+    volumes:
+      - ./volumes/plex/config/:/config/
+      - ./volumes/plex/media/:/media/
+    privileged: true
+    restart: unless-stopped
