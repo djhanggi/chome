@@ -2,8 +2,8 @@
   alias: Update At Home
   description: Updates At Home.
   trigger:
-  - platform: state
-    entity_id: person.djhanggi
+    - platform: state
+      entity_id: person.djhanggi
   condition: []
   action:
     - service_template: >

@@ -63,25 +63,9 @@ script:
       - service: input_boolean.toggle
         target:
           entity_id: input_boolean.dyson_fan_power
-    mode: single
-    icon: mdi:fan
-  dyson_fan_turn_off:
-    alias: Dyson Fan - Turn Off
-    sequence:
-      - condition: state
-        entity_id: input_boolean.dyson_fan_power
-        state: on
-      - service: remote.send_command
-        target:
-          entity_id: remote.harmony
-        data:
-          command: PowerToggle
-          << : *HARMONY_DYSON_FAN_DEVICE
       - service: input_boolean.turn_off
         target:
-          entity_id:
-          - input_boolean.dyson_fan_power
-          - input_boolean.dyson_fan_oscillating
+          entity_id: input_boolean.dyson_fan_oscillating
     mode: single
     icon: mdi:fan
   dyson_fan_toggle_oscillate:

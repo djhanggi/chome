@@ -1,10 +1,17 @@
 default_config:
 
+homeassistant:
+  name: !secret homeassistant_name
+  latitude: !secret homeassistant_latitude
+  longitude: !secret homeassistant_longitude
+  elevation: !secret homeassistant_elevation
+  unit_system: imperial
+  external_url: !secret homeassistant_external_url
+  packages: !include_dir_named packages/
+
 http:
   use_x_forwarded_for: true
-  trusted_proxies: !secret trusted_proxies
-
-homeassistant: !secret homeassistant
+  trusted_proxies: !secret http_trusted_proxies
 
 automation: !include configurations/automations.yaml
 script: !include configurations/scripts.yaml

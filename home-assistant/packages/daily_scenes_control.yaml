@@ -83,21 +83,20 @@ automation:
     description: >
       Activates the appropriate scene when Current Scene or Present update.
     trigger:
-    - platform: state
-      entity_id: input_select.current_scene
-    - platform: state
-      entity_id: input_boolean.at_home
+      - platform: state
+        entity_id: input_select.current_scene
+      - platform: state
+        entity_id: input_boolean.at_home
     condition: []
     action:
       - service: script.scenes_sync_scene
     mode: restart
   - id: scenes_set_morning
     alias: Morning
-    description: Sets the Current Scene to Morning at sunrise.
+    description: Sets the Current Scene to Morning at Morning Start Time.
     trigger:
-    - platform: sun
-      event: sunrise
-      offset: '0'
+      - platform: time
+        at: input_datetime.morning_start_time
     condition: []
     action:
     - service: input_select.select_option
@@ -110,15 +109,15 @@ automation:
     alias: Sunset
     description: Sets the Current Scene to Evening at Evening Start Time.
     trigger:
-    - platform: time
-      at: input_datetime.evening_start_time
+      - platform: time
+        at: input_datetime.evening_start_time
     condition: []
     action:
-    - service: input_select.select_option
-      target:
-        entity_id: input_select.current_scene
-      data:
-        option: Evening
+      - service: input_select.select_option
+        target:
+          entity_id: input_select.current_scene
+        data:
+          option: Evening
     mode: single
   - id: scenes_set_sleep
     alias: Sleep
@@ -128,9 +127,9 @@ automation:
         at: input_datetime.sleep_start_time
     condition: []
     action:
-    - service: input_select.select_option
-      target:
-        entity_id: input_select.current_scene
-      data:
-        option: Sleep
+      - service: input_select.select_option
+        target:
+          entity_id: input_select.current_scene
+        data:
+          option: Sleep
     mode: single
