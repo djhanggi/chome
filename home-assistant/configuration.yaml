@@ -4,10 +4,8 @@ http:
   use_x_forwarded_for: true
   trusted_proxies: !secret trusted_proxies
 
-homeassistant:
-  external_url: !secret external_url
-  packages: !include_dir_named packages/
+homeassistant: !secret homeassistant
 
-automation manual: !include configurations/automations.yaml
-script manual: !include configurations/scripts.yaml
-scene manual: !include configurations/scenes.yaml
+automation: !include configurations/automations.yaml
+script: !include configurations/scripts.yaml
+scene: !include configurations/scenes.yaml

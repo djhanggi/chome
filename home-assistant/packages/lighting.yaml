@@ -5,7 +5,7 @@ adaptive_lighting:
 
 group:
   lighting:
-    name: Lighting System
+    name: Lighting
     entities:
       - light.all_lights
       - switch.lamp

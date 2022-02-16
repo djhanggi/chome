@@ -2,26 +2,26 @@ script:
   scenes_sync_scene:
     alias: Sync Scene
     sequence:
-    - service: scene.turn_on
-      data_template:
-        entity_id: >
-          {% if is_state('input_boolean.at_home', 'on') %}
-            {% if is_state('input_select.current_scene', 'Morning') %}
-              scene.morning,
-              scene.ajar_blinds
-            {% elif is_state('input_select.current_scene', 'Daytime') %}
-              scene.daytime,
-              scene.open_blinds
-            {% elif is_state('input_select.current_scene','Evening') %}
-              scene.evening,
-              scene.ajar_blinds
-            {% elif is_state('input_select.current_scene', 'Night') %}
-              scene.sleep,
-              scene.closed_blinds
+      - service: scene.turn_on
+        data_template:
+          entity_id: >
+            {% if is_state('input_boolean.at_home', 'on') %}
+              {% if is_state('input_select.current_scene', 'Morning') %}
+                scene.morning,
+                scene.ajar_blinds
+              {% elif is_state('input_select.current_scene', 'Daytime') %}
+                scene.daytime,
+                scene.open_blinds
+              {% elif is_state('input_select.current_scene','Evening') %}
+                scene.evening,
+                scene.ajar_blinds
+              {% elif is_state('input_select.current_scene', 'Night') %}
+                scene.sleep,
+                scene.closed_blinds
+              {% endif %}
+            {% else %}
+              scene.away
             {% endif %}
-          {% else %}
-            scene.away
-          {% endif %}
     mode: restart
 
 input_boolean:
@@ -56,7 +56,7 @@ input_datetime:
     name: Sleep Start Time
     has_time: true
     initial: '00:00'
-    icon: mdi:weather-night
+    icon: mdi:bed
 
 automation:
   - id: scenes_set_morning_start_time
@@ -89,7 +89,7 @@ automation:
       entity_id: input_boolean.at_home
     condition: []
     action:
-    - service: script.scenes_sync_scene
+      - service: script.scenes_sync_scene
     mode: restart
   - id: scenes_set_morning
     alias: Morning
@@ -124,8 +124,8 @@ automation:
     alias: Sleep
     description: Sets the Current Scene to Sleep at Sleep Start Time.
     trigger:
-    - platform: time
-      at: input_datetime.sleep_start_time
+      - platform: time
+        at: input_datetime.sleep_start_time
     condition: []
     action:
     - service: input_select.select_option
