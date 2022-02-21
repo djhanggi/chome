@@ -7,7 +7,7 @@ script:
           entity_id: >
             {% if is_state('input_boolean.at_home', 'on') %}
               {% if is_state('input_select.current_scene', 'Morning') %}
-                scene.morning,
+                scene.daytime,
                 scene.ajar_blinds
               {% elif is_state('input_select.current_scene', 'Daytime') %}
                 scene.daytime,

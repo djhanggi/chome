@@ -7,10 +7,9 @@ group:
   lighting:
     name: Lighting
     entities:
+      - switch.adaptive_lighting_all_lights
       - light.all_lights
       - switch.lamp
-      - switch.adaptive_lighting_all_lights
-      - switch.adaptive_lighting_adapt_brightness_all_lights
 
 light:
   - platform: group
