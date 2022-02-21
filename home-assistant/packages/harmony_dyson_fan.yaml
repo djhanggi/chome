@@ -9,6 +9,7 @@ fan:
     fans:
       dyson_fan:
         friendly_name: Dyson Fan
+        unique_id: fan.dyson_fan
         value_template: >
           {{ states('input_boolean.dyson_fan_power') }}
         oscillating_template: >
