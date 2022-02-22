@@ -1,5 +1,3 @@
-default_config:
-
 homeassistant:
   name: !secret homeassistant_name
   latitude: !secret homeassistant_latitude
@@ -13,6 +11,37 @@ http:
   use_x_forwarded_for: true
   trusted_proxies: !secret http_trusted_proxies
 
+#default_config:
 automation: !include configurations/automations.yaml
-script: !include configurations/scripts.yaml
+#cloud:
+config:
+counter: !include configurations/counters.yaml
+#dhcp
+#energy
+frontend:
+history:
+#image
+input_boolean: !include configurations/input_booleans.yaml
+input_datetime: !include configurations/input_datetimes.yaml
+input_number: !include configurations/input_numbers.yaml
+input_select: !include configurations/input_selects.yaml
+input_text: !include configurations/input_texts.yaml
+logbook:
+map:
+media_source:
+mobile_app:
+#my
+person: !include configurations/persons.yaml
 scene: !include configurations/scenes.yaml
+script: !include configurations/scripts.yaml
+#ssdp:
+#stream
+sun:
+system_health:
+#tag
+#timer
+#updater:
+#usb
+#webhook
+zeroconf:
+zone: !include configurations/zones.yaml
