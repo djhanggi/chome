@@ -12,36 +12,36 @@ http:
   trusted_proxies: !secret http_trusted_proxies
 
 #default_config:
-automation: !include configurations/automations.yaml
+automation: !include automations.yaml
 #cloud:
 config:
-counter: !include configurations/counters.yaml
+counter: !include counters.yaml
 #dhcp
 #energy
 frontend:
 history:
 #image
-input_boolean: !include configurations/input_booleans.yaml
-input_datetime: !include configurations/input_datetimes.yaml
-input_number: !include configurations/input_numbers.yaml
-input_select: !include configurations/input_selects.yaml
-input_text: !include configurations/input_texts.yaml
+input_boolean: !include input_booleans.yaml
+input_datetime: !include input_datetimes.yaml
+input_number: !include input_numbers.yaml
+input_select: !include input_selects.yaml
+input_text: !include input_texts.yaml
 logbook:
 map:
 media_source:
 mobile_app:
 #my
-person: !include configurations/persons.yaml
-scene: !include configurations/scenes.yaml
-script: !include configurations/scripts.yaml
+person: !include persons.yaml
+scene: !include scenes.yaml
+script: !include scripts.yaml
 #ssdp:
 #stream
 sun:
 system_health:
 #tag
-#timer
+timer: !include timers.yaml
 #updater:
 #usb
 #webhook
 zeroconf:
-zone: !include configurations/zones.yaml
+zone: !include zones.yaml

@@ -7,7 +7,18 @@ services:
       - ./volumes/home-assistant/config/:/config/
       - ./home-assistant/configuration.yaml:/config/configuration.yaml
       - ./home-assistant/secrets.yaml:/config/secrets.yaml
-      - ./home-assistant/configurations/:/config/configurations/
       - ./home-assistant/packages/:/config/packages/
+      - ./home-assistant/automations.yaml:/config/automations.yaml
+      - ./home-assistant/counters.yaml:/config/counters.yaml
+      - ./home-assistant/input_booleans.yaml:/config/input_booleans.yaml
+      - ./home-assistant/input_datetimes.yaml:/config/input_datetimes.yaml
+      - ./home-assistant/input_numbers.yaml:/config/input_numbers.yaml
+      - ./home-assistant/input_selects.yaml:/config/input_selects.yaml
+      - ./home-assistant/input_texts.yaml:/config/input_texts.yaml
+      - ./home-assistant/persons.yaml:/config/persons.yaml
+      - ./home-assistant/scenes.yaml:/config/scenes.yaml
+      - ./home-assistant/scripts.yaml:/config/scripts.yaml
+      - ./home-assistant/timers.yaml:/config/timers.yaml
+      - ./home-assistant/zones.yaml:/config/zones.yaml
     restart: unless-stopped
     privileged: true
