@@ -13,7 +13,7 @@ fan:
         value_template: >
           {{ states('input_boolean.dyson_fan_power') }}
         oscillating_template: >
-          {{ states('input_boolean.dyson_fan_oscillating') }}
+          {{ is_state('input_boolean.dyson_fan_oscillating', 'on') }}
         percentage_template: >
           {{ states('input_number.dyson_fan_speed') | int * 10 }}
         turn_on:
