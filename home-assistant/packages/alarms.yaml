@@ -21,7 +21,7 @@ script:
           message: >
             {{
               state_attr("input_datetime.next_alarm_time", "timestamp")
-              | timestamp_custom('%H:%M')
+              | timestamp_custom('%H:%M', False)
             }}
           data:
             channel: Set Alarm
