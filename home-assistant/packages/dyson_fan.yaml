@@ -13,13 +13,13 @@ fan:
         value_template: >
           {{ states('input_boolean.dyson_fan_power') }}
         oscillating_template: >
-          {{ is_state('input_boolean.dyson_fan_oscillating', 'on') }}
+          {{ states('input_boolean.dyson_fan_oscillating') }}
         percentage_template: >
           {{ states('input_number.dyson_fan_speed') | int * 10 }}
         turn_on:
-          service: script.dyson_fan_toggle_power
+          service: script.dyson_fan_turn_on
         turn_off:
-          service: script.dyson_fan_toggle_power
+          service: script.dyson_fan_turn_off
         set_oscillating:
           service: script.dyson_fan_toggle_oscillate
           data:
@@ -64,9 +64,27 @@ script:
       - service: input_boolean.toggle
         target:
           entity_id: input_boolean.dyson_fan_power
+    mode: single
+    icon: mdi:fan
+  dyson_fan_turn_off:
+    alias: Dyson Fan - Turn Off
+    sequence:
+      - condition: state
+        entity_id: input_boolean.dyson_fan_power
+        state: 'on'
+      - service: script.dyson_fan_toggle_power
       - service: input_boolean.turn_off
         target:
           entity_id: input_boolean.dyson_fan_oscillating
+    mode: single
+    icon: mdi:fan
+  dyson_fan_turn_on:
+    alias: Dyson Fan - Turn On
+    sequence:
+      - condition: state
+        entity_id: input_boolean.dyson_fan_power
+        state: 'off'
+      - service: script.dyson_fan_toggle_power
     mode: single
     icon: mdi:fan
   dyson_fan_toggle_oscillate:
@@ -86,6 +104,9 @@ script:
   dyson_fan_increase_speed:
     alias: Dyson Fan - Increase Speed
     sequence:
+      - condition: state
+        entity_id: input_boolean.dyson_fan_power
+        state: 'on'
       - service: remote.send_command
         target:
           entity_id: remote.harmony
@@ -97,10 +118,13 @@ script:
           entity_id: input_number.dyson_fan_speed
     mode: queued
     icon: mdi:fan-plus
-    max: 10
+    max: 9
   dyson_fan_decrease_speed:
     alias: Dyson Fan - Decrease Speed
     sequence:
+      - condition: state
+        entity_id: input_boolean.dyson_fan_power
+        state: 'on'
       - service: remote.send_command
         target:
           entity_id: remote.harmony
@@ -112,7 +136,7 @@ script:
           entity_id: input_number.dyson_fan_speed
     mode: queued
     icon: mdi:fan-minus
-    max: 10
+    max: 9
   dyson_fan_set_speed:
     alias: Dyson Fan - Set Speed
     mode: restart
@@ -124,7 +148,7 @@ script:
                 {{
                   states('input_number.dyson_fan_speed') | int * 10 == percentage
                   or
-                  repeat.index == 10
+                  repeat.index == 9
                 }}
           sequence:
             - service_template: >

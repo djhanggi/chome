@@ -1,0 +1,104 @@
+input_datetime:
+  morning_start_time:
+    name: Morning Start Time
+    has_time: true
+    initial: '07:45'
+    icon: mdi:weather-sunset-up
+  evening_start_time:
+    name: Evening Start Time
+    has_time: true
+    initial: '21:30'
+    icon: mdi:weather-night
+
+scene:
+  - id: daytime
+    name: Daytime
+    entities:
+      group.lighting:
+        state: on
+      switch.monitor:
+        state: on
+    icon: mdi:weather-sunny
+  - id: evening
+    name: Evening
+    entities:
+      switch.adaptive_lighting_all_lights:
+        state: off
+      light.ceiling_e:
+          brightness: 3
+          color_temp: 600
+          state: on
+      light.ceiling_w:
+          state: off
+      light.hallway_e:
+          brightness: 3
+          color_temp: 600
+          state: on
+      light.hallway_w:
+          state: off
+      light.bathroom_e:
+        brightness: 3
+        color_temp: 600
+        state: on
+      light.bathroom_w:
+        state: off
+      switch.monitor:
+        state: off
+    icon: mdi:weather-sunset
+  - id: sleep
+    name: Sleep
+    entities:
+      group.lighting:
+        state: off
+      switch.humidifier:
+        state: off
+      fan.dyson_fan:
+        state: off
+      switch.monitor:
+        state: off
+      switch.bike_stand:
+        state: off
+      remote.harmony:
+        current_activity: PowerOff
+        state: off
+    icon: mdi:bed
+
+automation:
+  - id: morning
+    alias: Morning
+    description: Applies morning scenes at Morning Start Time.
+    trigger:
+      - platform: time
+        at: input_datetime.morning_start_time
+    condition: []
+    action:
+      - scene: scene.ajar_blinds
+      - scene: scene.daytime
+    mode: single
+  - id: evening
+    alias: Evening
+    description: Applies evening scenes at Evening Start Time.
+    trigger:
+      - platform: time
+        at: input_datetime.evening_start_time
+    condition: []
+    action:
+      - scene: scene.closed_blinds
+      - scene: scene.evening
+    mode: single
+  - id: away
+    alias: Away
+    description: Turns off entities while away.
+    mode: single
+    trigger:
+      - platform: zone
+        entity_id: person.djhanggi
+        zone: zone.home
+        event: leave
+    condition: []
+    action:
+      - service: scene.apply
+        data:
+          entities:
+            group.lighting:
+              state: 'off'

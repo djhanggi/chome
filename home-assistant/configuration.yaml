@@ -11,37 +11,16 @@ http:
   use_x_forwarded_for: true
   trusted_proxies: !secret http_trusted_proxies
 
-#default_config:
 automation: !include automations.yaml
-#cloud:
 config:
-counter: !include counters.yaml
-#dhcp
-#energy
 frontend:
 history:
-#image
-input_boolean: !include input_booleans.yaml
-input_datetime: !include input_datetimes.yaml
-input_number: !include input_numbers.yaml
-input_select: !include input_selects.yaml
-input_text: !include input_texts.yaml
 logbook:
 map:
 media_source:
 mobile_app:
-#my
-person: !include persons.yaml
 scene: !include scenes.yaml
 script: !include scripts.yaml
-#ssdp:
-#stream
 sun:
 system_health:
-#tag
-timer: !include timers.yaml
-#updater:
-#usb
-#webhook
 zeroconf:
-zone: !include zones.yaml
