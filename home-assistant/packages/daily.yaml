@@ -42,6 +42,8 @@ scene:
         state: on
       light.bathroom_w:
         state: off
+      switch.lamp:
+        state: on
       switch.monitor:
         state: off
     icon: mdi:weather-sunset
@@ -101,4 +103,20 @@ automation:
         data:
           entities:
             group.lighting:
-              state: 'off'
+              state: off
+  - id: return
+    alias: Return
+    description: Turns on entities when returning.
+    mode: single
+    trigger:
+      - platform: zone
+        entity_id: person.djhanggi
+        zone: zone.home
+        event: enter
+    condition: []
+    action:
+      - service: scene.apply
+        data:
+          entities:
+            group.lighting:
+              state: on
