@@ -52,6 +52,27 @@ input_number:
     icon: mdi:fan
 
 script:
+  dyson_fan_bedroom_send_command:
+    alias: Dyson Fan - Bedroom - Send Command
+    fields:
+      command:
+        description: |
+          The saved command to send. One of
+          * toggle_power
+          * toggle_oscillate
+          * increase_speed
+          * decrease_speed
+        example: toggle_power
+    sequence:
+      - service: remote.send_command
+        target:
+          entity_id: remote.bedroom_broadlink_remote
+        data_template:
+          device: dyson_fan
+          command: >
+            {{ command }}
+    mode: single
+    icon: mdi:fan
   dyson_fan_toggle_power:
     alias: Dyson Fan - Toggle Power
     sequence:
@@ -61,6 +82,9 @@ script:
         data:
           command: PowerToggle
           << : *HARMONY_DYSON_FAN_DEVICE
+      - service: script.friedrich_ac_bedroom_send_command
+        data:
+          command: toggle_power
       - service: input_boolean.toggle
         target:
           entity_id: input_boolean.dyson_fan_power
@@ -96,6 +120,9 @@ script:
         data:
           command: Oscillate
           << : *HARMONY_DYSON_FAN_DEVICE
+      - service: script.friedrich_ac_bedroom_send_command
+        data:
+          command: toggle_oscillate
       - service: input_boolean.toggle
         target:
           entity_id: input_boolean.dyson_fan_oscillating
@@ -113,6 +140,9 @@ script:
         data:
           command: FanModeUp
           << : *HARMONY_DYSON_FAN_DEVICE
+      - service: script.friedrich_ac_bedroom_send_command
+        data:
+          command: increase_speed
       - service: input_number.increment
         target:
           entity_id: input_number.dyson_fan_speed
@@ -131,6 +161,9 @@ script:
         data:
           command: FanModeDown
           << : *HARMONY_DYSON_FAN_DEVICE
+      - service: script.friedrich_ac_bedroom_send_command
+        data:
+          command: decrease_speed
       - service: input_number.decrement
         target:
           entity_id: input_number.dyson_fan_speed
