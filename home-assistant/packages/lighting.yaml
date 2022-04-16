@@ -9,7 +9,8 @@ group:
     entities:
       - switch.adaptive_lighting_all_lights
       - light.all_lights
-      - switch.lamp
+      - switch.kitchen_lights
+      - switch.sunlight_lamp
 
 light:
   - platform: group
@@ -22,6 +23,18 @@ light:
       - light.hallway_w
       - light.bathroom_e
       - light.bathroom_w
+      - light.living_room_lamp
+      - light.bedroom_lamp
+      - light.bed
+  - platform: group
+    name: Living Room Lights
+    unique_id: living_room_lights
+    entities:
+      - light.ceiling_e
+      - light.ceiling_w
+      - light.hallway_e
+      - light.hallway_w
+      - light.living_room_lamp
   - platform: group
     name: Ceiling Lights
     unique_id: ceiling_lights
@@ -40,3 +53,26 @@ light:
     entities:
       - light.bathroom_e
       - light.bathroom_w
+  - platform: group
+    name: Bedroom Lights
+    unique_id: bedroom_lights
+    entities:
+      - light.bedroom_lamp
+      - light.bed
+  - platform: group
+    name: Daytime Lights
+    unique_id: daytime_lights
+    entities:
+      - light.ceiling_e
+      - light.ceiling_w
+      - light.hallway_e
+      - light.hallway_w
+      - light.bathroom_w
+      - light.bedroom_lamp
+  - platform: group
+    name: Evening Lights
+    unique_id: evening_lights
+    entities:
+      - light.bathroom_e
+      - light.living_room_lamp
+      - light.bed

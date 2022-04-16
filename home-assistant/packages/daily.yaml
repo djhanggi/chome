@@ -24,26 +24,16 @@ scene:
     entities:
       switch.adaptive_lighting_all_lights:
         state: off
-      light.ceiling_e:
-          brightness: 3
-          color_temp: 600
-          state: on
-      light.ceiling_w:
+      light.daytime_lights:
           state: off
-      light.hallway_e:
-          brightness: 3
-          color_temp: 600
-          state: on
-      light.hallway_w:
-          state: off
-      light.bathroom_e:
+      light.evening_lights:
         brightness: 3
         color_temp: 600
         state: on
-      light.bathroom_w:
+      switch.sunlight_lamp:
         state: off
-      switch.lamp:
-        state: on
+      switch.kitchen_lights:
+        state: off
       switch.monitor:
         state: off
     icon: mdi:weather-sunset
