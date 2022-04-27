@@ -1,64 +1,65 @@
+---
 input_datetime:
   morning_start_time:
-    name: Morning Start Time
+    name: "Morning Start Time"
     has_time: true
-    initial: '07:45'
+    initial: "07:45"
     icon: mdi:weather-sunset-up
   evening_start_time:
-    name: Evening Start Time
+    name: "Evening Start Time"
     has_time: true
-    initial: '21:30'
+    initial: "21:30"
     icon: mdi:weather-night
 
 scene:
   - id: daytime
-    name: Daytime
+    name: "Daytime"
     entities:
       group.lighting:
-        state: on
+        state: "on"
       switch.monitor:
-        state: on
+        state: "on"
     icon: mdi:weather-sunny
   - id: evening
-    name: Evening
+    name: "Evening"
     entities:
       switch.adaptive_lighting_all_lights:
-        state: off
+        state: "off"
       light.daytime_lights:
-          state: off
+        state: "off"
       light.evening_lights:
         brightness: 3
         color_temp: 600
-        state: on
+        state: "on"
       switch.sunlight_lamp:
-        state: off
+        state: "off"
       switch.kitchen_lights:
-        state: off
+        state: "off"
       switch.monitor:
-        state: off
+        state: "off"
     icon: mdi:weather-sunset
   - id: sleep
-    name: Sleep
+    name: "Sleep"
     entities:
       group.lighting:
-        state: off
+        state: "off"
       switch.humidifier:
-        state: off
+        state: "off"
       fan.dyson_fan:
-        state: off
+        state: "off"
       switch.monitor:
-        state: off
+        state: "off"
       switch.bike_stand:
-        state: off
+        state: "off"
       remote.harmony:
         current_activity: PowerOff
-        state: off
+        state: "off"
     icon: mdi:bed
 
 automation:
   - id: morning
-    alias: Morning
-    description: Applies morning scenes at Morning Start Time.
+    alias: "Morning"
+    description: "Applies morning scenes at Morning Start Time."
     trigger:
       - platform: time
         at: input_datetime.morning_start_time
@@ -68,8 +69,8 @@ automation:
       - scene: scene.daytime
     mode: single
   - id: evening
-    alias: Evening
-    description: Applies evening scenes at Evening Start Time.
+    alias: "Evening"
+    description: "Applies evening scenes at Evening Start Time."
     trigger:
       - platform: time
         at: input_datetime.evening_start_time
@@ -79,8 +80,8 @@ automation:
       - scene: scene.evening
     mode: single
   - id: away
-    alias: Away
-    description: Turns off entities while away.
+    alias: "Away"
+    description: "Turns off entities while away."
     mode: single
     trigger:
       - platform: zone
@@ -93,10 +94,10 @@ automation:
         data:
           entities:
             group.lighting:
-              state: off
+              state: "off"
   - id: return
-    alias: Return
-    description: Turns on entities when returning.
+    alias: "Return"
+    description: "Turns on entities when returning."
     mode: single
     trigger:
       - platform: zone
@@ -109,4 +110,4 @@ automation:
         data:
           entities:
             group.lighting:
-              state: on
+              state: "on"

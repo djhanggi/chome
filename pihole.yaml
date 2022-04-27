@@ -1,3 +1,4 @@
+---
 services:
   pihole:
     image: pihole/pihole:latest
@@ -13,7 +14,7 @@ services:
       PIHOLE_DNS_: 8.8.8.8;8.8.4.4
       DNSMASQ_LISTENING: all
       TEMPERATUREUNIT: k
-      QUERY_LOGGING: 'true'
+      QUERY_LOGGING: "true"
     volumes:
       - ./volumes/pihole/etc/pihole/:/etc/pihole/
       - ./volumes/pihole/etc/dnsmasq.d/:/etc/dnsmasq.d/

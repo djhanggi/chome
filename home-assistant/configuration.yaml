@@ -1,3 +1,4 @@
+---
 homeassistant:
   name: !secret homeassistant_name
   latitude: !secret homeassistant_latitude

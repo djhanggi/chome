@@ -1,3 +1,4 @@
+---
 services:
   duckdns:
     image: ghcr.io/linuxserver/duckdns
