@@ -14,7 +14,7 @@ fan:
         value_template: >
           {{ states('input_boolean.dyson_fan_power') }}
         oscillating_template: >
-          {{ is_state('input_boolean.dyson_fan_oscillating', 'on') }}
+          {{ is_state('input_boolean.dyson_fan_oscillating', "on") }}
         percentage_template: >
           {{ states('input_number.dyson_fan_speed') | int * 10 }}
         turn_on:
@@ -46,36 +46,14 @@ input_boolean:
 input_number:
   dyson_fan_speed:
     name: "Dyson Fan - Power"
-    initial: 1
     min: 1
     max: 10
     step: 1
     icon: mdi:fan
 
 script:
-  dyson_fan_bedroom_send_command:
-    alias: "Dyson Fan - Bedroom - Send Command"
-    fields:
-      command:
-        description: |
-          The saved command to send. One of
-          * toggle_power
-          * toggle_oscillate
-          * increase_speed
-          * decrease_speed
-        example: toggle_power
-    sequence:
-      - service: remote.send_command
-        target:
-          entity_id: remote.bedroom_broadlink_remote
-        data_template:
-          device: dyson_fan
-          command: >
-            {{ command }}
-    mode: single
-    icon: mdi:fan
   dyson_fan_toggle_power:
-    alias: "Dyson Fan - Bedroom - Send Command"
+    alias: "Dyson Fan - Toggle Power"
     sequence:
       - service: remote.send_command
         target:
@@ -83,8 +61,11 @@ script:
         data:
           command: PowerToggle
           <<: *HARMONY_DYSON_FAN_DEVICE
-      - service: script.friedrich_ac_bedroom_send_command
+      - service: remote.send_command
+        target:
+          entity_id: remote.bedroom_broadlink_remote
         data:
+          device: dyson_fan
           command: toggle_power
       - service: input_boolean.toggle
         target:
@@ -92,7 +73,7 @@ script:
     mode: single
     icon: mdi:fan
   dyson_fan_turn_off:
-    alias: "Dyson Fan - Bedroom - Send Command"
+    alias: "Dyson Fan - Turn Off"
     sequence:
       - condition: state
         entity_id: input_boolean.dyson_fan_power
@@ -104,7 +85,7 @@ script:
     mode: single
     icon: mdi:fan
   dyson_fan_turn_on:
-    alias: "Dyson Fan - Bedroom - Send Command"
+    alias: "Dyson Fan - Turn On"
     sequence:
       - condition: state
         entity_id: input_boolean.dyson_fan_power
@@ -113,16 +94,22 @@ script:
     mode: single
     icon: mdi:fan
   dyson_fan_toggle_oscillate:
-    alias: "Dyson Fan - Bedroom - Send Command"
+    alias: "Dyson Fan - Toggle Oscillate"
     sequence:
+      - condition: state
+        entity_id: input_boolean.dyson_fan_power
+        state: "on"
       - service: remote.send_command
         target:
           entity_id: remote.harmony
         data:
           command: Oscillate
           <<: *HARMONY_DYSON_FAN_DEVICE
-      - service: script.friedrich_ac_bedroom_send_command
+      - service: remote.send_command
+        target:
+          entity_id: remote.bedroom_broadlink_remote
         data:
+          device: dyson_fan
           command: toggle_oscillate
       - service: input_boolean.toggle
         target:
@@ -130,7 +117,7 @@ script:
     mode: single
     icon: mdi:fan
   dyson_fan_increase_speed:
-    alias: "Dyson Fan - Bedroom - Send Command"
+    alias: "Dyson Fan - Increase Speed"
     sequence:
       - condition: state
         entity_id: input_boolean.dyson_fan_power
@@ -141,8 +128,11 @@ script:
         data:
           command: FanModeUp
           <<: *HARMONY_DYSON_FAN_DEVICE
-      - service: script.friedrich_ac_bedroom_send_command
+      - service: remote.send_command
+        target:
+          entity_id: remote.bedroom_broadlink_remote
         data:
+          device: dyson_fan
           command: increase_speed
       - service: input_number.increment
         target:
@@ -151,7 +141,7 @@ script:
     icon: mdi:fan-plus
     max: 9
   dyson_fan_decrease_speed:
-    alias: "Dyson Fan - Bedroom - Send Command"
+    alias: "Dyson Fan - Decrease Speed"
     sequence:
       - condition: state
         entity_id: input_boolean.dyson_fan_power
@@ -162,8 +152,11 @@ script:
         data:
           command: FanModeDown
           <<: *HARMONY_DYSON_FAN_DEVICE
-      - service: script.friedrich_ac_bedroom_send_command
+      - service: remote.send_command
+        target:
+          entity_id: remote.bedroom_broadlink_remote
         data:
+          device: dyson_fan
           command: decrease_speed
       - service: input_number.decrement
         target:
@@ -172,15 +165,14 @@ script:
     icon: mdi:fan-minus
     max: 9
   dyson_fan_set_speed:
-    alias: "Dyson Fan - Bedroom - Send Command"
+    alias: "Dyson Fan - Set Speed"
     mode: restart
     sequence:
       - repeat:
-          until:
-            - condition: template
-              value_template: >
-                {{ states('input_number.dyson_fan_speed') | int * 10 ==
-                percentage or repeat.index == 9 }}
+          while: >
+            {{ is_state('input_boolean.dyson_fan', "on") and
+            states('input_number.dyson_fan_speed') | int * 10 !=
+            percentage and repeat.index < 10 }}
           sequence:
             - service_template: >
                 {% if states('input_number.dyson_fan_speed') | int * 10 <
