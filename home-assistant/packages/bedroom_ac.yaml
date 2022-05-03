@@ -1,7 +1,7 @@
 ---
 script:
   bedroom_ac_send_command:
-    alias: "Bedroom AC - Toggle Power"
+    alias: "Bedroom AC - Send Commmand"
     description: >
       Sends a command to the Bedroom AC, particularly to manage atomicity.
     sequence:
@@ -114,6 +114,10 @@ input_boolean:
   bedroom_ac_power:
     name: Bedroom AC - Power
     icon: mdi:air-conditioner
+  bedroom_ac_use_outside_temperature:
+    name: Bedroom AC - Use Outside Temperature
+    initial: false
+    icon: mdi:sun-thermometer-outline
 
 input_number:
   bedroom_ac_temperature:
@@ -122,6 +126,19 @@ input_number:
     max: 90.0
     step: 1.0
     icon: mdi:temperature
+
+template:
+  - sensor:
+      - unique_id: bedroom_ac_temperature_reference
+        name: "Bedroom AC - Temperature Reference"
+        unit_of_measurement: "F"
+        state: >
+          {% if
+          is_state("input_boolean.bedroom_ac_use_outside_temperature", "on") %}
+            {{ state_attr('weather.chome', 'temperature') }}
+          {% else %}
+            {{ states('sensor.bedroom_broadlink_temperature') }}
+          {% endif %}
 
 automation:
   - id: bedroom_ac_set_temperature
@@ -173,11 +190,10 @@ climate:
     unique_id: bedroom_ac
     name: Bedroom AC
     heater: switch.bedroom_ac
-    target_sensor: sensor.bedroom_broadlink_temperature
+    target_sensor: sensor.bedroom_ac_temperature_reference
     min_temp: 60
     max_temp: 90
     ac_mode: true
-    target_temp: 69
     cold_tolerance: 1.0
     hot_tolerance: 0
     min_cycle_duration:
