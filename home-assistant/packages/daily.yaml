@@ -107,7 +107,15 @@ automation:
     condition: []
     action:
       - service: scene.apply
-        data:
-          entities:
-            group.lighting:
-              state: "on"
+        data_template:
+          entities: >
+            {% if now().strftime("%H-%M-%S") >=
+            states("input_datetime.morning_start_time") and
+            now().strftime("%H-%M-%S") <
+            states("input_datetime.evening_start_time") %}
+              group.lighting:
+                state: "on"
+            {% else %}
+              light.evening_lights:
+                state: "on"
+            {% endif %}

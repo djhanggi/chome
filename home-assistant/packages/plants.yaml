@@ -1,38 +1,46 @@
 ---
 input_datetime:
-  majesty_palm_sunrise_time:
-    name: "Majesty Palm Sunrise Time"
+  plant_sunrise_time:
+    name: "Plant Sunrise Time"
     has_time: true
     initial: "07:15"
     icon: mdi:weather-sunset-up
-  majesty_palm_sunset_time:
-    name: "Majesty Palm Sunset Time"
+  plant_sunset_time:
+    name: "Plant Sunset Time"
     has_time: true
     initial: "21:45"
     icon: mdi:weather-night
 
+group:
+  plant_lights:
+    name: "Plant Lights"
+    entities:
+      - switch.living_room_plant_light
+      # - switch.bedroom_plant_light
+
 automation:
-  - id: majesty_palm_sunrise
-    alias: "Majesty Palm Sunrise"
-    description: "Turns on the Majesty Palm light."
+  - id: plant_care
+    alias: "Plant Care"
+    description: "Turns on plant lighting and humidifers."
     trigger:
       - platform: time
-        at: input_datetime.majesty_palm_sunrise_time
-    condition: []
-    action:
-      - service: switch.turn_on
-        target:
-          entity_id: switch.majesty_palm_light
-    mode: single
-  - id: majesty_palm_sunset
-    alias: "Majesty Palm Sunset"
-    description: "Turns off the Majesty Palm light."
-    trigger:
+        at: input_datetime.plant_sunrise_time
+        id: plant_sunrise_trigger
       - platform: time
-        at: input_datetime.majesty_palm_sunset_time
+        at: input_datetime.plant_sunset_time
+        id: plant_sunset_trigger
     condition: []
     action:
-      - service: switch.turn_off
+      - service_template: >
+          {% if trigger.id == "plant_sunrise_trigger" %}
+            switch.turn_on
+          {% elif trigger.id == "plant_sunset_trigger" %}
+            switch.turn_off
+          {% else %}
+            switch.toggle
+          {% endif %}
         target:
-          entity_id: switch.majesty_palm_light
+          entity_id:
+            - group.plant_lights
+            - switch.humidifier
     mode: single
