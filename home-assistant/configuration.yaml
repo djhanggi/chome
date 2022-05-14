@@ -13,15 +13,26 @@ http:
   trusted_proxies: !secret http_trusted_proxies
 
 automation: !include automations.yaml
+backup:
 config:
 frontend:
+counter:
 history:
+input_boolean:
+input_button:
+input_datetime:
+input_number:
+input_select:
+input_text:
 logbook:
 map:
 media_source:
 mobile_app:
+my:
+person:
 scene: !include scenes.yaml
 script: !include scripts.yaml
 sun:
 system_health:
+timer:
 zeroconf:
