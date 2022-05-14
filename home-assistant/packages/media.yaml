@@ -8,8 +8,3 @@ sensor:
     username: !secret pocketcasts_username
     password: !secret pocketcasts_password
 
-media_player:
-  - platform: androidtv
-    exclude_unnamed_apps: true
-    name: Hoth Android TV
-    host: 192.168.1.151
