@@ -11,6 +11,16 @@ input_datetime:
     initial: "21:30"
     icon: mdi:weather-night
 
+template:
+  - sensor:
+    - unique_id: daytime_hours
+      name: "Daytime Hours"
+      state: >
+        {{ now().strftime("%H:%M:%S") >=
+        states("input_datetime.morning_start_time") and
+        now().strftime("%H:%M:%S") <
+        states("input_datetime.evening_start_time") }}
+
 scene:
   - id: daytime
     name: "Daytime"
@@ -106,16 +116,15 @@ automation:
         event: enter
     condition: []
     action:
-      - service: scene.apply
-        data_template:
-          entities: >
-            {% if now().strftime("%H-%M-%S") >=
-            states("input_datetime.morning_start_time") and
-            now().strftime("%H-%M-%S") <
-            states("input_datetime.evening_start_time") %}
-              group.lighting:
-                state: "on"
-            {% else %}
-              light.evening_lights:
-                state: "on"
-            {% endif %}
+      - if:
+          - condition: state
+            entity_id: sensor.daytime_hours
+            state: "True"
+        then:
+          - service: scene.turn_on
+            target:
+              entity_id: scene.daytime
+        else:
+          - service: scene.turn_on
+            target:
+              entity_id: scene.evening
