@@ -12,6 +12,14 @@ script:
           device: friedrich_ac
           command: "{{ command }}"
     mode: single
+  bedroom_ac_correct_power:
+    alias: "Bedroom AC - Correct Power"
+    sequence:
+      - service: script.bedroom_ac_send_command
+        data:
+          command: toggle_power
+    mode: single
+    icon: mdi:fan
   bedroom_ac_toggle_power:
     alias: "Bedroom AC - Toggle Power"
     sequence:

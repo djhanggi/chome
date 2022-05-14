@@ -18,6 +18,14 @@ script:
           <<: *HARMONY_FRIEDRICH_AC_DEVICE
           command: "{{ command }}"
     mode: single
+  living_room_ac_correct_power:
+    alias: "Living Room AC - Correct Power"
+    sequence:
+      - service: script.living_room_ac_send_command
+        data:
+          command: PowerToggle
+    mode: single
+    icon: mdi:fan
   living_room_ac_toggle_power:
     alias: "Living Room AC - Toggle Power"
     sequence:

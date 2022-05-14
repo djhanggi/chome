@@ -47,6 +47,15 @@ script:
       #     device: dyson_fan
       #     command: "{{ broadlink_command }}"
     mode: single
+  dyson_fan_correct_power:
+    alias: "Dyson Fan - Correct Power"
+    sequence:
+      - service: script.dyson_fan_send_command
+        data:
+          harmony_command: PowerToggle
+          broadlink_command: toggle_power
+    mode: single
+    icon: mdi:fan
   dyson_fan_toggle_power:
     alias: "Dyson Fan - Toggle Power"
     sequence:
