@@ -16,7 +16,7 @@ group:
     name: "Plant Lights"
     entities:
       - switch.living_room_plant_light
-      # - switch.bedroom_plant_light
+      - switch.bedroom_plant_light
 
 automation:
   - id: plant_care
