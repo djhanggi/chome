@@ -1,0 +1,30 @@
+---
+homekit:
+  - name: "CHOME.HA Bridge"
+    mode: "bridge"
+    filter:
+      include_entities:
+        - switch.adaptive_lighting_all_lights
+        - light.bathroom_lights
+        - light.hallway_lights
+        - light.ceiling_lights
+        - light.living_room_lamp
+        - light.bedroom_lamp
+        - light.bed
+        - light.living_room_plant_light
+        - light.bedroom_plant_light
+        - switch.sunlight_lamp
+        - climate.bedroom_ac
+        - climate.living_room_ac
+        - fan.dyson_fan
+        - fan.dyson_heater_fan
+    entity_config:
+      switch.adaptive_lighting_all_lights:
+        name: "Sun-Matched Lighting"
+        type: "switch"
+      switch.sunlight_lamp:
+        type: "outlet"
+      fan.dyson_fan:
+        name: "Living Room Fan"
+      fan.dyson_heater_fan:
+        name: "Bedroom Fan"
