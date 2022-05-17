@@ -1,3 +1,4 @@
+---
 input_select:
   sleep_sound:
     name: "Sleep Sound"

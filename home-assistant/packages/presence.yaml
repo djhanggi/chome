@@ -1,16 +1,15 @@
 ---
-
 template:
   - sensor:
-    - unique_id: scarif_at_home
-      name: "Scarif At Home"
-      state: >
-        {% if is_state("sensor.scarif_wifi_connection", "CHOME.NYC") or
-        is_state("sensor.scarif_wifi_connection", "CHOME") %}
-          home
-        {% else %}
-          away
-        {% endif %}
+      - unique_id: scarif_at_home
+        name: "Scarif At Home"
+        state: >
+          {% if is_state("sensor.scarif_wifi_connection", "CHOME.NYC") or
+          is_state("sensor.scarif_wifi_connection", "CHOME") %}
+            home
+          {% else %}
+            away
+          {% endif %}
 
 group:
   djhanggi_presence:

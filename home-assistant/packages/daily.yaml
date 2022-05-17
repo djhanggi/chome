@@ -13,13 +13,13 @@ input_datetime:
 
 template:
   - sensor:
-    - unique_id: daytime_hours
-      name: "Daytime Hours"
-      state: >
-        {{ now().strftime("%H:%M:%S") >=
-        states("input_datetime.morning_start_time") and
-        now().strftime("%H:%M:%S") <
-        states("input_datetime.evening_start_time") }}
+      - unique_id: daytime_hours
+        name: "Daytime Hours"
+        state: >
+          {{ now().strftime("%H:%M:%S") >=
+          states("input_datetime.morning_start_time") and
+          now().strftime("%H:%M:%S") <
+          states("input_datetime.evening_start_time") }}
 
 scene:
   - id: daytime

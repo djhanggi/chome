@@ -1,3 +1,4 @@
+---
 input_boolean:
   party_lights:
     name: Party Lights
