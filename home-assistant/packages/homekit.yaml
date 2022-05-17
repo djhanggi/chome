@@ -18,6 +18,7 @@ homekit:
         - climate.living_room_ac
         - fan.dyson_fan
         - fan.dyson_heater_fan
+        - cover.smart_roller_shade_curtain
     entity_config:
       switch.adaptive_lighting_all_lights:
         name: "Sun-Matched Lighting"
@@ -28,3 +29,5 @@ homekit:
         name: "Living Room Fan"
       fan.dyson_heater_fan:
         name: "Bedroom Fan"
+      cover.smart_roller_shade_curtain:
+        name: "Bedroom Blinds"
