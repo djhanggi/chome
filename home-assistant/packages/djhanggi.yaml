@@ -1,0 +1,87 @@
+---
+
+template:
+  - sensor:
+    - unique_id: scarif_at_home
+      name: "Scarif At Home"
+      state: >
+        {% if is_state("sensor.scarif_wifi_connection", "CHOME.NYC") or
+        is_state("sensor.scarif_wifi_connection", "CHOME") %}
+          home
+        {% else %}
+          away
+        {% endif %}
+
+group:
+  djhanggi_presence:
+    name: "DJHANGGI Presence"
+    entities:
+      - person.djhanggi
+      - sensor.scarif_at_home
+
+automation:
+  - id: away
+    alias: "Away"
+    description: "Turns off entities while away."
+    mode: single
+    trigger:
+      - platform: state
+        entity_id:
+          - group.djhanggi_presence
+        from: home
+        to: away
+    condition: []
+    action:
+      - service: scene.create
+        data:
+          scene_id: return
+          snapshot_entities:
+            - light.ceiling_lights
+            - light.hallway_lights
+            - light.living_room_lamp
+            - light.bathroom_lights
+            - light.bed
+            - light.bedroom_lamp
+            - climate.bedroom_ac
+            - climate.living_room_ac
+            - fan.dyson_heater_fan
+            - fan.dyson_fan
+            - remote.harmony
+      - service: scene.apply
+        data:
+          entities:
+            group.lighting:
+              state: "off"
+            climate.bedroom_ac:
+              state: "off"
+            climate.living_room_ac:
+              state: "off"
+            fan.dyson_heater_fan:
+              state: "off"
+            fan.dyson_fan:
+              state: "off"
+            remote.harmony:
+              state: "off"
+  - id: return
+    alias: "Return"
+    description: "Turns on entities when returning."
+    mode: single
+    trigger:
+      - platform: state
+        entity_id:
+          - group.djhanggi_presence
+        from: away
+        to: home
+    condition: []
+    action:
+      - service: scene.turn_on
+        target:
+          entity_id: scene.return
+      - if:
+          - condition: state
+            entity_id: sensor.daytime_hours
+            state: "False"
+        then:
+          - service: scene.turn_on
+            target:
+              entity_id: scene.evening
