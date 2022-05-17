@@ -1,0 +1,44 @@
+---
+homeassistant:
+  customize:
+    package.node_anchors:
+      harmony_lg_tv_device_id: &HARMONY_LG_TV_DEVICE_ID
+        device: !secret harmony_lg_tv_device_id
+
+script:
+  tv_volume_increase_25:
+    alias: "TV Volume +25"
+    sequence:
+      - service: remote.send_command
+        target:
+          entity_id: remote.harmony
+        data:
+          <<: *HARMONY_LG_TV_DEVICE_ID
+          command: VolumeUp
+          num_repeats: 25
+  tv_volume_decrease_25:
+    alias: "TV Volume -25"
+    sequence:
+      - service: remote.send_command
+        target:
+          entity_id: remote.harmony
+        data:
+          <<: *HARMONY_LG_TV_DEVICE_ID
+          command: VolumeDown
+          num_repeats: 25
+  hoth_full_volume:
+    alias: "Hoth Full Volume"
+    sequence:
+      - service: media_player.volume_set
+        target:
+          entity_id: media_player.cast_hoth
+        data:
+          volume_level: 1.0
+  hoth_half_volume:
+    alias: "Hoth Half Volume"
+    sequence:
+      - service: media_player.volume_set
+        target:
+          entity_id: media_player.cast_hoth
+        data:
+          volume_level: 0.5
