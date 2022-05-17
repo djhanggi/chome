@@ -25,7 +25,7 @@ automation:
     description: "Turns off entities while away."
     mode: single
     trigger:
-      - platform: state
+      - platform: "state"
         entity_id:
           - group.djhanggi_presence
         from: home
