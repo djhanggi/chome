@@ -1,102 +1,81 @@
 ---
 input_boolean:
-  party_lights:
-    name: Party Lights
+  party_lights_on:
+    name: "Party Lights - On"
     icon: mdi:party-popper
     initial: "off"
 
 input_number:
   party_lights_speed:
-    name: Party Lights Speed
+    name: "Party Lights - Speed"
     initial: 15
     min: 1
     max: 30
     step: 1
 
 switch:
-  - platform: template
+  - platform: "template"
     switches:
       party_lights:
         value_template: >
-          {{ states("input_boolean.party_lights") }}
+          {{ states("input_boolean.party_lights_on") }}
         friendly_name: "Party Lights"
         turn_on:
           - service: input_boolean.turn_on
-            entity_id: input_boolean.party_lights
+            entity_id: input_boolean.party_lights_on
           - service: script.turn_on
             target:
-              entity_id: script.party_lights_automation
+              entity_id: script.set_party_lights_automation
         turn_off:
           - service: input_boolean.turn_off
-            entity_id: input_boolean.party_lights
+            entity_id: input_boolean.party_lights_on
           - service: script.turn_off
             target:
-              entity_id: script.party_lights_automation
-
-light:
-  - platform: group
-    name: "Party Lights"
-    unique_id: party_lights
-    entities:
-      - light.ceiling_e
-      - light.ceiling_w
-      - light.hallway_e
-      - light.hallway_w
-      - light.bathroom_e
-      - light.living_room_lamp
-      - light.bedroom_lamp
-      - light.bed
-  - platform: group
-    name: "Party Lights - 1"
-    unique_id: party_lights_1
-    entities:
-      - light.ceiling_w
-      - light.hallway_w
-      - light.living_room_lamp
-      - light.bedroom_lamp
-  - platform: group
-    name: "Party Lights - 2"
-    unique_id: party_lights_2
-    entities:
-      - light.ceiling_e
-      - light.hallway_e
-      - light.bathroom_e
-      - light.bed
+              entity_id: script.set_party_lights_automation
 
 script:
   party_lights_automation:
-    alias: "Party Lights"
+    alias: "Party Lights Automation"
     sequence:
       - repeat:
           while:
-            - condition: state
-              entity_id: input_boolean.party_lights
+            - condition: "state"
+              entity_id: input_boolean.party_lights_on
               state: "on"
           sequence:
-            - service: script.party_lights
-            - delay: "{{ states.input_number.party_lights_speed.state }}"
-  party_lights:
-    alias: "Party Lights"
+            - service: script.set_party_lights
+            - delay: >
+                {{ states("input_number.party_lights_speed") }}
+  set_party_lights:
+    alias: "Set Party Lights"
     sequence:
       - service: light.turn_on
         data_template:
-          entity_id: light.party_lights_1
+          entity_id:
+            - light.ceiling_e
+            - light.hallway_e
+            - light.living_room_lamp
+            - light.bedroom_lamp
           rgb_color:
             [
-              "{{ (range(0, 255)|random) }}",
-              "{{ (range(0, 255)|random) }}",
-              "{{ (range(0, 255)|random) }}",
+              "{{ (range(0, 255) | random) }}",
+              "{{ (range(0, 255) | random) }}",
+              "{{ (range(0, 255) | random) }}",
             ]
-          brightness: "{{ (range(50, 250)|random) }}"
+          brightness: "{{ (range(50, 250) | random) }}"
           transition: 0.1
       - service: light.turn_on
         data_template:
-          entity_id: light.party_lights_2
+          entity_id:
+            - light.ceiling_w
+            - light.hallway_w
+            - light.bathroom_w
+            - light.bed
           rgb_color:
             [
-              "{{ (range(0, 255)|random) }}",
-              "{{ (range(0, 255)|random) }}",
-              "{{ (range(0, 255)|random) }}",
+              "{{ (range(0, 255) | random) }}",
+              "{{ (range(0, 255) | random) }}",
+              "{{ (range(0, 255) | random) }}",
             ]
-          brightness: "{{ (range(50, 250)|random) }}"
+          brightness: "{{ (range(50, 250) | random) }}"
           transition: 0.1
