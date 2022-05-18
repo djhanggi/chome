@@ -27,8 +27,8 @@ automation:
       - platform: "state"
         entity_id:
           - group.djhanggi_presence
-        from: home
-        to: away
+        from: "home"
+        to: "not_home"
     condition: []
     action:
       - service: scene.create
@@ -69,8 +69,8 @@ automation:
       - platform: state
         entity_id:
           - group.djhanggi_presence
-        from: away
-        to: home
+        from: "not_home"
+        to: "home"
     condition: []
     action:
       - service: scene.turn_on
