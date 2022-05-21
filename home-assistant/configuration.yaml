@@ -35,4 +35,5 @@ script: !include scripts.yaml
 sun:
 system_health:
 timer:
+webhook:
 zeroconf:
