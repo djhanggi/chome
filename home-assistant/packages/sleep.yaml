@@ -9,12 +9,13 @@ input_select:
       - River
       - Thunderstorm
       - Waterfall
+    initial: River
 
 template:
   - sensor:
       - unique_id: sleep_sound_content_id
         name: Sleep Sound Content ID
-        state: >
+        state: |
           {% set SOUNDS = {
               "Country":
           "https://storage.googleapis.com/relaxation-sounds/country_night_3600.mp3",
@@ -29,19 +30,10 @@ template:
               "Waterfall":
           "https://storage.googleapis.com/relaxation-sounds/waterfall_600.m4a",
             } %}
-          {% set state = states("input_select.sleep_sound") %} {{ SOUNDS[state]
-          }}
+          {% set state = states("input_select.sleep_sound") %}
+          {{ SOUNDS[state] }}
 
 script:
-  randomize_sleep_sound:
-    alias: Randomize Sleep Sound
-    sequence:
-      - service: input_select.select_option
-        target:
-          entity_id: input_select.sleep_sound
-        data_template:
-          option: >
-            {{ state_attr("input_select.sleep_sound", "options") | random }}
   play_bedroom_sleep_sound:
     alias: Play Bedroom Sleep Sound
     sequence:
@@ -49,7 +41,7 @@ script:
         target:
           entity_id: media_player.bedroom_speaker
         data:
-          volume_level: 0.20
+          volume_level: 0.25
       - service: media_player.play_media
         target:
           entity_id: media_player.bedroom_speaker
@@ -57,3 +49,16 @@ script:
           media_content_id: >
             {{ states("sensor.sleep_sound_content_id") }}
           media_content_type: music
+  go_to_sleep:
+    alias: Go to Sleep
+    sequence:
+      - service: input_select.select_option
+        target:
+          entity_id: input_select.sleep_sound
+        data_template:
+          option: >
+            {{ state_attr("input_select.sleep_sound", "options") | random }}
+      - service: script.play_bedroom_sleep_sound
+      - service: scene.turn_on
+        target:
+          entity_id: scene.sleep
