@@ -16,6 +16,7 @@ script:
           <<: *HARMONY_LG_TV_DEVICE_ID
           command: VolumeUp
           num_repeats: 25
+    icon: mdi:volume-plus
   tv_volume_decrease_25:
     alias: TV Volume -25
     sequence:
@@ -26,19 +27,4 @@ script:
           <<: *HARMONY_LG_TV_DEVICE_ID
           command: VolumeDown
           num_repeats: 25
-  hoth_full_volume:
-    alias: Hoth Full Volume
-    sequence:
-      - service: media_player.volume_set
-        target:
-          entity_id: media_player.cast_hoth
-        data:
-          volume_level: 1.0
-  hoth_half_volume:
-    alias: Hoth Half Volume
-    sequence:
-      - service: media_player.volume_set
-        target:
-          entity_id: media_player.cast_hoth
-        data:
-          volume_level: 0.5
+    icon: mdi:volume-minus
