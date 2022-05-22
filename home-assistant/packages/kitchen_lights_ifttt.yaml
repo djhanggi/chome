@@ -1,4 +1,9 @@
 ---
+homeassistant:
+  customize:
+    automation.kitchen_lights_sync_power_from_wyze:
+      icon: mdi:light-switch
+
 ifttt:
   key:
     djhanggi_wyze_ifttt: !secret djhanggi_wyze_ifttt
@@ -22,6 +27,7 @@ script:
         {% else %}
           {"event":"kitchen_lights_power_off"}
         {% endif %}
+    icon: mdi:light-switch
 
 automation:
   - id: kitchen_lights_sync_power_from_wyze
@@ -33,7 +39,6 @@ automation:
       - platform: webhook
         id: power_off
         webhook_id: !secret kitchen_lights_sync_power_off_from_wyze_webhook_id
-    mode: single
     action:
       - service_template: >
           {% if trigger.id == "power_on" %}
@@ -43,6 +48,7 @@ automation:
           {% endif %}
         target:
           entity_id: input_boolean.kitchen_lights_power
+    mode: single
 
 switch:
   - platform: template
