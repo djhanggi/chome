@@ -3,12 +3,12 @@ input_datetime:
   plant_sunrise_time:
     name: Plant Sunrise Time
     has_time: true
-    initial: 07:15
+    initial: "07:15:00"
     icon: mdi:weather-sunset-up
   plant_sunset_time:
     name: Plant Sunset Time
     has_time: true
-    initial: 21:45
+    initial: "21:45:00"
     icon: mdi:weather-night
 
 group:

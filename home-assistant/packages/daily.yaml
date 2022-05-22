@@ -3,12 +3,12 @@ input_datetime:
   morning_start_time:
     name: Morning Start Time
     has_time: true
-    initial: 07:45
+    initial: "07:45:00"
     icon: mdi:weather-sunset-up
   evening_start_time:
     name: Evening Start Time
     has_time: true
-    initial: 21:30
+    initial: "21:30:00"
     icon: mdi:weather-night
 
 template:
