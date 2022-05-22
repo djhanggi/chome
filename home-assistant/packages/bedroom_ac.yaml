@@ -1,9 +1,37 @@
 ---
+homeassistant:
+  customize:
+    automation.bedroom_ac_set_temperature:
+      icon: mdi:thermometer
+    switch.bedroom_ac:
+      icon: mdi:air-conditioner
+
+input_boolean:
+  bedroom_ac_power:
+    name: Bedroom AC - Power
+    icon: mdi:air-conditioner
+
+input_number:
+  bedroom_ac_temperature:
+    name: Bedroom AC - Temperature
+    min: 60.0
+    max: 90.0
+    step: 1.0
+    icon: mdi:thermometer
+
 script:
   bedroom_ac_send_command:
     alias: Bedroom AC - Send Commmand
-    description: >
+    description: |
       Sends a command to the Bedroom AC, particularly to manage atomicity.
+      Options include:
+        * toggle_power
+        * increase_temperature
+        * decrease_temperature
+        * set_cool_mode
+        * set_fan_only_mode
+        * set_money_saver_mode
+        * toggle_fan_speed
     sequence:
       - service: remote.send_command
         target:
@@ -12,14 +40,15 @@ script:
           device: friedrich_ac
           command: "{{ command }}"
     mode: single
+    icon: mdi:air-conditioner
   bedroom_ac_correct_power:
     alias: Bedroom AC - Correct Power
     sequence:
-      - service: script.bedroom_ac_send_command
-        data:
-          command: toggle_power
+      - service: input_boolean.toggle
+        target:
+          entity_id: input_boolean.bedroom_ac_power
     mode: single
-    icon: mdi:fan
+    icon: mdi:power
   bedroom_ac_toggle_power:
     alias: Bedroom AC - Toggle Power
     sequence:
@@ -37,7 +66,7 @@ script:
       - delay:
           milliseconds: 750
     mode: queued
-    icon: mdi:fan
+    icon: mdi:air-conditioner
   bedroom_ac_toggle_temperature:
     alias: Bedroom AC - Toggle Temperature
     sequence:
@@ -69,84 +98,6 @@ script:
           entity_id: input_number.bedroom_ac_temperature
     mode: single
     icon: mdi:thermometer
-  bedroom_ac_increase_temperature:
-    alias: Bedroom AC - Increase Temperature
-    sequence:
-      - service: script.bedroom_ac_toggle_temperature
-        data:
-          increase_temperature: true
-    mode: single
-    icon: mdi:thermometer-plus
-  bedroom_ac_decrease_temperature:
-    alias: Bedroom AC - Decrease Temperature
-    sequence:
-      - service: script.bedroom_ac_toggle_temperature
-        data:
-          increase_temperature: false
-    mode: single
-    icon: mdi:thermometer-minus
-  bedroom_ac_set_cool_mode:
-    alias: Bedroom AC - Set Cool Mode
-    sequence:
-      - service: script.bedroom_ac_send_command
-        data:
-          command: set_cool_mode
-    mode: single
-    icon: mdi:coolant-temperature
-  bedroom_ac_set_fan_only_mode:
-    alias: Bedroom AC - Set Fan-Only Mode
-    sequence:
-      - service: script.bedroom_ac_send_command
-        data:
-          command: set_fan_only_mode
-    mode: single
-    icon: mdi:fan
-  bedroom_ac_set_money_saver_mode:
-    alias: Bedroom AC - Set Money-Saver Mode
-    sequence:
-      - service: script.bedroom_ac_send_command
-        data:
-          command: set_money_saver_mode
-    mode: single
-    icon: mdi:fan
-  bedroom_ac_toggle_fan_speed:
-    alias: Bedroom AC - Toggle Fan Speed
-    sequence:
-      - service: script.bedroom_ac_send_command
-        data:
-          command: toggle_fan_speed
-    mode: single
-    icon: mdi:fan-chevron-up
-
-input_boolean:
-  bedroom_ac_power:
-    name: Bedroom AC - Power
-    icon: mdi:air-conditioner
-  bedroom_ac_use_outside_temperature:
-    name: Bedroom AC - Use Outside Temperature
-    initial: false
-    icon: mdi:sun-thermometer-outline
-
-input_number:
-  bedroom_ac_temperature:
-    name: Bedroom AC - Temperature
-    min: 60.0
-    max: 90.0
-    step: 1.0
-    icon: mdi:temperature
-
-template:
-  - sensor:
-      - unique_id: bedroom_ac_temperature_reference
-        name: Bedroom AC - Temperature Reference
-        unit_of_measurement: F
-        state: >
-          {% if is_state("input_boolean.bedroom_ac_use_outside_temperature",
-          "on") %}
-            {{ state_attr("weather.chome", "temperature") }}
-          {% else %}
-            {{ states("sensor.bedroom_broadlink_temperature") }}
-          {% endif %}
 
 automation:
   - id: bedroom_ac_set_temperature
@@ -168,13 +119,11 @@ automation:
               states("input_number.bedroom_ac_temperature") | int !=
               state_attr("climate.bedroom_ac", "temperature") | int }}
           sequence:
-            - service_template: >
-                {% if states("input_number.bedroom_ac_temperature") | int <
-                state_attr("climate.bedroom_ac", "temperature") | int %}
-                  script.bedroom_ac_increase_temperature
-                {% else %}
-                  script.bedroom_ac_decrease_temperature
-                {% endif %}
+            - service: script.bedroom_ac_toggle_temperature
+              data_template:
+                increase_temperature: >
+                  {{ states("input_number.bedroom_ac_temperature") | int <
+                  state_attr("climate.bedroom_ac", "temperature") | int }}
 
 switch:
   - platform: template
@@ -187,6 +136,9 @@ switch:
             entity_id: input_boolean.bedroom_ac_power
             state: "off"
           - service: script.bedroom_ac_toggle_power
+          - service: script.bedroom_ac_send_command
+            data:
+              command: set_cool_mode
         turn_off:
           - condition: state
             entity_id: input_boolean.bedroom_ac_power
@@ -198,12 +150,12 @@ climate:
     unique_id: bedroom_ac
     name: Bedroom AC
     heater: switch.bedroom_ac
-    target_sensor: sensor.bedroom_ac_temperature_reference
+    target_sensor: sensor.bedroom_broadlink_temperature
     min_temp: 60
     max_temp: 90
     ac_mode: true
     cold_tolerance: 1.0
-    hot_tolerance: 0
+    hot_tolerance: 1.0
     min_cycle_duration:
       minutes: 2
     initial_hvac_mode: "off"
