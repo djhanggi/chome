@@ -7,7 +7,7 @@ input_boolean:
   kitchen_lights_power:
     name: Kitchen Lights - Power
     initial: false
-    icon: mdi:light
+    icon: mdi:light-switch
 
 script:
   set_kitchen_lights_power:

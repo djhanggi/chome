@@ -14,11 +14,12 @@ homekit:
         - switch.sunlight_lamp
         - switch.living_room_plant_light
         - switch.bedroom_plant_light
+        - switch.kitchen_lights
+        - cover.smart_roller_shade_curtain
         - climate.bedroom_ac
         - climate.living_room_ac
         - fan.dyson_fan
         - fan.dyson_heater_fan
-        - cover.smart_roller_shade_curtain
     entity_config:
       switch.adaptive_lighting_all_lights:
         name: Sun-Matched Lighting
@@ -29,6 +30,8 @@ homekit:
         type: outlet
       switch.bedroom_plant_light:
         type: outlet
+      switch.kitchen_lights:
+        type: switch
       fan.dyson_fan:
         name: Living Room Fan
       fan.dyson_heater_fan:
