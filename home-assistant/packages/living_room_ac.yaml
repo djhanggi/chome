@@ -7,7 +7,7 @@ homeassistant:
 
 script:
   living_room_ac_send_command:
-    alias: "Living Room AC - Send Command"
+    alias: Living Room AC - Send Command
     description: >
       Sends a command to the Living Room AC, particularly to manage atomicity.
     sequence:
@@ -19,7 +19,7 @@ script:
           command: "{{ command }}"
     mode: single
   living_room_ac_correct_power:
-    alias: "Living Room AC - Correct Power"
+    alias: Living Room AC - Correct Power
     sequence:
       - service: script.living_room_ac_send_command
         data:
@@ -27,7 +27,7 @@ script:
     mode: single
     icon: mdi:fan
   living_room_ac_toggle_power:
-    alias: "Living Room AC - Toggle Power"
+    alias: Living Room AC - Toggle Power
     sequence:
       # Ensure that setting temperature is not currently running to guarantee
       # atomicity with that script.
@@ -45,7 +45,7 @@ script:
     mode: queued
     icon: mdi:fan
   living_room_ac_toggle_temperature:
-    alias: "Living Room AC - Toggle Temperature"
+    alias: Living Room AC - Toggle Temperature
     sequence:
       # Delay to allow time for any existing AC scripts to run and finish.
       - delay:
@@ -76,7 +76,7 @@ script:
     mode: single
     icon: mdi:thermometer
   living_room_ac_increase_temperature:
-    alias: "Living Room AC - Increase Temperature"
+    alias: Living Room AC - Increase Temperature
     sequence:
       - service: script.living_room_ac_toggle_temperature
         data:
@@ -84,7 +84,7 @@ script:
     mode: single
     icon: mdi:thermometer-plus
   living_room_ac_decrease_temperature:
-    alias: "Living Room AC - Decrease Temperature"
+    alias: Living Room AC - Decrease Temperature
     sequence:
       - service: script.living_room_ac_toggle_temperature
         data:
@@ -92,7 +92,7 @@ script:
     mode: single
     icon: mdi:thermometer-minus
   living_room_ac_set_cool_mode:
-    alias: "Living Room AC - Set Cool Mode"
+    alias: Living Room AC - Set Cool Mode
     sequence:
       - service: script.living_room_ac_send_command
         data:
@@ -100,7 +100,7 @@ script:
     mode: single
     icon: mdi:coolant-temperature
   living_room_ac_set_fan_only_mode:
-    alias: "Living Room AC - Set Fan-Only Mode"
+    alias: Living Room AC - Set Fan-Only Mode
     sequence:
       - service: script.living_room_ac_send_command
         data:
@@ -108,7 +108,7 @@ script:
     mode: single
     icon: mdi:fan
   living_room_ac_set_money_saver_mode:
-    alias: "Living Room AC - Set Money-Saver Mode"
+    alias: Living Room AC - Set Money-Saver Mode
     sequence:
       - service: script.living_room_ac_send_command
         data:
@@ -116,7 +116,7 @@ script:
     mode: single
     icon: mdi:fan
   living_room_ac_toggle_fan_speed:
-    alias: "Living Room AC - Toggle Fan Speed"
+    alias: Living Room AC - Toggle Fan Speed
     sequence:
       - service: script.living_room_ac_send_command
         data:
@@ -144,20 +144,19 @@ input_number:
 template:
   - sensor:
       - unique_id: living_room_ac_temperature_reference
-        name: "Living Room AC - Temperature Reference"
-        unit_of_measurement: "F"
+        name: Living Room AC - Temperature Reference
+        unit_of_measurement: F
         state: >
-          {% if
-          is_state("input_boolean.living_room_ac_use_outside_temperature",
+          {% if is_state("input_boolean.living_room_ac_use_outside_temperature",
           "on") %}
-            {{ state_attr('weather.chome', 'temperature') }}
+            {{ state_attr("weather.chome", "temperature") }}
           {% else %}
-            {{ states('sensor.bedroom_broadlink_temperature') }}
+            {{ states("sensor.bedroom_broadlink_temperature") }}
           {% endif %}
 
 automation:
   - id: living_room_ac_set_temperature
-    alias: "Living Room AC - Set Temperature"
+    alias: Living Room AC - Set Temperature
     description: >
       Sets the AC temperature to the set point of climate.living_room_ac.
     trigger:
@@ -171,13 +170,13 @@ automation:
     action:
       - repeat:
           while: >
-            {{ is_state('input_boolean.living_room_ac_power', "on") and
-              states('input_number.living_room_ac_temperature') | int !=
-              state_attr('climate.living_room_ac', 'temperature') | int }}
+            {{ is_state("input_boolean.living_room_ac_power", "on") and
+              states("input_number.living_room_ac_temperature") | int !=
+              state_attr("climate.living_room_ac", "temperature") | int }}
           sequence:
             - service_template: >
-                {% if states('input_number.living_room_ac_temperature') | int <
-                state_attr('climate.living_room_ac', 'temperature') | int %}
+                {% if states("input_number.living_room_ac_temperature") | int <
+                state_attr("climate.living_room_ac", "temperature") | int %}
                   script.living_room_ac_increase_temperature
                 {% else %}
                   script.living_room_ac_decrease_temperature

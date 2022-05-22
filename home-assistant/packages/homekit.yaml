@@ -1,7 +1,7 @@
 ---
 homekit:
-  - name: "CHOME.HA Bridge"
-    mode: "bridge"
+  - name: CHOME.HA Bridge
+    mode: bridge
     filter:
       include_entities:
         - switch.adaptive_lighting_all_lights
@@ -21,17 +21,17 @@ homekit:
         - cover.smart_roller_shade_curtain
     entity_config:
       switch.adaptive_lighting_all_lights:
-        name: "Sun-Matched Lighting"
-        type: "switch"
+        name: Sun-Matched Lighting
+        type: switch
       switch.sunlight_lamp:
-        type: "outlet"
+        type: outlet
       switch.living_room_plant_light:
-        type: "outlet"
+        type: outlet
       switch.bedroom_plant_light:
-        type: "outlet"
+        type: outlet
       fan.dyson_fan:
-        name: "Living Room Fan"
+        name: Living Room Fan
       fan.dyson_heater_fan:
-        name: "Bedroom Fan"
+        name: Bedroom Fan
       cover.smart_roller_shade_curtain:
-        name: "Bedroom Blinds"
+        name: Bedroom Blinds

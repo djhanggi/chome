@@ -1,20 +1,20 @@
 ---
 input_datetime:
   morning_start_time:
-    name: "Morning Start Time"
+    name: Morning Start Time
     has_time: true
-    initial: "07:45"
+    initial: 07:45
     icon: mdi:weather-sunset-up
   evening_start_time:
-    name: "Evening Start Time"
+    name: Evening Start Time
     has_time: true
-    initial: "21:30"
+    initial: 21:30
     icon: mdi:weather-night
 
 template:
   - sensor:
       - unique_id: daytime_hours
-        name: "Daytime Hours"
+        name: Daytime Hours
         state: >
           {{ now().strftime("%H:%M:%S") >=
           states("input_datetime.morning_start_time") and
@@ -23,7 +23,7 @@ template:
 
 scene:
   - id: daytime
-    name: "Daytime"
+    name: Daytime
     entities:
       group.lighting:
         state: "on"
@@ -31,7 +31,7 @@ scene:
         state: "on"
     icon: mdi:weather-sunny
   - id: evening
-    name: "Evening"
+    name: Evening
     entities:
       switch.adaptive_lighting_all_lights:
         state: "off"
@@ -49,7 +49,7 @@ scene:
         state: "off"
     icon: mdi:weather-sunset
   - id: sleep
-    name: "Sleep"
+    name: Sleep
     entities:
       group.lighting:
         state: "off"
@@ -68,29 +68,29 @@ scene:
 
 automation:
   - id: morning
-    alias: "Morning"
-    description: "Applies morning scenes at Morning Start Time."
+    alias: Morning
+    description: Applies morning scenes at Morning Start Time.
     trigger:
-      - platform: "time"
+      - platform: time
         at: input_datetime.morning_start_time
     condition:
-      - condition: "state"
+      - condition: state
         entity_id: person.djhanggi
-        state: "home"
+        state: home
     action:
       - scene: scene.ajar_blinds
       - scene: scene.daytime
     mode: single
   - id: evening
-    alias: "Evening"
-    description: "Applies evening scenes at Evening Start Time."
+    alias: Evening
+    description: Applies evening scenes at Evening Start Time.
     trigger:
       - platform: time
         at: input_datetime.evening_start_time
     condition:
-      - condition: "state"
+      - condition: state
         entity_id: person.djhanggi
-        state: "home"
+        state: home
     action:
       - scene: scene.closed_blinds
       - scene: scene.evening

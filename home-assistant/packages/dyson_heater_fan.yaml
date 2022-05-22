@@ -7,23 +7,23 @@
 
 input_boolean:
   dyson_heater_fan_power:
-    name: "Dyson Heater Fan - Power"
+    name: Dyson Heater Fan - Power
     initial: "off"
     icon: mdi:fan
   dyson_heater_fan_oscillating:
-    name: "Dyson Heater Fan - Oscillating"
+    name: Dyson Heater Fan - Oscillating
     initial: "off"
     icon: mdi:fan
 
 input_number:
   dyson_heater_fan_speed:
-    name: "Dyson Heater Fan - Speed"
+    name: Dyson Heater Fan - Speed
     min: 1
     max: 10
     step: 1
     icon: mdi:fan
   dyson_heater_fan_target_speed:
-    name: "Dyson Heater Fan - Target Speed"
+    name: Dyson Heater Fan - Target Speed
     min: 1
     max: 10
     step: 1
@@ -42,7 +42,7 @@ script:
           command: "{{ broadlink_command }}"
     mode: single
   dyson_heater_fan_correct_power:
-    alias: "Dyson Heater Fan - Correct Power"
+    alias: Dyson Heater Fan - Correct Power
     sequence:
       - service: script.dyson_heater_fan_send_command
         data:
@@ -50,7 +50,7 @@ script:
     mode: single
     icon: mdi:fan
   dyson_heater_fan_toggle_power:
-    alias: "Dyson Heater Fan - Toggle Power"
+    alias: Dyson Heater Fan - Toggle Power
     sequence:
       # Ensure that setting temperature is not currently running to guarantee
       # atomicity with that script.
@@ -73,7 +73,7 @@ script:
     mode: queued
     icon: mdi:fan
   dyson_heater_fan_toggle_oscillate:
-    alias: "Dyson Heater Fan - Toggle Oscillate"
+    alias: Dyson Heater Fan - Toggle Oscillate
     fields:
       oscillating:
         name: Oscillating
@@ -112,7 +112,7 @@ script:
     mode: single
     icon: mdi:fan
   dyson_heater_fan_toggle_speed:
-    alias: "Dyson Heater Fan - Toggle Speed"
+    alias: Dyson Heater Fan - Toggle Speed
     sequence:
       # Delay to allow time for any existing fan scripts to run and finish.
       - delay:
@@ -144,7 +144,7 @@ script:
     icon: mdi:fan-plus
     max: 9
   dyson_heater_fan_increase_speed:
-    alias: "Dyson Heater Fan - Increase Speed"
+    alias: Dyson Heater Fan - Increase Speed
     sequence:
       - service: script.dyson_heater_fan_toggle_speed
         data:
@@ -153,7 +153,7 @@ script:
     icon: mdi:fan-plus
     max: 9
   dyson_heater_fan_decrease_speed:
-    alias: "Dyson Heater Fan - Decrease Speed"
+    alias: Dyson Heater Fan - Decrease Speed
     sequence:
       - service: script.dyson_heater_fan_toggle_speed
         data:
@@ -162,7 +162,7 @@ script:
     icon: mdi:fan-minus
     max: 9
   dyson_heater_fan_set_speed:
-    alias: "Dyson Heater Fan - Set Speed"
+    alias: Dyson Heater Fan - Set Speed
     mode: restart
     sequence:
       - repeat:
@@ -182,7 +182,7 @@ script:
 
 automation:
   - id: dyson_heater_fan_set_speed
-    alias: "Dyson Heater Fan - Set Speed"
+    alias: Dyson Heater Fan - Set Speed
     description: >
       Sets the fan speed to the target speed.
     trigger:

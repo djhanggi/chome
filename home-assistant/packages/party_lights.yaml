@@ -1,25 +1,25 @@
 ---
 input_boolean:
   party_lights_on:
-    name: "Party Lights - On"
+    name: Party Lights - "On"
     icon: mdi:party-popper
     initial: "off"
 
 input_number:
   party_lights_speed:
-    name: "Party Lights - Speed"
+    name: Party Lights - Speed
     initial: 15
     min: 1
     max: 30
     step: 1
 
 switch:
-  - platform: "template"
+  - platform: template
     switches:
       party_lights:
         value_template: >
           {{ states("input_boolean.party_lights_on") }}
-        friendly_name: "Party Lights"
+        friendly_name: Party Lights
         turn_on:
           - service: input_boolean.turn_on
             entity_id: input_boolean.party_lights_on
@@ -35,11 +35,11 @@ switch:
 
 script:
   party_lights_automation:
-    alias: "Party Lights Automation"
+    alias: Party Lights Automation
     sequence:
       - repeat:
           while:
-            - condition: "state"
+            - condition: state
               entity_id: input_boolean.party_lights_on
               state: "on"
           sequence:
@@ -47,7 +47,7 @@ script:
             - delay: >
                 {{ states("input_number.party_lights_speed") }}
   set_party_lights:
-    alias: "Set Party Lights"
+    alias: Set Party Lights
     sequence:
       - service: light.turn_on
         data_template:

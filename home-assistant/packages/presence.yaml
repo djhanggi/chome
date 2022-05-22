@@ -2,7 +2,7 @@
 template:
   - sensor:
       - unique_id: scarif_at_home
-        name: "Scarif At Home"
+        name: Scarif At Home
         state: >
           {% if is_state("sensor.scarif_wifi_connection", "CHOME.NYC") or
           is_state("sensor.scarif_wifi_connection", "CHOME") %}
@@ -13,22 +13,22 @@ template:
 
 group:
   djhanggi_presence:
-    name: "DJHANGGI Presence"
+    name: DJHANGGI Presence
     entities:
       - person.djhanggi
       - sensor.scarif_at_home
 
 automation:
   - id: away
-    alias: "Away"
-    description: "Turns off entities while away."
+    alias: Away
+    description: Turns off entities while away.
     mode: single
     trigger:
-      - platform: "state"
+      - platform: state
         entity_id:
           - group.djhanggi_presence
-        from: "home"
-        to: "not_home"
+        from: home
+        to: not_home
     condition: []
     action:
       - service: scene.create
@@ -62,15 +62,15 @@ automation:
             remote.harmony:
               state: "off"
   - id: return
-    alias: "Return"
-    description: "Turns on entities when returning."
+    alias: Return
+    description: Turns on entities when returning.
     mode: single
     trigger:
       - platform: state
         entity_id:
           - group.djhanggi_presence
-        from: "not_home"
-        to: "home"
+        from: not_home
+        to: home
     condition: []
     action:
       - service: scene.turn_on

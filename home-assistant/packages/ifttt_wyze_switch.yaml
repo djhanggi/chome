@@ -5,13 +5,13 @@ ifttt:
 
 input_boolean:
   kitchen_lights_power:
-    name: "Kitchen Lights - Power"
+    name: Kitchen Lights - Power
     initial: false
     icon: mdi:light
 
 script:
   set_kitchen_lights_power:
-    alias: "Set Kitchen Lights Power"
+    alias: Set Kitchen Lights Power
     description: >
       Sends command to IFTTT to turn on or off Wyze Kitchen Lights
     sequence:
@@ -25,14 +25,14 @@ script:
 
 automation:
   - id: kitchen_lights_sync_power_from_wyze
-    alias: "Kitchen Lights - Sync Power From Wyze"
+    alias: Kitchen Lights - Sync Power From Wyze
     trigger:
       - platform: webhook
-        id: "power_on"
-        webhook_id:  !secret kitchen_lights_sync_power_on_from_wyze_webhook_id
+        id: power_on
+        webhook_id: !secret kitchen_lights_sync_power_on_from_wyze_webhook_id
       - platform: webhook
-        id: "power_off"
-        webhook_id:  !secret kitchen_lights_sync_power_off_from_wyze_webhook_id
+        id: power_off
+        webhook_id: !secret kitchen_lights_sync_power_off_from_wyze_webhook_id
     mode: single
     action:
       - service_template: >
@@ -48,8 +48,8 @@ switch:
   - platform: template
     switches:
       kitchen_lights:
-        friendly_name: "Kitchen Lights"
-        unique_id: "kitchen_lights"
+        friendly_name: Kitchen Lights
+        unique_id: kitchen_lights
         value_template: >
           {{ is_state("input_boolean.kitchen_lights_power", "on") }}
         turn_on:

@@ -1,8 +1,8 @@
 ---
 script:
   sync_next_alarm_time:
-    alias: "Sync Next Alarm Time from Scarif"
-    description: "Syncs Next Alarm Time from Scarif."
+    alias: Sync Next Alarm Time from Scarif
+    description: Syncs Next Alarm Time from Scarif.
     sequence:
       - service: input_datetime.set_datetime
         target:
@@ -11,31 +11,31 @@ script:
           time: >
             {{
               as_timestamp(states.sensor.scarif_next_alarm.state)
-              | timestamp_custom('%H:%M')
+              | timestamp_custom("%H:%M")
             }}
   set_alarm_on_scarif:
-    alias: "Set Alarm On Scarif"
+    alias: Set Alarm On Scarif
     sequence:
       - service: notify.mobile_app_scarif
         data_template:
           title: Set Alarm
           message: >
             {{ state_attr("input_datetime.next_alarm_time", "timestamp") |
-            timestamp_custom('%H:%M', False) }}
+            timestamp_custom("%H:%M", False) }}
           data:
             channel: Set Alarm
             timeout: 1
 
 input_datetime:
   next_alarm_time:
-    name: "Next Alarm Time"
+    name: Next Alarm Time
     has_time: true
     icon: mdi:alarm-check
 
 automation:
   - id: set_morning_start_time_to_sunrise
-    alias: "Set Morning Start Time to Sunrise"
-    description: "Sets the Morning Start Time to the next sunrise."
+    alias: Set Morning Start Time to Sunrise
+    description: Sets the Morning Start Time to the next sunrise.
     mode: single
     trigger:
       - platform: time
@@ -46,6 +46,6 @@ automation:
         target:
           entity_id: input_datetime.morning_start_time
         data_template:
-          time: >
-            {{ as_timestamp(state_attr('sun.sun', 'next_rising')) |
+          time: >-
+            {{ as_timestamp(state_attr("sun.sun", "next_rising")) |
             timestamp_custom("%H:%M") }}

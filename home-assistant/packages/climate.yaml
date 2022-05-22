@@ -1,7 +1,7 @@
 ---
 scene:
   - id: fans_on
-    name: "Fans On"
+    name: Fans On
     entities:
       fan.dyson_fan:
         state: "on"
@@ -11,7 +11,7 @@ scene:
         oscillating: true
     icon: mdi:fan
   - id: fans_off
-    name: "Fans Off"
+    name: Fans Off
     entities:
       fan.dyson_fan:
         state: "off"
@@ -19,15 +19,15 @@ scene:
         state: "off"
     icon: mdi:fan-off
   - id: acs_on
-    name: "ACs On"
+    name: ACs On
     entities:
       climate.living_room_ac:
-        state: "cool"
+        state: cool
       climate.bedroom_ac:
-        state: "cool"
+        state: cool
     icon: mdi:home-thermometer
   - id: acs_off
-    name: "ACs Off"
+    name: ACs Off
     entities:
       climate.living_room_ac:
         state: "off"
@@ -35,19 +35,19 @@ scene:
         state: "off"
     icon: mdi:home-thermometer
   - id: bedroom_climate
-    name: "Bedroom Climate"
+    name: Bedroom Climate
     entities:
       fan.dyson_heater_fan:
         state: "on"
         oscillating: true
       climate.bedroom_ac:
-        state: "cool"
+        state: cool
     icon: mdi:home-thermometer
   - id: living_room_climate
-    name: "Living Room Climate"
+    name: Living Room Climate
     entities:
       climate.living_room_ac:
-        state: "cool"
+        state: cool
       fan.dyson_fan:
         state: "on"
         oscillating: true

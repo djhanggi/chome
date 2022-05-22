@@ -7,23 +7,23 @@ homeassistant:
 
 input_boolean:
   dyson_fan_power:
-    name: "Dyson Fan - Power"
+    name: Dyson Fan - Power
     initial: "off"
     icon: mdi:fan
   dyson_fan_oscillating:
-    name: "Dyson Fan - Oscillating"
+    name: Dyson Fan - Oscillating
     initial: "off"
     icon: mdi:fan
 
 input_number:
   dyson_fan_speed:
-    name: "Dyson Fan - Speed"
+    name: Dyson Fan - Speed
     min: 1
     max: 10
     step: 1
     icon: mdi:fan
   dyson_fan_target_speed:
-    name: "Dyson Fan - Target Speed"
+    name: Dyson Fan - Target Speed
     min: 1
     max: 10
     step: 1
@@ -48,7 +48,7 @@ script:
       #     command: "{{ broadlink_command }}"
     mode: single
   dyson_fan_correct_power:
-    alias: "Dyson Fan - Correct Power"
+    alias: Dyson Fan - Correct Power
     sequence:
       - service: script.dyson_fan_send_command
         data:
@@ -57,7 +57,7 @@ script:
     mode: single
     icon: mdi:fan
   dyson_fan_toggle_power:
-    alias: "Dyson Fan - Toggle Power"
+    alias: Dyson Fan - Toggle Power
     sequence:
       # Ensure that setting temperature is not currently running to guarantee
       # atomicity with that script.
@@ -76,7 +76,7 @@ script:
     mode: queued
     icon: mdi:fan
   dyson_fan_toggle_oscillate:
-    alias: "Dyson Fan - Toggle Oscillate"
+    alias: Dyson Fan - Toggle Oscillate
     sequence:
       # Ensure that setting temperature is not currently running to guarantee
       # atomicity with that script.
@@ -98,7 +98,7 @@ script:
     mode: single
     icon: mdi:fan
   dyson_fan_toggle_speed:
-    alias: "Dyson Fan - Toggle Speed"
+    alias: Dyson Fan - Toggle Speed
     sequence:
       # Delay to allow time for any existing fan scripts to run and finish.
       - delay:
@@ -136,7 +136,7 @@ script:
     icon: mdi:fan-plus
     max: 9
   dyson_fan_increase_speed:
-    alias: "Dyson Fan - Increase Speed"
+    alias: Dyson Fan - Increase Speed
     sequence:
       - service: script.dyson_fan_toggle_speed
         data:
@@ -145,7 +145,7 @@ script:
     icon: mdi:fan-plus
     max: 9
   dyson_fan_decrease_speed:
-    alias: "Dyson Fan - Decrease Speed"
+    alias: Dyson Fan - Decrease Speed
     sequence:
       - service: script.dyson_fan_toggle_speed
         data:
@@ -154,18 +154,18 @@ script:
     icon: mdi:fan-minus
     max: 9
   dyson_fan_set_speed:
-    alias: "Dyson Fan - Set Speed"
+    alias: Dyson Fan - Set Speed
     mode: restart
     sequence:
       - repeat:
           while: >
             {{ is_state("input_boolean.dyson_fan", "on") and
-            states('input_number.dyson_fan_speed') | int * 10 !=
-            percentage and repeat.index < 10 }}
+            states("input_number.dyson_fan_speed") | int * 10 != percentage and
+            repeat.index < 10 }}
           sequence:
             - service_template: >
-                {% if states('input_number.dyson_fan_speed') <
-                states('input_number.dyson_fan_target_speed') %}
+                {% if states("input_number.dyson_fan_speed") <
+                states("input_number.dyson_fan_target_speed") %}
                   script.dyson_fan_increase_speed
                 {% else %}
                   script.dyson_fan_decrease_speed
@@ -174,7 +174,7 @@ script:
 
 automation:
   - id: dyson_fan_set_speed
-    alias: "Dyson Fan - Set Speed"
+    alias: Dyson Fan - Set Speed
     description: >
       Sets the fan speed to the target speed.
     trigger:
@@ -187,13 +187,13 @@ automation:
     action:
       - repeat:
           while: >
-            {{ is_state('input_boolean.dyson_fan_power', "on") and
-              states('input_number.dyson_fan_target_speed') | int !=
-              states('input_number.dyson_fan_speed') | int }}
+            {{ is_state("input_boolean.dyson_fan_power", "on") and
+              states("input_number.dyson_fan_target_speed") | int !=
+              states("input_number.dyson_fan_speed") | int }}
           sequence:
             - service_template: >
-                {% if states('input_number.dyson_fan_speed') | int <
-                states('input_number.dyson_fan_target_speed') | int %}
+                {% if states("input_number.dyson_fan_speed") | int <
+                states("input_number.dyson_fan_target_speed") | int %}
                   script.dyson_fan_increase_speed
                 {% else %}
                   script.dyson_fan_decrease_speed
@@ -206,11 +206,11 @@ fan:
         friendly_name: Dyson Fan
         unique_id: fan.dyson_fan
         value_template: >
-          {{ states('input_boolean.dyson_fan_power') }}
+          {{ states("input_boolean.dyson_fan_power") }}
         oscillating_template: >
-          {{ is_state('input_boolean.dyson_fan_oscillating', "on") }}
+          {{ is_state("input_boolean.dyson_fan_oscillating", "on") }}
         percentage_template: >
-          {{ states('input_number.dyson_fan_target_speed') | int * 10 }}
+          {{ states("input_number.dyson_fan_target_speed") | int * 10 }}
         turn_on:
           - condition: state
             entity_id: input_boolean.dyson_fan_power

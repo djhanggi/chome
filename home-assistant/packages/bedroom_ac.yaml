@@ -1,7 +1,7 @@
 ---
 script:
   bedroom_ac_send_command:
-    alias: "Bedroom AC - Send Commmand"
+    alias: Bedroom AC - Send Commmand
     description: >
       Sends a command to the Bedroom AC, particularly to manage atomicity.
     sequence:
@@ -13,7 +13,7 @@ script:
           command: "{{ command }}"
     mode: single
   bedroom_ac_correct_power:
-    alias: "Bedroom AC - Correct Power"
+    alias: Bedroom AC - Correct Power
     sequence:
       - service: script.bedroom_ac_send_command
         data:
@@ -21,7 +21,7 @@ script:
     mode: single
     icon: mdi:fan
   bedroom_ac_toggle_power:
-    alias: "Bedroom AC - Toggle Power"
+    alias: Bedroom AC - Toggle Power
     sequence:
       # Ensure that setting temperature is not currently running to guarantee
       # atomicity with that script.
@@ -39,7 +39,7 @@ script:
     mode: queued
     icon: mdi:fan
   bedroom_ac_toggle_temperature:
-    alias: "Bedroom AC - Toggle Temperature"
+    alias: Bedroom AC - Toggle Temperature
     sequence:
       # Delay to allow time for any existing AC scripts to run and finish.
       - delay:
@@ -70,7 +70,7 @@ script:
     mode: single
     icon: mdi:thermometer
   bedroom_ac_increase_temperature:
-    alias: "Bedroom AC - Increase Temperature"
+    alias: Bedroom AC - Increase Temperature
     sequence:
       - service: script.bedroom_ac_toggle_temperature
         data:
@@ -78,7 +78,7 @@ script:
     mode: single
     icon: mdi:thermometer-plus
   bedroom_ac_decrease_temperature:
-    alias: "Bedroom AC - Decrease Temperature"
+    alias: Bedroom AC - Decrease Temperature
     sequence:
       - service: script.bedroom_ac_toggle_temperature
         data:
@@ -86,7 +86,7 @@ script:
     mode: single
     icon: mdi:thermometer-minus
   bedroom_ac_set_cool_mode:
-    alias: "Bedroom AC - Set Cool Mode"
+    alias: Bedroom AC - Set Cool Mode
     sequence:
       - service: script.bedroom_ac_send_command
         data:
@@ -94,7 +94,7 @@ script:
     mode: single
     icon: mdi:coolant-temperature
   bedroom_ac_set_fan_only_mode:
-    alias: "Bedroom AC - Set Fan-Only Mode"
+    alias: Bedroom AC - Set Fan-Only Mode
     sequence:
       - service: script.bedroom_ac_send_command
         data:
@@ -102,7 +102,7 @@ script:
     mode: single
     icon: mdi:fan
   bedroom_ac_set_money_saver_mode:
-    alias: "Bedroom AC - Set Money-Saver Mode"
+    alias: Bedroom AC - Set Money-Saver Mode
     sequence:
       - service: script.bedroom_ac_send_command
         data:
@@ -110,7 +110,7 @@ script:
     mode: single
     icon: mdi:fan
   bedroom_ac_toggle_fan_speed:
-    alias: "Bedroom AC - Toggle Fan Speed"
+    alias: Bedroom AC - Toggle Fan Speed
     sequence:
       - service: script.bedroom_ac_send_command
         data:
@@ -138,19 +138,19 @@ input_number:
 template:
   - sensor:
       - unique_id: bedroom_ac_temperature_reference
-        name: "Bedroom AC - Temperature Reference"
-        unit_of_measurement: "F"
+        name: Bedroom AC - Temperature Reference
+        unit_of_measurement: F
         state: >
-          {% if
-          is_state("input_boolean.bedroom_ac_use_outside_temperature", "on") %}
-            {{ state_attr('weather.chome', 'temperature') }}
+          {% if is_state("input_boolean.bedroom_ac_use_outside_temperature",
+          "on") %}
+            {{ state_attr("weather.chome", "temperature") }}
           {% else %}
-            {{ states('sensor.bedroom_broadlink_temperature') }}
+            {{ states("sensor.bedroom_broadlink_temperature") }}
           {% endif %}
 
 automation:
   - id: bedroom_ac_set_temperature
-    alias: "Bedroom AC - Set Temperature"
+    alias: Bedroom AC - Set Temperature
     description: >
       Sets the AC temperature to the set point of climate.bedroom_ac.
     trigger:
@@ -164,13 +164,13 @@ automation:
     action:
       - repeat:
           while: >
-            {{ is_state('input_boolean.bedroom_ac_power', "on") and
-              states('input_number.bedroom_ac_temperature') | int !=
-              state_attr('climate.bedroom_ac', 'temperature') | int }}
+            {{ is_state("input_boolean.bedroom_ac_power", "on") and
+              states("input_number.bedroom_ac_temperature") | int !=
+              state_attr("climate.bedroom_ac", "temperature") | int }}
           sequence:
             - service_template: >
-                {% if states('input_number.bedroom_ac_temperature') | int <
-                state_attr('climate.bedroom_ac', 'temperature') | int %}
+                {% if states("input_number.bedroom_ac_temperature") | int <
+                state_attr("climate.bedroom_ac", "temperature") | int %}
                   script.bedroom_ac_increase_temperature
                 {% else %}
                   script.bedroom_ac_decrease_temperature

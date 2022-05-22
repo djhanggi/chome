@@ -7,7 +7,7 @@ homeassistant:
 
 script:
   tv_volume_increase_25:
-    alias: "TV Volume +25"
+    alias: TV Volume +25
     sequence:
       - service: remote.send_command
         target:
@@ -17,7 +17,7 @@ script:
           command: VolumeUp
           num_repeats: 25
   tv_volume_decrease_25:
-    alias: "TV Volume -25"
+    alias: TV Volume -25
     sequence:
       - service: remote.send_command
         target:
@@ -27,7 +27,7 @@ script:
           command: VolumeDown
           num_repeats: 25
   hoth_full_volume:
-    alias: "Hoth Full Volume"
+    alias: Hoth Full Volume
     sequence:
       - service: media_player.volume_set
         target:
@@ -35,7 +35,7 @@ script:
         data:
           volume_level: 1.0
   hoth_half_volume:
-    alias: "Hoth Half Volume"
+    alias: Hoth Half Volume
     sequence:
       - service: media_player.volume_set
         target:

@@ -1,27 +1,27 @@
 ---
 input_datetime:
   plant_sunrise_time:
-    name: "Plant Sunrise Time"
+    name: Plant Sunrise Time
     has_time: true
-    initial: "07:15"
+    initial: 07:15
     icon: mdi:weather-sunset-up
   plant_sunset_time:
-    name: "Plant Sunset Time"
+    name: Plant Sunset Time
     has_time: true
-    initial: "21:45"
+    initial: 21:45
     icon: mdi:weather-night
 
 group:
   plant_lights:
-    name: "Plant Lights"
+    name: Plant Lights
     entities:
       - switch.living_room_plant_light
       - switch.bedroom_plant_light
 
 automation:
   - id: plant_care
-    alias: "Plant Care"
-    description: "Turns on plant lighting and humidifers."
+    alias: Plant Care
+    description: Turns on plant lighting and humidifers.
     trigger:
       - platform: time
         at: input_datetime.plant_sunrise_time
