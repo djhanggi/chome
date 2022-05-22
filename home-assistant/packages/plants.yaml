@@ -1,4 +1,9 @@
 ---
+homeassistant:
+  customize:
+    automation.plant_care:
+      icon: mdi:flower
+
 input_datetime:
   plant_sunrise_time:
     name: Plant Sunrise Time
@@ -11,25 +16,17 @@ input_datetime:
     initial: "21:45:00"
     icon: mdi:weather-night
 
-group:
-  plant_lights:
-    name: Plant Lights
-    entities:
-      - switch.living_room_plant_light
-      - switch.bedroom_plant_light
-
 automation:
   - id: plant_care
     alias: Plant Care
     description: Turns on plant lighting and humidifers.
     trigger:
       - platform: time
-        at: input_datetime.plant_sunrise_time
         id: plant_sunrise_trigger
+        at: input_datetime.plant_sunrise_time
       - platform: time
-        at: input_datetime.plant_sunset_time
         id: plant_sunset_trigger
-    condition: []
+        at: input_datetime.plant_sunset_time
     action:
       - service_template: >
           {% if trigger.id == "plant_sunrise_trigger" %}
@@ -41,6 +38,8 @@ automation:
           {% endif %}
         target:
           entity_id:
-            - group.plant_lights
-            - switch.humidifier
-    mode: single
+            - switch.living_room_plant_light
+            - switch.bedroom_plant_light
+            # TODO(djhanggi): Re-enable in the fall.
+            # - switch.humidifier
+    mode: queued
