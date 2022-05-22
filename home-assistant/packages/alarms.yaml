@@ -1,8 +1,18 @@
 ---
+homeassistant:
+  customize:
+    automation.set_morning_start_time_to_sunrise:
+      icon: mdi:weather-sunset-up
+
+input_datetime:
+  next_alarm_time:
+    name: Next Alarm Time
+    has_time: true
+    icon: mdi:alarm-check
+
 script:
   sync_next_alarm_time:
     alias: Sync Next Alarm Time from Scarif
-    description: Syncs Next Alarm Time from Scarif.
     sequence:
       - service: input_datetime.set_datetime
         target:
@@ -11,8 +21,10 @@ script:
           time: >
             {{
               as_timestamp(states.sensor.scarif_next_alarm.state)
-              | timestamp_custom("%H:%M")
+              | timestamp_custom("%H:%M:%S")
+              | default("00:00:00", True)
             }}
+    icon: mdi:phone-clock
   set_alarm_on_scarif:
     alias: Set Alarm On Scarif
     sequence:
@@ -25,22 +37,14 @@ script:
           data:
             channel: Set Alarm
             timeout: 1
-
-input_datetime:
-  next_alarm_time:
-    name: Next Alarm Time
-    has_time: true
-    icon: mdi:alarm-check
+    icon: mdi:alarm-bell
 
 automation:
   - id: set_morning_start_time_to_sunrise
     alias: Set Morning Start Time to Sunrise
-    description: Sets the Morning Start Time to the next sunrise.
-    mode: single
     trigger:
       - platform: time
         at: input_datetime.evening_start_time
-    condition: []
     action:
       - service: input_datetime.set_datetime
         target:
@@ -49,3 +53,4 @@ automation:
           time: >-
             {{ as_timestamp(state_attr("sun.sun", "next_rising")) |
             timestamp_custom("%H:%M") }}
+    mode: single
