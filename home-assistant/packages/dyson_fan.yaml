@@ -4,6 +4,8 @@ homeassistant:
     package.node_anchors:
       harmony_dyson_fan_device: &HARMONY_DYSON_FAN_DEVICE
         device: !secret harmony_dyson_fan_device_id
+    automation.dyson_fan_set_speed:
+      icon: mdi:speedometer
 
 input_boolean:
   dyson_fan_power:
@@ -31,6 +33,7 @@ input_number:
 
 script:
   dyson_fan_send_command:
+    alias: Dyson Fan - Send Command
     description: >
       Sends a command to the Dyson Fan, particularly to manage atomicity.
     sequence:
@@ -39,23 +42,17 @@ script:
           entity_id: remote.harmony
         data_template:
           <<: *HARMONY_DYSON_FAN_DEVICE
-          command: "{{ harmony_command }}"
-      # - service: remote.send_command
-      #   target:
-      #     entity_id: remote.bedroom_broadlink_remote
-      #   data:
-      #     device: dyson_fan
-      #     command: "{{ broadlink_command }}"
+          command: "{{ command }}"
     mode: single
+    icon: mdi:fan
   dyson_fan_correct_power:
     alias: Dyson Fan - Correct Power
     sequence:
-      - service: script.dyson_fan_send_command
-        data:
-          harmony_command: PowerToggle
-          broadlink_command: toggle_power
+      - service: input_boolean.toggle
+        target:
+          entity_id: input_boolean.dyson_fan_power
     mode: single
-    icon: mdi:fan
+    icon: mdi:fan-alert
   dyson_fan_toggle_power:
     alias: Dyson Fan - Toggle Power
     sequence:
@@ -65,7 +62,7 @@ script:
           {{ is_state("script.dyson_fan_toggle_speed", "off") }}
       - service: script.dyson_fan_send_command
         data:
-          harmony_command: PowerToggle
+          command: PowerToggle
           broadlink_command: toggle_power
       - service: input_boolean.toggle
         target:
@@ -87,7 +84,7 @@ script:
         state: "on"
       - service: script.dyson_fan_send_command
         data:
-          harmony_command: Oscillate
+          command: Oscillate
           broadlink_command: toggle_oscillate
       - service: input_boolean.toggle
         target:
@@ -112,17 +109,11 @@ script:
         state: "on"
       - service: script.dyson_fan_send_command
         data_template:
-          harmony_command: >
+          command: >
             {% if increase_speed %}
               FanModeUp
             {% else %}
               FanModeDown
-            {% endif %}
-          broadlink_command: >
-            {% if increase_speed %}
-              increase_speed
-            {% else %}
-              decrease_speed
             {% endif %}
       - service_template: >
           {% if increase_speed %}
@@ -135,42 +126,6 @@ script:
     mode: queued
     icon: mdi:fan-plus
     max: 9
-  dyson_fan_increase_speed:
-    alias: Dyson Fan - Increase Speed
-    sequence:
-      - service: script.dyson_fan_toggle_speed
-        data:
-          increase_speed: true
-    mode: queued
-    icon: mdi:fan-plus
-    max: 9
-  dyson_fan_decrease_speed:
-    alias: Dyson Fan - Decrease Speed
-    sequence:
-      - service: script.dyson_fan_toggle_speed
-        data:
-          increase_speed: false
-    mode: queued
-    icon: mdi:fan-minus
-    max: 9
-  dyson_fan_set_speed:
-    alias: Dyson Fan - Set Speed
-    mode: restart
-    sequence:
-      - repeat:
-          while: >
-            {{ is_state("input_boolean.dyson_fan", "on") and
-            states("input_number.dyson_fan_speed") | int * 10 != percentage and
-            repeat.index < 10 }}
-          sequence:
-            - service_template: >
-                {% if states("input_number.dyson_fan_speed") <
-                states("input_number.dyson_fan_target_speed") %}
-                  script.dyson_fan_increase_speed
-                {% else %}
-                  script.dyson_fan_decrease_speed
-                {% endif %}
-    icon: mdi:fan
 
 automation:
   - id: dyson_fan_set_speed
@@ -183,7 +138,6 @@ automation:
         to: "on"
       - platform: state
         entity_id: input_number.dyson_fan_target_speed
-    mode: single
     action:
       - repeat:
           while: >
@@ -191,13 +145,12 @@ automation:
               states("input_number.dyson_fan_target_speed") | int !=
               states("input_number.dyson_fan_speed") | int }}
           sequence:
-            - service_template: >
-                {% if states("input_number.dyson_fan_speed") | int <
-                states("input_number.dyson_fan_target_speed") | int %}
-                  script.dyson_fan_increase_speed
-                {% else %}
-                  script.dyson_fan_decrease_speed
-                {% endif %}
+            - service: script.dyson_fan_toggle_speed
+              data_template:
+                increase_speed: >
+                  {{ states("input_number.dyson_fan_speed") | int <
+                  states("input_number.dyson_fan_target_speed") | int }}
+    mode: restart
 
 fan:
   - platform: template
@@ -219,6 +172,7 @@ fan:
           - service: input_boolean.turn_off
             target:
               entity_id: input_boolean.dyson_fan_oscillating
+          - service: script.dyson_fan_toggle_oscillate
         turn_off:
           - condition: state
             entity_id: input_boolean.dyson_fan_power
