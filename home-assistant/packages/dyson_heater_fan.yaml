@@ -1,9 +1,8 @@
 ---
-# homeassistant:
-#   customize:
-#     package.node_anchors:
-#       harmony_dyson_heater_fan_device: &HARMONY_dyson_heater_fan_DEVICE
-#         device: !secret harmony_dyson_heater_fan_device_id
+homeassistant:
+  customize:
+    automation.dyson_heater_fan_set_speed:
+      icon: mdi:speedometer
 
 input_boolean:
   dyson_heater_fan_power:
@@ -31,6 +30,7 @@ input_number:
 
 script:
   dyson_heater_fan_send_command:
+    alias: Dyson Heater  Fan - Send Command
     description: >
       Sends a command to the Dyson Heater Fan, particularly to manage atomicity.
     sequence:
@@ -39,16 +39,8 @@ script:
           entity_id: remote.bedroom_broadlink_remote
         data_template:
           device: dyson_heater_fan
-          command: "{{ broadlink_command }}"
+          command: "{{ command }}"
     mode: single
-  dyson_heater_fan_correct_power:
-    alias: Dyson Heater Fan - Correct Power
-    sequence:
-      - service: script.dyson_heater_fan_send_command
-        data:
-          broadlink_command: power_off
-    mode: single
-    icon: mdi:fan
   dyson_heater_fan_toggle_power:
     alias: Dyson Heater Fan - Toggle Power
     sequence:
@@ -58,7 +50,7 @@ script:
           {{ is_state("script.dyson_heater_fan_toggle_speed", "off") }}
       - service: script.dyson_heater_fan_send_command
         data_template:
-          broadlink_command: >
+          command: >
             {% if is_state("input_boolean.dyson_heater_fan_power", "off") %}
               power_on
             {% else %}
@@ -89,10 +81,10 @@ script:
       - condition: template
         value_template: >
           {{ is_state("input_boolean.dyson_heater_fan_oscillating",  "off" if
-          oscillating else "on") }}
+          (oscillating | default(True, True)) else "on") }}
       - service: script.dyson_heater_fan_send_command
         data_template:
-          broadlink_command: >
+          command: >
             {% if oscillating %}
               oscillate_on
             {% else %}
@@ -126,7 +118,7 @@ script:
         state: "on"
       - service: script.dyson_heater_fan_send_command
         data_template:
-          broadlink_command: >
+          command: >
             {% if increase_speed %}
               increase_speed
             {% else %}
@@ -143,42 +135,6 @@ script:
     mode: queued
     icon: mdi:fan-plus
     max: 9
-  dyson_heater_fan_increase_speed:
-    alias: Dyson Heater Fan - Increase Speed
-    sequence:
-      - service: script.dyson_heater_fan_toggle_speed
-        data:
-          increase_speed: true
-    mode: queued
-    icon: mdi:fan-plus
-    max: 9
-  dyson_heater_fan_decrease_speed:
-    alias: Dyson Heater Fan - Decrease Speed
-    sequence:
-      - service: script.dyson_heater_fan_toggle_speed
-        data:
-          increase_speed: false
-    mode: queued
-    icon: mdi:fan-minus
-    max: 9
-  dyson_heater_fan_set_speed:
-    alias: Dyson Heater Fan - Set Speed
-    mode: restart
-    sequence:
-      - repeat:
-          while: >
-            {{ is_state("input_boolean.dyson_heater_fan", "on") and
-            states("input_number.dyson_heater_fan_speed") | int * 10 !=
-            percentage and repeat.index < 10 }}
-          sequence:
-            - service_template: >
-                {% if states("input_number.dyson_heater_fan_speed") <
-                states("input_number.dyson_heater_fan_target_speed") %}
-                  script.dyson_heater_fan_increase_speed
-                {% else %}
-                  script.dyson_heater_fan_decrease_speed
-                {% endif %}
-    icon: mdi:fan
 
 automation:
   - id: dyson_heater_fan_set_speed
@@ -199,13 +155,11 @@ automation:
               states("input_number.dyson_heater_fan_target_speed") | int !=
               states("input_number.dyson_heater_fan_speed") | int }}
           sequence:
-            - service_template: >
-                {% if states("input_number.dyson_heater_fan_speed") | int <
-                states("input_number.dyson_heater_fan_target_speed") | int %}
-                  script.dyson_heater_fan_increase_speed
-                {% else %}
-                  script.dyson_heater_fan_decrease_speed
-                {% endif %}
+            - service: script.dyson_heater_fan_toggle_speed
+              data_template:
+                increase_speed: >
+                  {{ states("input_number.dyson_heater_fan_speed") | int <
+                  states("input_number.dyson_heater_fan_target_speed") | int }}
 
 fan:
   - platform: template
@@ -227,6 +181,9 @@ fan:
           - service: input_boolean.turn_off
             target:
               entity_id: input_boolean.dyson_heater_fan_oscillating
+          - service: script.dyson_heater_fan_toggle_oscillate
+            data:
+              oscillating: true
         turn_off:
           - condition: state
             entity_id: input_boolean.dyson_heater_fan_power
@@ -236,10 +193,9 @@ fan:
             target:
               entity_id: input_boolean.dyson_heater_fan_oscillating
         set_oscillating:
-          service: script.dyson_heater_fan_toggle_oscillate
-          data_template:
-            oscillating: >
-              {{ oscillating }}
+          - service: script.dyson_heater_fan_toggle_oscillate
+            data_template:
+              oscillating: "{{ oscillating }}"
         set_percentage:
           - service: input_number.set_value
             target:
