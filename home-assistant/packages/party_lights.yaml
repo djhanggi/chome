@@ -1,53 +1,44 @@
 ---
+homeassistant:
+  customize:
+    switch.party_lights:
+      icon: mdi:party-popper
+
 input_boolean:
   party_lights_on:
-    name: Party Lights - "On"
-    icon: mdi:party-popper
+    name: "Party Lights - On"
     initial: "off"
+    icon: mdi:party-popper
 
 input_number:
   party_lights_speed:
     name: Party Lights - Speed
+    unit_of_measurement: seconds
     initial: 15
-    min: 1
-    max: 30
+    min: 3
+    max: 60
     step: 1
-
-switch:
-  - platform: template
-    switches:
-      party_lights:
-        value_template: >
-          {{ states("input_boolean.party_lights_on") }}
-        friendly_name: Party Lights
-        turn_on:
-          - service: input_boolean.turn_on
-            entity_id: input_boolean.party_lights_on
-          - service: script.turn_on
-            target:
-              entity_id: script.set_party_lights_automation
-        turn_off:
-          - service: input_boolean.turn_off
-            entity_id: input_boolean.party_lights_on
-          - service: script.turn_off
-            target:
-              entity_id: script.set_party_lights_automation
+    icon: mdi:speedometer
 
 script:
-  party_lights_automation:
-    alias: Party Lights Automation
+  party_lights_animation:
+    alias: Party Lights Animation
     sequence:
+      - service: switch.turn_off
+        target:
+          entity_id: switch.adaptive_lighting_all_lights
       - repeat:
           while:
             - condition: state
               entity_id: input_boolean.party_lights_on
               state: "on"
           sequence:
-            - service: script.set_party_lights
+            - service: script.apply_party_lights_scene
             - delay: >
                 {{ states("input_number.party_lights_speed") }}
-  set_party_lights:
-    alias: Set Party Lights
+    icon: mdi:party-popper
+  apply_party_lights_scene:
+    alias: Apply Party Lights Scene
     sequence:
       - service: light.turn_on
         data_template:
@@ -79,3 +70,24 @@ script:
             ]
           brightness: "{{ (range(50, 250) | random) }}"
           transition: 0.1
+    icon: mdi:party-popper
+
+switch:
+  - platform: template
+    switches:
+      party_lights:
+        value_template: >
+          {{ states("input_boolean.party_lights_on") }}
+        friendly_name: Party Lights
+        turn_on:
+          - service: input_boolean.turn_on
+            entity_id: input_boolean.party_lights_on
+          - service: script.turn_on
+            target:
+              entity_id: script.party_lights_animation
+        turn_off:
+          - service: input_boolean.turn_off
+            entity_id: input_boolean.party_lights_on
+          - service: script.turn_off
+            target:
+              entity_id: script.party_lights_animation
