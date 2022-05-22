@@ -4,12 +4,37 @@ homeassistant:
     package.node_anchors:
       harmony_friedrich_ac_device: &HARMONY_FRIEDRICH_AC_DEVICE
         device: !secret harmony_friedrich_ac_device_id
+      automation.living_room_ac_set_temperature:
+        icon: mdi:thermometer
+      switch.living_room_ac:
+        icon: mdi:air-conditioner
+
+input_boolean:
+  living_room_ac_power:
+    name: Living Room AC - Power
+    icon: mdi:air-conditioner
+
+input_number:
+  living_room_ac_temperature:
+    name: Living Room AC - Temperature
+    min: 60.0
+    max: 90.0
+    step: 1.0
+    icon: mdi:thermometer
 
 script:
   living_room_ac_send_command:
-    alias: Living Room AC - Send Command
-    description: >
+    alias: Living Room AC - Send Commmand
+    description: |
       Sends a command to the Living Room AC, particularly to manage atomicity.
+      Options include
+        * PowerToggle
+        * TempHotter
+        * TempCooler
+        * CoolMode
+        * FanMode
+        * MoneySaverMode
+        * FanModeUp
     sequence:
       - service: remote.send_command
         target:
@@ -18,14 +43,15 @@ script:
           <<: *HARMONY_FRIEDRICH_AC_DEVICE
           command: "{{ command }}"
     mode: single
+    icon: mdi:air-conditioner
   living_room_ac_correct_power:
     alias: Living Room AC - Correct Power
     sequence:
-      - service: script.living_room_ac_send_command
-        data:
-          command: PowerToggle
+      - service: input_boolean.toggle
+        target:
+          entity_id: input_boolean.living_room_ac_power
     mode: single
-    icon: mdi:fan
+    icon: mdi:power
   living_room_ac_toggle_power:
     alias: Living Room AC - Toggle Power
     sequence:
@@ -41,15 +67,15 @@ script:
           entity_id: input_boolean.living_room_ac_power
       # Delay to allow time for the AC to process the command.
       - delay:
-          milliseconds: 100
+          milliseconds: 750
     mode: queued
-    icon: mdi:fan
+    icon: mdi:air-conditioner
   living_room_ac_toggle_temperature:
     alias: Living Room AC - Toggle Temperature
     sequence:
       # Delay to allow time for any existing AC scripts to run and finish.
       - delay:
-          milliseconds: 100
+          milliseconds: 750
       # Fail if another AC command is running to guarantee atomicity.
       - condition: state
         entity_id: script.living_room_ac_send_command
@@ -75,84 +101,6 @@ script:
           entity_id: input_number.living_room_ac_temperature
     mode: single
     icon: mdi:thermometer
-  living_room_ac_increase_temperature:
-    alias: Living Room AC - Increase Temperature
-    sequence:
-      - service: script.living_room_ac_toggle_temperature
-        data:
-          increase_temperature: true
-    mode: single
-    icon: mdi:thermometer-plus
-  living_room_ac_decrease_temperature:
-    alias: Living Room AC - Decrease Temperature
-    sequence:
-      - service: script.living_room_ac_toggle_temperature
-        data:
-          increase_temperature: false
-    mode: single
-    icon: mdi:thermometer-minus
-  living_room_ac_set_cool_mode:
-    alias: Living Room AC - Set Cool Mode
-    sequence:
-      - service: script.living_room_ac_send_command
-        data:
-          command: CoolMode
-    mode: single
-    icon: mdi:coolant-temperature
-  living_room_ac_set_fan_only_mode:
-    alias: Living Room AC - Set Fan-Only Mode
-    sequence:
-      - service: script.living_room_ac_send_command
-        data:
-          command: FanMode
-    mode: single
-    icon: mdi:fan
-  living_room_ac_set_money_saver_mode:
-    alias: Living Room AC - Set Money-Saver Mode
-    sequence:
-      - service: script.living_room_ac_send_command
-        data:
-          command: MoneySaverMode
-    mode: single
-    icon: mdi:fan
-  living_room_ac_toggle_fan_speed:
-    alias: Living Room AC - Toggle Fan Speed
-    sequence:
-      - service: script.living_room_ac_send_command
-        data:
-          command: FanModeUp
-    mode: single
-    icon: mdi:fan-chevron-up
-
-input_boolean:
-  living_room_ac_power:
-    name: Living Room AC - Power
-    icon: mdi:air-conditioner
-  living_room_ac_use_outside_temperature:
-    name: Living Room AC - Use Outside Temperature
-    initial: false
-    icon: mdi:sun-thermometer-outline
-
-input_number:
-  living_room_ac_temperature:
-    name: Living Room AC - Temperature
-    min: 60.0
-    max: 90.0
-    step: 1.0
-    icon: mdi:temperature
-
-template:
-  - sensor:
-      - unique_id: living_room_ac_temperature_reference
-        name: Living Room AC - Temperature Reference
-        unit_of_measurement: F
-        state: >
-          {% if is_state("input_boolean.living_room_ac_use_outside_temperature",
-          "on") %}
-            {{ state_attr("weather.chome", "temperature") }}
-          {% else %}
-            {{ states("sensor.bedroom_broadlink_temperature") }}
-          {% endif %}
 
 automation:
   - id: living_room_ac_set_temperature
@@ -174,13 +122,11 @@ automation:
               states("input_number.living_room_ac_temperature") | int !=
               state_attr("climate.living_room_ac", "temperature") | int }}
           sequence:
-            - service_template: >
-                {% if states("input_number.living_room_ac_temperature") | int <
-                state_attr("climate.living_room_ac", "temperature") | int %}
-                  script.living_room_ac_increase_temperature
-                {% else %}
-                  script.living_room_ac_decrease_temperature
-                {% endif %}
+            - service: script.living_room_ac_toggle_temperature
+              data_template:
+                increase_temperature: >
+                  {{ states("input_number.living_room_ac_temperature") | int <
+                  state_attr("climate.living_room_ac", "temperature") | int }}
 
 switch:
   - platform: template
@@ -193,6 +139,9 @@ switch:
             entity_id: input_boolean.living_room_ac_power
             state: "off"
           - service: script.living_room_ac_toggle_power
+          - service: script.living_room_ac_send_command
+            data:
+              command: CoolMode
         turn_off:
           - condition: state
             entity_id: input_boolean.living_room_ac_power
@@ -204,12 +153,12 @@ climate:
     unique_id: living_room_ac
     name: Living Room AC
     heater: switch.living_room_ac
-    target_sensor: sensor.living_room_ac_temperature_reference
+    target_sensor: sensor.bedroom_broadlink_temperature
     min_temp: 60
     max_temp: 90
     ac_mode: true
     cold_tolerance: 1.0
-    hot_tolerance: 0
+    hot_tolerance: 1.0
     min_cycle_duration:
       minutes: 2
     initial_hvac_mode: "off"
