@@ -79,7 +79,13 @@ script:
       - service: script.play_bedroom_sleep_sound
       - service: scene.turn_on
         target:
-          entity_id: scene.sleep
+          entity_id: scene.chome_off
+      - service: fan.turn_on
+        target:
+          entity_id: fan.dyson_heater_fan
+      - service: climate.turn_on
+        target:
+          entity_id: climate.bedroom_ac
       - service: timer.start
         target:
           entity_id: timer.bedroom_ac_shutoff_timer_during_sleep

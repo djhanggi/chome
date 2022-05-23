@@ -4,37 +4,37 @@ homekit:
     mode: bridge
     filter:
       include_entities:
-        - switch.adaptive_lighting_all_lights
-        - light.bathroom_lights
-        - light.hallway_lights
+        - switch.adaptive_lighting_all_light_bulbs
         - light.ceiling_lights
         - light.living_room_lamp
+        - light.hallway_lights
+        - light.bathroom_lights
         - light.bedroom_lamp
         - light.bed
-        - switch.sunlight_lamp
+        - switch.kitchen_lights
         - switch.living_room_plant_light
         - switch.bedroom_plant_light
-        - switch.kitchen_lights
+        - switch.sunlight_lamp
         - cover.smart_roller_shade_curtain
-        - climate.bedroom_ac
         - climate.living_room_ac
+        - climate.bedroom_ac
         - fan.dyson_fan
         - fan.dyson_heater_fan
     entity_config:
-      switch.adaptive_lighting_all_lights:
+      switch.adaptive_lighting_all_light_bulbs:
         name: Sun-Matched Lighting
         type: switch
-      switch.sunlight_lamp:
-        type: outlet
+      switch.kitchen_lights:
+        type: switch
       switch.living_room_plant_light:
         type: outlet
       switch.bedroom_plant_light:
         type: outlet
-      switch.kitchen_lights:
-        type: switch
+      switch.sunlight_lamp:
+        type: outlet
+      cover.smart_roller_shade_curtain:
+        name: Bedroom Blinds
       fan.dyson_fan:
         name: Living Room Fan
       fan.dyson_heater_fan:
         name: Bedroom Fan
-      cover.smart_roller_shade_curtain:
-        name: Bedroom Blinds

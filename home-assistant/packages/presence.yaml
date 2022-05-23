@@ -1,15 +1,12 @@
 ---
-template:
-  - sensor:
-      - unique_id: scarif_at_home
-        name: Scarif At Home
-        state: >
-          {% if is_state("sensor.scarif_wifi_connection", "CHOME.NYC") or
-          is_state("sensor.scarif_wifi_connection", "CHOME") %}
-            home
-          {% else %}
-            away
-          {% endif %}
+homeassistant:
+  customize:
+    group.djhanggi_presence:
+      icon: mdi:home-map-marker
+    automation.away:
+      icon: mdi:location-exit
+    automation.return:
+      icon: mdi:location-enter
 
 group:
   djhanggi_presence:
@@ -17,6 +14,18 @@ group:
     entities:
       - person.djhanggi
       - sensor.scarif_at_home
+
+template:
+  - sensor:
+      - unique_id: djhanggi_at_home
+        name: DJHANGGI at Home
+        state: >
+          {% if is_state("sensor.scarif_wifi_connection", "CHOME.NYC") or
+          is_state("sensor.scarif_wifi_connection", "CHOME") %}
+            home
+          {% else %}
+            {{ person.djhanggi }}
+          {% endif %}
 
 automation:
   - id: away
@@ -26,10 +35,9 @@ automation:
     trigger:
       - platform: state
         entity_id:
-          - group.djhanggi_presence
+          - sensor.djhanggi_at_home
         from: home
         to: not_home
-    condition: []
     action:
       - service: scene.create
         data:
@@ -39,25 +47,25 @@ automation:
             - light.hallway_lights
             - light.living_room_lamp
             - light.bathroom_lights
-            - light.bed
             - light.bedroom_lamp
-            - climate.bedroom_ac
+            - light.bed
             - climate.living_room_ac
-            - fan.dyson_heater_fan
+            - climate.bedroom_ac
             - fan.dyson_fan
+            - fan.dyson_heater_fan
             - remote.harmony
       - service: scene.apply
         data:
           entities:
             group.lighting:
               state: "off"
-            climate.bedroom_ac:
-              state: "off"
             climate.living_room_ac:
               state: "off"
-            fan.dyson_heater_fan:
+            climate.bedroom_ac:
               state: "off"
             fan.dyson_fan:
+              state: "off"
+            fan.dyson_heater_fan:
               state: "off"
             remote.harmony:
               state: "off"
@@ -68,10 +76,9 @@ automation:
     trigger:
       - platform: state
         entity_id:
-          - group.djhanggi_presence
+          - sensor.djhanggi_at_home
         from: not_home
         to: home
-    condition: []
     action:
       - service: scene.turn_on
         target:

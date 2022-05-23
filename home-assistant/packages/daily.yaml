@@ -1,4 +1,13 @@
 ---
+homeassistant:
+  customize:
+    sensor.daytime_hours:
+      icon: mdi:brightness-6
+    automation.morning:
+      icon: mdi:weather-sunny
+    automation.evening:
+      icon: mdi:weather-sunset
+
 input_datetime:
   morning_start_time:
     name: Morning Start Time
@@ -22,49 +31,106 @@ template:
           states("input_datetime.evening_start_time") }}
 
 scene:
+  - id: "chome_off"
+    name: "CHOME Off"
+    entities:
+      group.lighting:
+        state: "off"
+      switch.humidifier:
+        state: "off"
+      switch.monitor:
+        state: "off"
+      switch.bike_stand:
+        state: "off"
+      fan.dyson_fan:
+        state: "off"
+      fan.dyson_heater_fan:
+        state: "off"
+      climate.living_room_ac:
+        state: "off"
+      climate.bedroom_ac:
+        state: "off"
+      remote.harmony:
+        current_activity: PowerOff
+        state: "off"
+    icon: mdi:bed
+  - id: morning
+    name: Morning
+    entities:
+      switch.adaptive_lighting_all_light_bulbs:
+        state: "on"
+      light.ceiling_e:
+        state: "on"
+      light.hallway_e:
+        state: "on"
+      light.bathroom_e:
+        state: "on"
+      light.bedroom_lamp:
+        state: "on"
+      light.bed:
+        state: "on"
+      switch.sunlight_lamp:
+        state: "on"
+      switch.monitor:
+        state: "on"
+      fan.dyson_heater_fan:
+        state: "on"
+        oscillating: true
+      climate.bedroom_ac:
+        state: cool
   - id: daytime
     name: Daytime
     entities:
-      group.lighting:
+      switch.adaptive_lighting_all_light_bulbs:
         state: "on"
+      light.ceiling_e:
+        state: "on"
+      light.ceiling_w:
+        state: "on"
+      light.living_room_lamp:
+        state: "on"
+      light.bathroom_e:
+        state: "on"
+      light.bedroom_lamp:
+        state: "on"
+      light.bed:
+        state: "off"
+      switch.sunlight_lamp:
+        state: "off"
       switch.monitor:
         state: "on"
     icon: mdi:weather-sunny
   - id: evening
     name: Evening
     entities:
-      switch.adaptive_lighting_all_lights:
+      switch.adaptive_lighting_all_light_bulbs:
         state: "off"
-      light.daytime_lights:
+      light.ceiling_lights:
         state: "off"
-      light.evening_lights:
+      light.living_room_lamp: &EVENING_LIGHT_SETTINGS
+        state: "on"
         brightness: 3
         color_temp: 600
-        state: "on"
-      switch.sunlight_lamp:
+      light.bookhself: *EVENING_LIGHT_SETTINGS
+      light.hallway_lights:
         state: "off"
+      light.bathroom_lights:
+        state: "off"
+      light.bedroom_lamp:
+        state: "off"
+      light.bed: *EVENING_LIGHT_SETTINGS
       switch.kitchen_lights:
         state: "off"
+      switch.sunlight_lamp:
+        state: "off"
       switch.monitor:
         state: "off"
+      fan.dyson_heater_fan:
+        state: "on"
+        oscillating: true
+      climate.bedroom_ac:
+        state: cool
     icon: mdi:weather-sunset
-  - id: sleep
-    name: Sleep
-    entities:
-      group.lighting:
-        state: "off"
-      switch.humidifier:
-        state: "off"
-      fan.dyson_fan:
-        state: "off"
-      switch.monitor:
-        state: "off"
-      switch.bike_stand:
-        state: "off"
-      remote.harmony:
-        current_activity: PowerOff
-        state: "off"
-    icon: mdi:bed
 
 automation:
   - id: morning
@@ -79,7 +145,7 @@ automation:
         state: home
     action:
       - scene: scene.ajar_blinds
-      - scene: scene.daytime
+      - scene: scene.morning
     mode: single
   - id: evening
     alias: Evening
@@ -89,9 +155,12 @@ automation:
         at: input_datetime.evening_start_time
     condition:
       - condition: state
-        entity_id: person.djhanggi
+        entity_id: sensor.djhanggi_at_home
         state: home
     action:
       - scene: scene.closed_blinds
+      - service: homeassistant.turn_off
+        target:
+          entity_id: group.lighting
       - scene: scene.evening
     mode: single
