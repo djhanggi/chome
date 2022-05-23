@@ -41,6 +41,7 @@ script:
           device: dyson_heater_fan
           command: "{{ command }}"
     mode: single
+    icon: mdi:fan
   dyson_heater_fan_toggle_power:
     alias: Dyson Heater Fan - Toggle Power
     sequence:

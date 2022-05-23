@@ -53,7 +53,7 @@ scene:
       remote.harmony:
         current_activity: PowerOff
         state: "off"
-    icon: mdi:bed
+    icon: mdi:power-off
   - id: morning
     name: Morning
     entities:
@@ -78,6 +78,7 @@ scene:
         oscillating: true
       climate.bedroom_ac:
         state: cool
+    icon: mdi:weather-sunset-up
   - id: daytime
     name: Daytime
     entities:

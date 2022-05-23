@@ -7,6 +7,8 @@ homeassistant:
       icon: mdi:location-exit
     automation.return:
       icon: mdi:location-enter
+    scene.return:
+      icon: mdi:location-enter
 
 group:
   djhanggi_presence:
