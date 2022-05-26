@@ -7,6 +7,14 @@ homeassistant:
     automation.dyson_fan_set_speed:
       icon: mdi:speedometer
 
+logbook:
+  exclude:
+    entities:
+      - script.dyson_fan_send_command
+      - script.dyson_fan_toggle_power
+      - script.dyson_fan_toggle_oscillate
+      - script.dyson_fan_toggle_speed
+
 input_boolean:
   dyson_fan_power:
     name: Dyson Fan - Power

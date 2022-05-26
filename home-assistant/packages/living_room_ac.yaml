@@ -8,6 +8,15 @@ homeassistant:
         icon: mdi:thermometer
       switch.living_room_ac:
         icon: mdi:air-conditioner
+        friendly_name: Living Room AC - Switch
+
+logbook:
+  exclude:
+    entities:
+      - script.living_room_ac_send_command
+      - script.living_room_ac_toggle_power
+      - script.living_room_ac_toggle_temperature
+      - switch.living_room_ac
 
 input_boolean:
   living_room_ac_power:

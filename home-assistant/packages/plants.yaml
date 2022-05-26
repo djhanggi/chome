@@ -3,6 +3,15 @@ homeassistant:
   customize:
     automation.plant_care:
       icon: mdi:flower
+    switch.living_room_plant_light:
+      device_class: light
+      icon: mdi:flower
+    switch.bedroom_plant_light:
+      device_class: light
+      icon: mdi:flower
+    switch.humidifer:
+      device_class: switch
+      icon: mdi:humidifer
 
 input_datetime:
   plant_sunrise_time:

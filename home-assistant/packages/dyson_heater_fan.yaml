@@ -4,6 +4,14 @@ homeassistant:
     automation.dyson_heater_fan_set_speed:
       icon: mdi:speedometer
 
+logbook:
+  exclude:
+    entities:
+      - script.dyson_heater_fan_send_command
+      - script.dyson_heater_fan_toggle_power
+      - script.dyson_heater_fan_toggle_oscillate
+      - script.dyson_heater_fan_toggle_speed
+
 input_boolean:
   dyson_heater_fan_power:
     name: Dyson Heater Fan - Power

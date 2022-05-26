@@ -26,7 +26,7 @@ template:
           is_state("sensor.scarif_wifi_connection", "CHOME") %}
             home
           {% else %}
-            {{ person.djhanggi }}
+            {{ states("person.djhanggi") }}
           {% endif %}
 
 automation:

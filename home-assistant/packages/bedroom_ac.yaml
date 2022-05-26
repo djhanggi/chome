@@ -5,6 +5,15 @@ homeassistant:
       icon: mdi:thermometer
     switch.bedroom_ac:
       icon: mdi:air-conditioner
+      friendly_name: Bedroom AC - Switch
+
+logbook:
+  exclude:
+    entities:
+      - script.bedroom_ac_send_command
+      - script.bedroom_ac_toggle_power
+      - script.bedroom_ac_toggle_temperature
+      - switch.bedroom_ac
 
 input_boolean:
   bedroom_ac_power:

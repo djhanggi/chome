@@ -4,6 +4,11 @@ homeassistant:
     automation.kitchen_lights_sync_power_from_wyze:
       icon: mdi:light-switch
 
+logbook:
+  exclude:
+    entities:
+      - script.set_kitchen_lights_power
+
 ifttt:
   key:
     djhanggi_wyze_ifttt: !secret djhanggi_wyze_ifttt

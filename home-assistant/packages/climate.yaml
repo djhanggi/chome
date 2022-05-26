@@ -19,10 +19,10 @@ scene:
   - id: bedroom_cool_climate
     name: Bedroom Cool Climate
     entities:
-      fan.dyson_heater_fan:
-        state: "on"
-        oscillating: true
       climate.bedroom_ac:
         state: cool
         temperature: 67
+      fan.dyson_heater_fan:
+        state: "on"
+        oscillating: true
     icon: mdi:home-thermometer

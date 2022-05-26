@@ -4,6 +4,11 @@ homeassistant:
     switch.party_lights:
       icon: mdi:party-popper
 
+logbook:
+  exclude:
+    entities:
+      - script.party_lights_animation
+
 input_boolean:
   party_lights_on:
     name: "Party Lights - On"

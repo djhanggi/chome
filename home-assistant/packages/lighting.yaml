@@ -1,4 +1,20 @@
 ---
+homeassistant:
+  customize:
+    switch.kitchen_lights:
+      icon: mdi:light-switch
+    switch.sunlight_lamp:
+      icon: mdi:weather-sunny
+
+logbook:
+  exclude:
+    entities:
+      - group.lighting
+      - light.all_light_bulbs
+      - light.ceiling_lights
+      - light.hallway_lights
+      - light.bathroom_lights
+
 adaptive_lighting:
   - name: All Light Bulbs
     lights:

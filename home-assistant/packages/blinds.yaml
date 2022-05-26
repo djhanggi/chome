@@ -18,6 +18,8 @@ scene:
     name: Closed Blinds
     entities:
       cover.smart_roller_shade_curtain:
-        state: closed
+        # The cover is basically always set to "closed" so the state must be
+        # open for the current_position to be picked up.
+        state: open
         current_position: 0
     icon: mdi:curtains-closed
