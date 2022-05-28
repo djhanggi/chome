@@ -49,8 +49,8 @@ script:
         data_template:
           entity_id:
             - light.ceiling_e
-            - light.hallway_e
             - light.living_room_lamp
+            - light.hallway_e
             - light.bedroom_lamp
           rgb_color:
             [
@@ -64,6 +64,7 @@ script:
         data_template:
           entity_id:
             - light.ceiling_w
+            - light.bookshelf
             - light.hallway_w
             - light.bathroom_w
             - light.bed
