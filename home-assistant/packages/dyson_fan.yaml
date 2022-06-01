@@ -10,6 +10,9 @@ homeassistant:
 logbook:
   exclude:
     entities:
+      - input_boolean.dyson_fan_power
+      - input_boolean.dyson_fan_oscillating
+      - input_boolean.dyson_fan_target_speed
       - script.dyson_fan_send_command
       - script.dyson_fan_toggle_power
       - script.dyson_fan_toggle_oscillate
