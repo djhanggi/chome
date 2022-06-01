@@ -159,6 +159,20 @@ automation:
                   {{ states("input_number.dyson_fan_speed") | int <
                   states("input_number.dyson_fan_target_speed") | int }}
     mode: restart
+  - id: dyson_fan_oscillate_on_start
+    alias: Dyson Fan - Oscillate On Start
+    trigger:
+      - platform: state
+        entity_id: fan.dyson_fan
+        from: "off"
+        to: "on"
+    action:
+      - service: fan.oscillate
+        target:
+          entity_id: fan.dyson_fan
+        data:
+          oscillating: true
+    mode: single
 
 fan:
   - platform: template
@@ -180,7 +194,6 @@ fan:
           - service: input_boolean.turn_off
             target:
               entity_id: input_boolean.dyson_fan_oscillating
-          - service: script.dyson_fan_toggle_oscillate
         turn_off:
           - condition: state
             entity_id: input_boolean.dyson_fan_power
