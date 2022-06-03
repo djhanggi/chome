@@ -6,6 +6,11 @@ homeassistant:
     automation.restart_bedroom_ac:
       icon: mdi:timer
 
+logbook:
+  exclude:
+    entities:
+      - sensor.sleep_sound_content_id
+
 timer:
   bedroom_ac_shutoff_timer_during_sleep:
     name: Bedroom AC Shut-Off Timer during Sleep
@@ -80,54 +85,23 @@ script:
       - service: scene.turn_on
         target:
           entity_id: scene.chome_off
+      - service: input_number.set_value
+        target:
+          entity_id: input_number.cycle_ac_shutoff_timer_duration
+        data:
+          value: "10"
+      - service: input_number.set_value
+        target:
+          entity_id: input_number.cycle_ac_restart_timer_duration
+        data:
+          value: "30"
       - service: fan.turn_on
         target:
           entity_id: fan.dyson_heater_fan
       - service: climate.turn_on
         target:
           entity_id: climate.bedroom_ac
-      - service: timer.start
+      - service: automation.trigger
         target:
-          entity_id: timer.bedroom_ac_shutoff_timer_during_sleep
+          entity_id: automation.cycle_ac
     icon: mdi:sleep
-
-automation:
-  - id: shutoff_bedroom_ac
-    alias: Shut-Off Bedroom AC
-    trigger:
-      - platform: event
-        event_type: timer.finished
-        event_data:
-          entity_id: timer.bedroom_ac_shutoff_timer_during_sleep
-    action:
-      - service: climate.turn_off
-        target:
-          entity_id: climate.bedroom_ac
-      - service: timer.start
-        target:
-          entity_id: timer.bedroom_ac_restart_timer_during_sleep
-    mode: single
-  - id: restart_bedroom_ac
-    alias: Restart Bedroom AC
-    trigger:
-      - platform: event
-        event_type: timer.finished
-        event_data:
-          entity_id: timer.bedroom_ac_restart_timer_during_sleep
-    condition:
-      - condition: state
-        entity_id: sensor.daytime_hours
-        state: "False"
-    action:
-      - service: climate.turn_on
-        target:
-          entity_id: climate.bedroom_ac
-      - if:
-          - condition: state
-            entity_id: sensor.daytime_hours
-            state: "False"
-        then:
-          - service: timer.start
-            target:
-              entity_id: timer.bedroom_ac_shutoff_timer_during_sleep
-    mode: single

@@ -10,6 +10,24 @@ homeassistant:
     automation.cycle_ac_disable_automation:
       icon: mdi:timer
 
+input_number:
+  cycle_ac_shutoff_timer_duration:
+    name: Cycle AC - Shut-Off Timer Duration
+    step: 1
+    min: 5
+    max: 60
+    mode: box
+    unit_of_measurement: minutes
+    icon: mdi:restart-off
+  cycle_ac_restart_timer_duration:
+    name: Cycle AC - Restart Timer Duration
+    min: 5
+    max: 60
+    step: 1
+    mode: box
+    unit_of_measurement: minutes
+    icon: mdi:restart
+
 timer:
   cycle_ac_shutoff_timer:
     name: Cycle AC - Shut-Off Timer
@@ -67,6 +85,10 @@ automation:
       - service: timer.start
         target:
           entity_id: timer.cycle_ac_shutoff_timer
+        data_template:
+          duration: >
+            00:{{ states("input_number.cycle_ac_shutoff_timer_duration") |
+            int}}:00
       - service: timer.cancel
         target:
           entity_id: timer.cycle_ac_restart_timer
@@ -86,6 +108,10 @@ automation:
       - service: timer.start
         target:
           entity_id: timer.cycle_ac_restart_timer
+        data_template:
+          duration: >
+            00:{{ states("input_number.cycle_ac_restart_timer_duration") | int
+            }}:00
     mode: single
   - id: cycle_ac_restart
     alias: Cycle AC - Restart
@@ -101,6 +127,10 @@ automation:
       - service: timer.start
         target:
           entity_id: timer.cycle_ac_shutoff_timer
+        data_template:
+          duration: >
+            00:{{ states("input_number.cycle_ac_shutoff_timer_duration") |
+            int}}:00
     mode: single
   - id: cycle_ac_disable_automation
     alias: Cycle AC - Disable Automation
@@ -113,6 +143,6 @@ automation:
       - service: timer.cancel
         target:
           entity_id:
-            - timer.cycle_ac_restart_timer
             - timer.cycle_ac_shutoff_timer
+            - timer.cycle_ac_restart_timer
     mode: single

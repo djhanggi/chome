@@ -56,6 +56,7 @@ automation:
             - fan.dyson_fan
             - fan.dyson_heater_fan
             - remote.harmony
+            - automation.cycle_ac
       - service: scene.apply
         data:
           entities:
@@ -70,6 +71,8 @@ automation:
             fan.dyson_heater_fan:
               state: "off"
             remote.harmony:
+              state: "off"
+            automation.cycle_ac:
               state: "off"
   - id: return
     alias: Return

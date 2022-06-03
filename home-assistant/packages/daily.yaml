@@ -53,6 +53,10 @@ scene:
       remote.harmony:
         current_activity: PowerOff
         state: "off"
+      input_number.cycle_ac_shutoff_timer_duration:
+        state: "10"
+      input_number.cycle_ac_restart_timer_duration:
+        state: "30"
     icon: mdi:power-off
   - id: morning
     name: Morning
@@ -78,6 +82,10 @@ scene:
         oscillating: true
       climate.bedroom_ac:
         state: cool
+      input_number.cycle_ac_shutoff_timer_duration:
+        state: "30"
+      input_number.cycle_ac_restart_timer_duration:
+        state: "30"
     icon: mdi:weather-sunset-up
   - id: daytime
     name: Daytime
@@ -100,6 +108,10 @@ scene:
         state: "off"
       switch.monitor:
         state: "on"
+      input_number.cycle_ac_shutoff_timer_duration:
+        state: "30"
+      input_number.cycle_ac_restart_timer_duration:
+        state: "30"
     icon: mdi:weather-sunny
   - id: evening
     name: Evening
