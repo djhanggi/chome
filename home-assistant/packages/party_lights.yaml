@@ -79,6 +79,19 @@ script:
           transition: 0.1
     icon: mdi:party-popper
 
+automation:
+  - id: clear_scene_before_party_lights
+    alias: Clear scene.before_party_lights
+    mode: single
+    trigger:
+      - platform: homeassistant
+        event: start
+    action:
+      - service: scene.create
+        data:
+          scene_id: before_party_lights
+          entities: {}
+
 switch:
   - platform: template
     switches:
@@ -116,3 +129,6 @@ switch:
           - service: scene.turn_on
             target:
               entity_id: scene.before_party_lights
+          - service: automation.trigger
+            target:
+              entity_id: automation.clear_scene_before_party_lights

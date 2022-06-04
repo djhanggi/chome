@@ -145,4 +145,18 @@ automation:
           entity_id:
             - timer.cycle_ac_shutoff_timer
             - timer.cycle_ac_restart_timer
+      - service: automation.trigger
+        target:
+          entity_id: automation.clear_scene_cycle_ac
     mode: single
+  - id: clear_scene_cycle_ac
+    alias: Clear scene.cycle_ac
+    mode: single
+    trigger:
+      - platform: homeassistant
+        event: start
+    action:
+      - service: scene.create
+        data:
+          scene_id: cycle_ac
+          entities: {}

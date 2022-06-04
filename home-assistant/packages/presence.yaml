@@ -96,3 +96,17 @@ automation:
           - service: scene.turn_on
             target:
               entity_id: scene.evening
+      - service: automation.trigger
+        target:
+          entity_id: automation.clear_scene_return
+  - id: clear_scene_return
+    alias: Clear scene.return
+    mode: single
+    trigger:
+      - platform: homeassistant
+        event: start
+    action:
+      - service: scene.create
+        data:
+          scene_id: return
+          entities: {}
