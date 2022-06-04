@@ -45,16 +45,23 @@ automation:
         data:
           scene_id: return
           snapshot_entities:
-            - light.ceiling_lights
-            - light.hallway_lights
+            - switch.adaptive_lighting_all_light_bulbs
+            - light.ceiling_e
+            - light.ceiling_w
             - light.living_room_lamp
-            - light.bathroom_lights
+            - light.bookshelf
+            - switch.kitchen_lights
+            - light.hallway_e
+            - light.hallway_w
+            - light.bathroom_e
+            - light.bathroom_w
             - light.bedroom_lamp
             - light.bed
-            - climate.living_room_ac
-            - climate.bedroom_ac
+            - switch.sunlight_lamp
             - fan.dyson_fan
             - fan.dyson_heater_fan
+            - climate.living_room_ac
+            - climate.bedroom_ac
             - remote.harmony
             - automation.cycle_ac
       - service: scene.apply
@@ -62,13 +69,13 @@ automation:
           entities:
             group.lighting:
               state: "off"
-            climate.living_room_ac:
-              state: "off"
-            climate.bedroom_ac:
-              state: "off"
             fan.dyson_fan:
               state: "off"
             fan.dyson_heater_fan:
+              state: "off"
+            climate.living_room_ac:
+              state: "off"
+            climate.bedroom_ac:
               state: "off"
             remote.harmony:
               state: "off"
