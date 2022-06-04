@@ -15,6 +15,7 @@ http:
 automation: !include automations.yaml
 backup:
 config:
+conversation:
 frontend:
 counter:
 history:
