@@ -90,7 +90,9 @@ automation:
       - service: scene.create
         data:
           scene_id: before_party_lights
-          entities: {}
+          entities:
+            automation.clear_scene_before_party_lights:
+              state: "on"
 
 switch:
   - platform: template

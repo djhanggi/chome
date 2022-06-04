@@ -109,4 +109,6 @@ automation:
       - service: scene.create
         data:
           scene_id: return
-          entities: {}
+          entities:
+            automation.clear_scene_return:
+              state: "on"
