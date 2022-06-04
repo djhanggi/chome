@@ -281,10 +281,10 @@ views:
     cards:
       - type: entities
         entities:
-          - entity: input_datetime.morning_start_time
-          - entity: input_datetime.evening_start_time
           - entity: automation.morning
           - entity: automation.evening
+          - entity: input_datetime.morning_start_time
+          - entity: input_datetime.evening_start_time
           - entity: automation.set_morning_start_time_to_sunrise
         show_header_toggle: false
         state_color: false
@@ -298,13 +298,13 @@ views:
             name: Adaptive Lighting - Color
       - type: entities
         entities:
-          - automation.plant_care
-          - input_datetime.plant_sunset_time
-          - input_datetime.plant_sunrise_time
+          - entity: automation.plant_care
+          - entity: input_datetime.plant_sunrise_time
+          - entity: input_datetime.plant_sunset_time
       - type: entities
         entities:
-          - input_number.cycle_ac_restart_timer_duration
-          - input_number.cycle_ac_shutoff_timer_duration
+          - entity: input_number.cycle_ac_shutoff_timer_duration
+          - entity: input_number.cycle_ac_restart_timer_duration
       - type: entities
         entities:
           - entity: automation.away
