@@ -9,6 +9,8 @@ homeassistant:
       icon: mdi:timer
     automation.cycle_ac_disable_automation:
       icon: mdi:timer
+    scene.cycle_ac:
+      icon: mdi:air-conditioner
 
 input_number:
   cycle_ac_shutoff_timer_duration:
