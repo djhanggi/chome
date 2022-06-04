@@ -43,7 +43,7 @@ input_number:
 
 script:
   dyson_heater_fan_send_command:
-    alias: Dyson Heater  Fan - Send Command
+    alias: Dyson Heater Fan - Send Command
     description: >
       Sends a command to the Dyson Heater Fan, particularly to manage atomicity.
     sequence:
