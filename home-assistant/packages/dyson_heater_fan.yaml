@@ -3,6 +3,8 @@ homeassistant:
   customize:
     automation.dyson_heater_fan_set_speed:
       icon: mdi:speedometer
+    automation.dyson_heater_fan_oscillate_on_start:
+      icon: mdi:rotate-360
 
 logbook:
   exclude:
