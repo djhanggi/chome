@@ -102,23 +102,14 @@ views:
                 entity: climate.living_room_ac
               - type: thermostat
                 entity: climate.bedroom_ac
-          - type: entities
-            entities:
-              - entity: automation.cycle_ac
-                name: Cycle AC
-                secondary_info: none
-              - entity: timer.cycle_ac_shutoff_timer
-              - entity: timer.cycle_ac_restart_timer
           - type: horizontal-stack
             cards:
               - type: entities
                 entities:
                   - entity: scene.chome_cool_climate
                     name: Cool CHOME
-                    secondary_info: none
                   - entity: scene.bedroom_cool_climate
                     name: Cool Bedroom
-                    secondary_info: none
                   - entity: sensor.bedroom_broadlink_humidity
                     name: Bedroom Humidity
                 show_header_toggle: false
@@ -128,22 +119,6 @@ views:
           - entity: switch.living_room_plant_light
           - entity: switch.bedroom_plant_light
           - entity: switch.humidifier
-      - type: vertical-stack
-        cards:
-          - type: entities
-            entities:
-              - entity: automation.cycle_ac
-                name: Cycle AC
-                secondary_info: none
-              - entity: timer.cycle_ac_shutoff_timer
-              - entity: timer.cycle_ac_restart_timer
-          - type: horizontal-stack
-            cards:
-              - type: entities
-                entities:
-                  - entity: script.living_room_ac_correct_power
-                  - entity: script.dyson_fan_correct_power
-                  - entity: script.bedroom_ac_correct_power
   - theme: Backend-selected
     path: overview
     title: Overview
@@ -173,7 +148,6 @@ views:
             entities:
               - entity: sensor.pocketcasts_unlistened_episodes
                 name: Pocket Casts
-                secondary_info: none
       - type: vertical-stack
         cards:
           - type: weather-forecast
@@ -200,10 +174,8 @@ views:
             name: PiHole
           - entity: sensor.bespin_pihole_ads_blocked_today
             name: Ads Blocked - Today
-            secondary_info: none
           - entity: sensor.bespin_pihole_dns_queries_today
             name: DNS Queries - Today
-            secondary_info: none
       - type: entities
         entities:
           - entity: sensor.plex_chome
@@ -231,7 +203,7 @@ views:
           - type: media-control
             entity: media_player.cast_hoth
           - type: media-control
-            entity: media_player.android_tv_192_168_1_151
+            entity: media_player.android_tv_hoth
           - type: media-control
             entity: media_player.plex_hoth
       - square: false
@@ -266,6 +238,21 @@ views:
         entities:
           - entity: input_select.sleep_sound
           - entity: script.play_bedroom_sleep_sound
+      - type: vertical-stack
+        cards:
+          - type: entities
+            entities:
+              - entity: automation.cycle_ac
+                name: Cycle AC
+              - entity: timer.cycle_ac_shutoff_timer
+              - entity: timer.cycle_ac_restart_timer
+          - type: horizontal-stack
+            cards:
+              - type: entities
+                entities:
+                  - entity: script.living_room_ac_correct_power
+                  - entity: script.dyson_fan_correct_power
+                  - entity: script.bedroom_ac_correct_power
       - type: entities
         entities:
           - entity: switch.party_lights
