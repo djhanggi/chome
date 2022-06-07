@@ -246,6 +246,7 @@ views:
                 name: Cycle AC
               - entity: timer.cycle_ac_shutoff_timer
               - entity: timer.cycle_ac_restart_timer
+              - entity: scene.cycle_ac
           - type: horizontal-stack
             cards:
               - type: entities
@@ -292,6 +293,7 @@ views:
         entities:
           - entity: input_number.cycle_ac_shutoff_timer_duration
           - entity: input_number.cycle_ac_restart_timer_duration
+          - entity: automation.cycle_ac_change_intervals
       - type: entities
         entities:
           - entity: automation.away
