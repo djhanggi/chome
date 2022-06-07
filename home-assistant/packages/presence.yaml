@@ -105,9 +105,9 @@ automation:
               entity_id: scene.evening
       - service: automation.trigger
         target:
-          entity_id: automation.clear_scene_return
-  - id: clear_scene_return
-    alias: Clear scene.return
+          entity_id: automation.reset_scene_return
+  - id: reset_scene_return
+    alias: Reset scene.return
     mode: single
     trigger:
       - platform: homeassistant
@@ -117,5 +117,5 @@ automation:
         data:
           scene_id: return
           entities:
-            automation.clear_scene_return:
+            automation.reset_scene_return:
               state: "on"

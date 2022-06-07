@@ -82,8 +82,8 @@ script:
     icon: mdi:party-popper
 
 automation:
-  - id: clear_scene_before_party_lights
-    alias: Clear scene.before_party_lights
+  - id: reset_scene_before_party_lights
+    alias: Reset scene.before_party_lights
     mode: single
     trigger:
       - platform: homeassistant
@@ -93,7 +93,7 @@ automation:
         data:
           scene_id: before_party_lights
           entities:
-            automation.clear_scene_before_party_lights:
+            automation.reset_scene_before_party_lights:
               state: "on"
 
 switch:
@@ -135,4 +135,4 @@ switch:
               entity_id: scene.before_party_lights
           - service: automation.trigger
             target:
-              entity_id: automation.clear_scene_before_party_lights
+              entity_id: automation.reset_scene_before_party_lights

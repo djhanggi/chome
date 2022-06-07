@@ -121,10 +121,10 @@ automation:
             - timer.cycle_ac_restart_timer
       - service: automation.trigger
         target:
-          entity_id: automation.clear_scene_cycle_ac
+          entity_id: automation.reset_scene_cycle_ac
     mode: single
-  - id: clear_scene_cycle_ac
-    alias: Clear scene.cycle_ac
+  - id: reset_scene_cycle_ac
+    alias: Reset scene.cycle_ac
     mode: single
     trigger:
       - platform: homeassistant
@@ -134,7 +134,7 @@ automation:
         data:
           scene_id: cycle_ac
           entities:
-            automation.clear_scene_cycle_ac:
+            automation.reset_scene_cycle_ac:
               state: "on"
   - id: change_cycle_ac_interval
     alias: Change Cycle AC Interval
