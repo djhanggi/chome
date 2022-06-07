@@ -11,10 +11,6 @@ homeassistant:
       icon: mdi:timer
     scene.cycle_ac:
       icon: mdi:air-conditioner
-    scene.cycle_ac_daytime_durations:
-      icon: mdi:timer
-    scene.cycle_ac_nighttime_durations:
-      icon: mdi:timer
 
 input_number:
   cycle_ac_shutoff_timer_duration:
@@ -140,29 +136,6 @@ automation:
           entities:
             automation.clear_scene_cycle_ac:
               state: "on"
-  - id: initialize_scene_cycle_ac_interval
-    alias: Initialize Cycle AC Interval Scenes
-    mode: single
-    trigger:
-      - platform: homeassistant
-        event: start
-    action:
-      - service: scene.create
-        data:
-          scene_id: cycle_ac_daytime_durations
-          entities:
-            input_number.cycle_ac_shutoff_timer_duration:
-              state: "30.0"
-            input_number.cycle_ac_restart_timer_duration:
-              state: "30.0"
-      - service: scene.create
-        data:
-          scene_id: cycle_ac_nighttime_durations
-          entities:
-            input_number.cycle_ac_shutoff_timer_duration:
-              state: "10.0"
-            input_number.cycle_ac_restart_timer_duration:
-              state: "30.0"
   - id: change_cycle_ac_interval
     alias: Change Cycle AC Interval
     mode: single
@@ -175,22 +148,18 @@ automation:
             entity_id: sensor.daytime_hours
             state: "True"
         then:
-          - service: scene.create
+          - service: scene.apply
             data:
-              scene_id: cycle_ac_nighttime_durations
-              snapshot_entities:
-                - input_number.cycle_ac_shutoff_timer_duration
-                - input_number.cycle_ac_restart_timer_duration
-          - service: scene.turn_on
-            target:
-              entity_id: scene.cycle_ac_daytime_durations
+              entities:
+                input_number.cycle_ac_shutoff_timer_duration:
+                  state: "30.0"
+                input_number.cycle_ac_restart_timer_duration:
+                  state: "30.0"
         else:
           - service: scene.create
             data:
-              scene_id: cycle_ac_daytime_durations
-              snapshot_entities:
-                - input_number.cycle_ac_shutoff_timer_duration
-                - input_number.cycle_ac_restart_timer_duration
-          - service: scene.turn_on
-            target:
-              entity_id: scene.cycle_ac_nighttime_durations
+              entities:
+                input_number.cycle_ac_shutoff_timer_duration:
+                  state: "10.0"
+                input_number.cycle_ac_restart_timer_duration:
+                  state: "30.0"
