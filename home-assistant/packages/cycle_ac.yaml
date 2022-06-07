@@ -137,8 +137,8 @@ automation:
           entities:
             automation.reset_scene_cycle_ac:
               state: "on"
-  - id: change_cycle_ac_interval
-    alias: Change Cycle AC Interval
+  - id: cycle_ac_change_intervals
+    alias: Cycle AC - Change Intervals
     mode: single
     trigger:
       - platform: state
@@ -157,7 +157,7 @@ automation:
                 input_number.cycle_ac_restart_timer_duration:
                   state: "30.0"
         else:
-          - service: scene.create
+          - service: scene.apply
             data:
               entities:
                 input_number.cycle_ac_shutoff_timer_duration:
