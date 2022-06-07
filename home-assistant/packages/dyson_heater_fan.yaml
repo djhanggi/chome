@@ -205,10 +205,10 @@ fan:
           - condition: state
             entity_id: input_boolean.dyson_heater_fan_power
             state: "off"
-          - service: script.dyson_heater_fan_toggle_power
           - service: input_boolean.turn_off
             target:
               entity_id: input_boolean.dyson_heater_fan_oscillating
+          - service: script.dyson_heater_fan_toggle_power
         turn_off:
           - condition: state
             entity_id: input_boolean.dyson_heater_fan_power
