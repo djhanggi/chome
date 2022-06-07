@@ -4,6 +4,7 @@ homeassistant:
     switch.party_lights:
       icon: mdi:party-popper
     scene.before_party_lights:
+      friendly_name: Party Lights - Return Scene
       icon: mdi:party-popper
 
 logbook:

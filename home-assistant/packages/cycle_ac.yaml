@@ -10,6 +10,7 @@ homeassistant:
     automation.cycle_ac_disable_automation:
       icon: mdi:timer
     scene.cycle_ac:
+      friendly_name: Cycle AC - Return Scene
       icon: mdi:air-conditioner
 
 input_number:

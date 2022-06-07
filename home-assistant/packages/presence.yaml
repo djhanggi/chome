@@ -8,6 +8,7 @@ homeassistant:
     automation.return:
       icon: mdi:location-enter
     scene.return:
+      friendly_name: Presence - Return Scene
       icon: mdi:location-enter
 
 group:
