@@ -37,6 +37,7 @@ my:
 person:
 scene: !include scenes.yaml
 script: !include scripts.yaml
+stream:
 sun:
 system_health:
 timer:
