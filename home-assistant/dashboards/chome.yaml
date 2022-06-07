@@ -51,13 +51,7 @@ views:
                 tap_action:
                   action: toggle
                 entity: script.go_to_sleep
-          - show_name: true
-            show_icon: true
-            type: button
-            tap_action:
-              action: toggle
-            entity: scene.chome_off
-            icon_height: 20px
+                name: Sleep
           - type: horizontal-stack
             cards:
               - show_name: true
@@ -82,12 +76,20 @@ views:
           - type: horizontal-stack
             cards:
               - show_name: true
+                show_icon: true
+                name: "Off"
+                type: button
+                tap_action:
+                  action: toggle
+                entity: scene.chome_off
+              - show_name: true
+                show_icon: true
                 name: Return
-                show_icon: false
                 type: button
                 tap_action:
                   action: toggle
                 entity: scene.return
+                show_state: false
       - type: vertical-stack
         cards:
           - type: horizontal-stack
@@ -162,8 +164,6 @@ views:
         state_color: false
       - type: entities
         entities:
-          - entity: switch.living_room_cam
-            name: Camera
           - entity: switch.monitor
           - entity: switch.bike_stand
         show_header_toggle: false
@@ -308,3 +308,24 @@ views:
       - type: entities
         entities:
           - automation.backup_home_assistant
+  - theme: Backend-selected
+    title: Cameras
+    path: cameras
+    icon: mdi:video
+    badges: []
+    cards:
+      - type: grid
+        square: false
+        columns: 1
+        cards:
+          - type: entities
+            entities:
+              - entity: switch.living_room_cam
+                name: Living Room Camera
+          - show_state: false
+            show_name: false
+            camera_view: live
+            type: picture-entity
+            entity: camera.living_room
+            camera_image: camera.living_room
+            name: Living Room Camera
