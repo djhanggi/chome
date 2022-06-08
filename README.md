@@ -15,3 +15,5 @@ To format, use `prettier --write **/*.yaml` with the existing .prettierrc.yaml.
   - primary default forwards to secondary, falls back to open DNS
   - secondary blocks optional websites (like social media) and can be turned off
 - Document setup for custom components and UI-managed items
+- Move secrets to each individual package
+- Manage networking/configuration/constants/secrets in separate repository
