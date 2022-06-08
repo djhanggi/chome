@@ -122,9 +122,9 @@ scene:
         state: "off"
       light.living_room_lamp: &EVENING_LIGHT_SETTINGS
         state: "on"
-        brightness: 3
-        color_temp: 600
-      light.bookhself: *EVENING_LIGHT_SETTINGS
+        brightness: 10
+        color_temp: 500
+      light.bookshelf: *EVENING_LIGHT_SETTINGS
       light.hallway_lights:
         state: "off"
       light.bathroom_lights:
