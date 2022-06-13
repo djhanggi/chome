@@ -1,4 +1,4 @@
-# This is my home server setup.
+# This is my home server setup
 
 ## Formatting
 
