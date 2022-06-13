@@ -37,7 +37,7 @@ automation:
         id: plant_sunset_trigger
         at: input_datetime.plant_sunset_time
     action:
-      - service_template: >
+      - service: >
           {% if trigger.id == "plant_sunrise_trigger" %}
             switch.turn_on
           {% elif trigger.id == "plant_sunset_trigger" %}

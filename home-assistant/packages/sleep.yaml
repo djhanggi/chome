@@ -59,7 +59,7 @@ script:
       - service: media_player.play_media
         target:
           entity_id: media_player.bedroom_speaker
-        data_template:
+        data:
           media_content_id: >
             {{ states("sensor.sleep_sound_content_id") }}
           media_content_type: music
@@ -70,7 +70,7 @@ script:
       - service: input_select.select_option
         target:
           entity_id: input_select.sleep_sound
-        data_template:
+        data:
           option: >
             {{ state_attr("input_select.sleep_sound", "options") | random }}
       - service: script.play_bedroom_sleep_sound

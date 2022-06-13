@@ -45,7 +45,7 @@ script:
       - service: remote.send_command
         target:
           entity_id: remote.bedroom_broadlink_remote
-        data_template:
+        data:
           device: friedrich_ac
           command: "{{ command }}"
     mode: single
@@ -90,14 +90,14 @@ script:
         entity_id: input_boolean.bedroom_ac_power
         state: "on"
       - service: script.bedroom_ac_send_command
-        data_template:
+        data:
           command: >
             {% if increase_temperature %}
               increase_temperature
             {% else %}
               decrease_temperature
             {% endif %}
-      - service_template: >
+      - service: >
           {% if increase_temperature %}
             input_number.increment
           {% else %}
@@ -129,7 +129,7 @@ automation:
               state_attr("climate.bedroom_ac", "temperature") | int }}
           sequence:
             - service: script.bedroom_ac_toggle_temperature
-              data_template:
+              data:
                 increase_temperature: >
                   {{ states("input_number.bedroom_ac_temperature") | int <
                   state_attr("climate.bedroom_ac", "temperature") | int }}

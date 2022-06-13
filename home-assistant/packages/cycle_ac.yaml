@@ -60,7 +60,7 @@ automation:
       - service: timer.start
         target:
           entity_id: timer.cycle_ac_shutoff_timer
-        data_template:
+        data:
           duration: >
             00:{{ states("input_number.cycle_ac_shutoff_timer_duration") |
             int}}:00
@@ -83,7 +83,7 @@ automation:
       - service: timer.start
         target:
           entity_id: timer.cycle_ac_restart_timer
-        data_template:
+        data:
           duration: >
             00:{{ states("input_number.cycle_ac_restart_timer_duration") | int
             }}:00
@@ -102,7 +102,7 @@ automation:
       - service: timer.start
         target:
           entity_id: timer.cycle_ac_shutoff_timer
-        data_template:
+        data:
           duration: >
             00:{{ states("input_number.cycle_ac_shutoff_timer_duration") |
             int}}:00

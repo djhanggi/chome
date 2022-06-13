@@ -48,7 +48,7 @@ automation:
         id: power_off
         webhook_id: !secret kitchen_lights_wyze_ifttt_webhook_sync_power_off
     action:
-      - service_template: >
+      - service: >
           {% if trigger.id == "power_on" %}
             input_boolean.turn_on
           {% elif trigger.id == "power_off" %}

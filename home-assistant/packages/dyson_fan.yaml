@@ -53,7 +53,7 @@ script:
       - service: remote.send_command
         target:
           entity_id: remote.harmony
-        data_template:
+        data:
           <<: *HARMONY_DYSON_FAN_DEVICE
           command: "{{ command }}"
     mode: single
@@ -121,14 +121,14 @@ script:
         entity_id: input_boolean.dyson_fan_power
         state: "on"
       - service: script.dyson_fan_send_command
-        data_template:
+        data:
           command: >
             {% if increase_speed %}
               FanModeUp
             {% else %}
               FanModeDown
             {% endif %}
-      - service_template: >
+      - service: >
           {% if increase_speed %}
             input_number.increment
           {% else %}
@@ -159,7 +159,7 @@ automation:
               states("input_number.dyson_fan_speed") | int }}
           sequence:
             - service: script.dyson_fan_toggle_speed
-              data_template:
+              data:
                 increase_speed: >
                   {{ states("input_number.dyson_fan_speed") | int <
                   states("input_number.dyson_fan_target_speed") | int }}

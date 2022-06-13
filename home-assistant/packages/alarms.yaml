@@ -17,7 +17,7 @@ script:
       - service: input_datetime.set_datetime
         target:
           entity_id: input_datetime.next_alarm_time
-        data_template:
+        data:
           time: >
             {{
               as_timestamp(states.sensor.scarif_next_alarm.state)
@@ -29,7 +29,7 @@ script:
     alias: Set Alarm On Scarif
     sequence:
       - service: notify.mobile_app_scarif
-        data_template:
+        data:
           title: Set Alarm
           message: >
             {{ state_attr("input_datetime.next_alarm_time", "timestamp") |
@@ -49,7 +49,7 @@ automation:
       - service: input_datetime.set_datetime
         target:
           entity_id: input_datetime.morning_start_time
-        data_template:
+        data:
           time: >-
             {{ as_timestamp(state_attr("sun.sun", "next_rising")) |
             timestamp_custom("%H:%M") }}

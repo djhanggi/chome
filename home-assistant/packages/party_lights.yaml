@@ -50,7 +50,7 @@ script:
     alias: Apply Party Lights Scene
     sequence:
       - service: light.turn_on
-        data_template:
+        data:
           entity_id:
             - light.ceiling_e
             - light.living_room_lamp
@@ -65,7 +65,7 @@ script:
           brightness: "{{ (range(50, 250) | random) }}"
           transition: 0.1
       - service: light.turn_on
-        data_template:
+        data:
           entity_id:
             - light.ceiling_w
             - light.bookshelf
