@@ -1,0 +1,14 @@
+---
+script:
+  snooze_pihole:
+    alias: Snooze PiHole
+    sequence:
+      - service: switch.turn_off
+        target:
+          entity_id: switch.bespin_pihole
+      - delay:
+          minutes: 5
+      - service: switch.turn_on
+        target:
+          entity_id: switch.bespin_pihole
+    icon: mdi:pi-hole
