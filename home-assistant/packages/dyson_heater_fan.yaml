@@ -41,6 +41,14 @@ input_number:
     step: 1
     icon: mdi:fan
 
+input_select:
+  dyson_heater_fan_next_power_command:
+    name: Dyson Heater Fan - Next Power Command
+    options:
+      - power_command_1
+      - power_command_2
+    icon: mdi:power
+
 script:
   dyson_heater_fan_send_command:
     alias: Dyson Heater Fan - Send Command
@@ -55,6 +63,21 @@ script:
           command: "{{ command }}"
     mode: single
     icon: mdi:fan
+  dyson_heater_fan_correct_power:
+    alias: Dyson Heater Fan - Correct Power
+    sequence:
+      - service: script.dyson_heater_fan_send_command
+        data:
+          command: >
+            {{ states("input_select.dyson_heater_fan_next_power_command") }}
+      - service: input_select.select_next
+        target:
+          entity_id: input_select.dyson_heater_fan_next_power_command
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.dyson_heater_fan_oscillating
+    mode: single
+    icon: mdi:fan-alert
   dyson_heater_fan_toggle_power:
     alias: Dyson Heater Fan - Toggle Power
     sequence:
@@ -65,11 +88,10 @@ script:
       - service: script.dyson_heater_fan_send_command
         data:
           command: >
-            {% if is_state("input_boolean.dyson_heater_fan_power", "off") %}
-              power_on
-            {% else %}
-              power_off
-            {% endif %}
+            {{ states("input_select.dyson_heater_fan_next_power_command") }}
+      - service: input_select.select_next
+        target:
+          entity_id: input_select.dyson_heater_fan_next_power_command
       - service: input_boolean.toggle
         target:
           entity_id: input_boolean.dyson_heater_fan_power
