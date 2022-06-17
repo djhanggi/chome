@@ -29,12 +29,8 @@ script:
       Sends command to IFTTT to turn on or off Wyze Kitchen Lights
     sequence:
       service: ifttt.trigger
-      data_template: >
-        {% if power %}
-          {"event":"kitchen_lights_power_on"}
-        {% else %}
-          {"event":"kitchen_lights_power_off"}
-        {% endif %}
+      data:
+        event: 'kitchen_lights_power_{{ "on" if power else "off" }}'
     icon: mdi:light-switch
 
 automation:
