@@ -16,7 +16,7 @@ logbook:
 input_boolean:
   party_lights_on:
     name: "Party Lights - On"
-    initial: "off"
+    initial: off
     icon: mdi:party-popper
 
 input_number:
