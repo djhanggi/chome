@@ -23,11 +23,9 @@ logbook:
 input_boolean:
   dyson_fan_power:
     name: Dyson Fan - Power
-    initial: off
     icon: mdi:fan
   dyson_fan_oscillating:
     name: Dyson Fan - Oscillating
-    initial: off
     icon: mdi:fan
 
 input_number:
@@ -193,9 +191,6 @@ fan:
           - condition: state
             entity_id: input_boolean.dyson_fan_power
             state: "off"
-          - service: input_boolean.turn_off
-            target:
-              entity_id: input_boolean.dyson_fan_oscillating
           - service: script.dyson_fan_toggle_power
         turn_off:
           - condition: state
@@ -206,7 +201,9 @@ fan:
             target:
               entity_id: input_boolean.dyson_fan_oscillating
         set_oscillating:
-          service: script.dyson_fan_toggle_oscillate
+          - condition: >
+              {{ states("input_boolean.dyson_fan_oscillating") != oscillating }}
+          - service: script.dyson_fan_toggle_oscillate
         set_percentage:
           - service: input_number.set_value
             target:
