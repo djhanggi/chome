@@ -16,8 +16,8 @@ automation: !include automations.yaml
 backup:
 config:
 conversation:
-frontend:
 counter:
+frontend:
 history:
 input_boolean:
 input_button:
