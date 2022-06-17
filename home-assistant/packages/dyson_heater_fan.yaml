@@ -20,11 +20,11 @@ logbook:
 input_boolean:
   dyson_heater_fan_power:
     name: Dyson Heater Fan - Power
-    initial: "off"
+    initial: off
     icon: mdi:fan
   dyson_heater_fan_oscillating:
     name: Dyson Heater Fan - Oscillating
-    initial: "off"
+    initial: off
     icon: mdi:fan
 
 input_number:
