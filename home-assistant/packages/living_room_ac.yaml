@@ -56,9 +56,9 @@ script:
   living_room_ac_correct_power:
     alias: Living Room AC - Correct Power
     sequence:
-      - service: input_boolean.toggle
-        target:
-          entity_id: input_boolean.living_room_ac_power
+      - service: script.living_room_ac_send_command
+        data:
+          command: PowerToggle
     mode: single
     icon: mdi:power
   living_room_ac_toggle_power:

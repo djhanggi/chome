@@ -61,9 +61,9 @@ script:
   dyson_fan_correct_power:
     alias: Dyson Fan - Correct Power
     sequence:
-      - service: input_boolean.toggle
-        target:
-          entity_id: input_boolean.dyson_fan_power
+      - service: script.dyson_fan_send_command
+        data:
+          command: PowerToggle
     mode: single
     icon: mdi:fan-alert
   dyson_fan_toggle_power:
@@ -76,7 +76,6 @@ script:
       - service: script.dyson_fan_send_command
         data:
           command: PowerToggle
-          broadlink_command: toggle_power
       - service: input_boolean.toggle
         target:
           entity_id: input_boolean.dyson_fan_power
@@ -98,7 +97,6 @@ script:
       - service: script.dyson_fan_send_command
         data:
           command: Oscillate
-          broadlink_command: toggle_oscillate
       - service: input_boolean.toggle
         target:
           entity_id: input_boolean.dyson_fan_oscillating

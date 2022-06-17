@@ -53,9 +53,9 @@ script:
   bedroom_ac_correct_power:
     alias: Bedroom AC - Correct Power
     sequence:
-      - service: input_boolean.toggle
-        target:
-          entity_id: input_boolean.bedroom_ac_power
+      - service: script.bedroom_ac_send_command
+        data:
+          command: toggle_power
     mode: single
     icon: mdi:power
   bedroom_ac_toggle_power:
