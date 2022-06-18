@@ -1,4 +1,9 @@
 ---
+homeassistant:
+  customize:
+    automation.flash_lights_on_silent_phone_ring:
+      icon: mdi:alarm-bell
+
 automation:
   - id: flash_lights_on_silent_phone_ring
     alias: Flash Lights On Silent Phone Ring
