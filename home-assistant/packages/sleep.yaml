@@ -16,6 +16,7 @@ input_select:
     name: Sleep Sound
     options:
       - Country
+      - Ocean
       - Rain
       - Rainforest
       - River
@@ -32,6 +33,8 @@ template:
           {% set SOUNDS = {
               "Country":
           "https://storage.googleapis.com/relaxation-sounds/country_night_3600.mp3",
+              "Ocean":
+          "https://storage.googleapis.com/relaxation-sounds/ocean_3600.mp3",
               "Rain":
           "https://storage.googleapis.com/relaxation-sounds/rain_3600.mp3",
               "Rainforest":
