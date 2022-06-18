@@ -116,6 +116,15 @@ views:
                     name: Bedroom Humidity
                 show_header_toggle: false
                 state_color: false
+          - type: horizontal-stack
+            cards:
+              - type: entities
+                entities:
+                  - entity: automation.cycle_ac
+                    name: Cycle AC
+                  - entity: timer.cycle_ac_shutoff_timer
+                  - entity: timer.cycle_ac_restart_timer
+                  - entity: scene.cycle_ac
       - type: entities
         entities:
           - entity: switch.living_room_plant_light
@@ -155,6 +164,11 @@ views:
           - type: weather-forecast
             entity: weather.chome
           - type: custom:sun-card
+          - hours_to_show: 24
+            graph: none
+            type: sensor
+            entity: sensor.moon
+            detail: 1
       - type: entities
         entities:
           - entity: input_datetime.next_alarm_time
@@ -172,6 +186,7 @@ views:
         entities:
           - entity: switch.bespin_pihole
             name: PiHole
+          - entity: script.snooze_pihole
           - entity: sensor.bespin_pihole_ads_blocked_today
             name: Ads Blocked - Today
           - entity: sensor.bespin_pihole_dns_queries_today
@@ -238,22 +253,14 @@ views:
         entities:
           - entity: input_select.sleep_sound
           - entity: script.play_bedroom_sleep_sound
-      - type: vertical-stack
+      - type: horizontal-stack
         cards:
           - type: entities
             entities:
-              - entity: automation.cycle_ac
-                name: Cycle AC
-              - entity: timer.cycle_ac_shutoff_timer
-              - entity: timer.cycle_ac_restart_timer
-              - entity: scene.cycle_ac
-          - type: horizontal-stack
-            cards:
-              - type: entities
-                entities:
-                  - entity: script.living_room_ac_correct_power
-                  - entity: script.dyson_fan_correct_power
-                  - entity: script.bedroom_ac_correct_power
+              - entity: script.living_room_ac_correct_power
+              - entity: script.dyson_fan_correct_power
+              - entity: script.bedroom_ac_correct_power
+              - entity: script.dyson_heater_fan_correct_power
       - type: entities
         entities:
           - entity: switch.party_lights
@@ -270,10 +277,11 @@ views:
       - type: entities
         entities:
           - entity: automation.morning
-          - entity: automation.evening
+          - entity: input_boolean.open_blinds_in_morning
           - entity: input_datetime.morning_start_time
-          - entity: input_datetime.evening_start_time
           - entity: automation.set_morning_start_time_to_sunrise
+          - entity: automation.evening
+          - entity: input_datetime.evening_start_time
         show_header_toggle: false
         state_color: false
         view_layout:
@@ -308,15 +316,18 @@ views:
       - type: entities
         entities:
           - automation.backup_home_assistant
+      - type: entities
+        entities:
+          - automation.flash_lights_on_silent_phone_ring
   - theme: Backend-selected
     title: Cameras
     path: cameras
     icon: mdi:video
     badges: []
     cards:
-      - type: grid
-        square: false
+      - square: false
         columns: 1
+        type: grid
         cards:
           - type: entities
             entities:
@@ -329,3 +340,28 @@ views:
             entity: camera.living_room
             camera_image: camera.living_room
             name: Living Room Camera
+          - type: horizontal-stack
+            cards:
+              - show_name: true
+                show_icon: false
+                type: button
+                tap_action:
+                  action: call-service
+                  service: camera.play_stream
+                  service_data:
+                    media_player: media_player.cast_hoth
+                  target:
+                    entity_id: camera.living_room
+                entity: ""
+                name: Cast to Hoth
+              - show_name: true
+                show_icon: false
+                type: button
+                tap_action:
+                  action: call-service
+                  service: media_player.media_stop
+                  service_data: {}
+                  target:
+                    entity_id: media_player.cast_hoth
+                entity: ""
+                name: Stop Casting to Hoth
