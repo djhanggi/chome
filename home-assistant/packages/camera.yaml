@@ -1,5 +1,0 @@
----
-camera:
-  - platform: generic
-    name: Living Room Camera
-    stream_source: !secret living_room_camera_stream_source
