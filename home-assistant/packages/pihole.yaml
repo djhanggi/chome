@@ -7,7 +7,7 @@ script:
         target:
           entity_id: switch.bespin_pihole
       - delay:
-          minutes: 5
+          minutes: 1
       - service: switch.turn_on
         target:
           entity_id: switch.bespin_pihole
