@@ -365,3 +365,15 @@ views:
                     entity_id: media_player.cast_hoth
                 entity: ""
                 name: Stop Casting to Hoth
+  - theme: Backend-selected
+    title: Calendar
+    path: calendar
+    icon: mdi:calendar
+    badges: []
+    cards:
+      - initial_view: list
+        type: calendar
+        entities:
+          - calendar.djhanggi_gmail_com
+          - calendar.djh325
+          - calendar.daniel_hanggi_braze_com
