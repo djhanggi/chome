@@ -8,6 +8,11 @@ homeassistant:
     automation.evening:
       icon: mdi:weather-sunset
 
+input_boolean:
+  open_blinds_in_morning:
+    name: Open Blinds in Morning
+    icon: mdi:blinds-open
+
 input_datetime:
   morning_start_time:
     name: Morning Start Time
@@ -157,8 +162,11 @@ automation:
         entity_id: person.djhanggi
         state: home
     action:
-      - scene: scene.ajar_blinds
       - scene: scene.morning
+      - if:
+          - '{{ is_state("input_boolean.open_blinds_in_morning", "on") }}'
+        then:
+          - scene: scene.ajar_blinds
     mode: single
   - id: evening
     alias: Evening
