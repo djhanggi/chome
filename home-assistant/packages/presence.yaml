@@ -11,13 +11,6 @@ homeassistant:
       friendly_name: Presence - Return Scene
       icon: mdi:location-enter
 
-group:
-  djhanggi_presence:
-    name: DJHANGGI Presence
-    entities:
-      - person.djhanggi
-      - sensor.scarif_at_home
-
 template:
   - sensor:
       - unique_id: djhanggi_at_home

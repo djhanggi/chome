@@ -18,6 +18,9 @@ automation:
         value_template: >
           {{ not is_state("sensor.scarif_do_not_disturb_sensor", "Off") or
           states("sensor.scarif_volume_level_ringer") | int < 5 }}
+      - condition: state
+        entity_id: sensor.djhanggi_at_home
+        state: home
     action:
       - service: input_number.set_value
         data:
