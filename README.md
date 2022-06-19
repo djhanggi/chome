@@ -17,3 +17,4 @@ To format, use `prettier --write **/*.yaml` with the existing .prettierrc.yaml.
 - Document setup for custom components and UI-managed items
 - Move secrets to each individual package
 - Manage networking/configuration/constants/secrets in separate repository
+- Move WiFi names to secrets

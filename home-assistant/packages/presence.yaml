@@ -1,8 +1,6 @@
 ---
 homeassistant:
   customize:
-    group.djhanggi_presence:
-      icon: mdi:home-map-marker
     automation.away:
       icon: mdi:location-exit
     automation.return:
@@ -11,18 +9,6 @@ homeassistant:
       friendly_name: Presence - Return Scene
       icon: mdi:location-enter
 
-template:
-  - sensor:
-      - unique_id: djhanggi_at_home
-        name: DJHANGGI at Home
-        state: >
-          {% if is_state("sensor.scarif_wifi_connection", "CHOME.NYC") or
-          is_state("sensor.scarif_wifi_connection", "CHOME") %}
-            home
-          {% else %}
-            {{ states("person.djhanggi") }}
-          {% endif %}
-
 automation:
   - id: away
     alias: Away
@@ -30,8 +16,7 @@ automation:
     mode: single
     trigger:
       - platform: state
-        entity_id:
-          - sensor.djhanggi_at_home
+        entity_id: person.djhanggi
         from: home
         to: not_home
     action:
@@ -81,8 +66,7 @@ automation:
     mode: single
     trigger:
       - platform: state
-        entity_id:
-          - sensor.djhanggi_at_home
+        entity_id: person.djhanggi
         from: not_home
         to: home
     action:

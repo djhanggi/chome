@@ -176,7 +176,7 @@ automation:
         at: input_datetime.evening_start_time
     condition:
       - condition: state
-        entity_id: sensor.djhanggi_at_home
+        entity_id: person.djhanggi
         state: home
     action:
       - scene: scene.closed_blinds

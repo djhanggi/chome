@@ -1,0 +1,30 @@
+---
+homeassistant:
+  customize:
+    automation.update_djhanggi_device_tracker:
+      icon: mdi:home-map-marker
+
+template:
+  - binary_sensor:
+      - unique_id: djhanggi_at_home
+        name: DJHANGGI at Home
+        state: >
+          {{ is_state("sensor.scarif_wifi_connection", "CHOME.NYC") or
+          is_state("sensor.scarif_wifi_connection", "CHOME") or
+          is_state("device_tracker.scarif", "home") }}
+        icon: mdi:home-map-marker
+
+automation:
+  - id: update_djhanggi_device_tracker
+    alias: Update device_tracker.djhanggi
+    mode: single
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.djhanggi_at_home
+    action:
+      - service: device_tracker.see
+        data:
+          dev_id: "djhanggi_sensor"
+          location_name: >
+            {{ "home" if states("binary_sensor.djhanggi_at_home") else
+            "not_home" }}
