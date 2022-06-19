@@ -18,8 +18,8 @@ automation:
     condition:
       - condition: template
         value_template: >
-          '{{ not is_state("sensor.scarif_do_not_disturb_sensor", "Off") or
-          states("sensor.scarif_volume_level_ringer") | int < 5 }}'
+          {{ not is_state("sensor.scarif_do_not_disturb_sensor", "Off") or
+          states("sensor.scarif_volume_level_ringer") | int < 5 }}
     action:
       - service: input_number.set_value
         data:
