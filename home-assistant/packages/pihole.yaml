@@ -2,13 +2,11 @@
 script:
   snooze_pihole:
     alias: Snooze PiHole
+    description: Snooze PiHole for 30 seconds
     sequence:
-      - service: switch.turn_off
+      - service: pi_hole.disable
         target:
           entity_id: switch.bespin_pihole
-      - delay:
-          minutes: 1
-      - service: switch.turn_on
-        target:
-          entity_id: switch.bespin_pihole
+        data:
+          duration: "00:00:30"
     icon: mdi:pi-hole
