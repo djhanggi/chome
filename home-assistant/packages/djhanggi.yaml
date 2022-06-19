@@ -15,10 +15,12 @@ template:
         icon: mdi:home-map-marker
 
 automation:
-  - id: update_djhanggi_device_tracker
-    alias: Update device_tracker.djhanggi
+  - id: update_device_tracker_djhanggi_sensor
+    alias: Update device_tracker.djhanggi_sensor
     mode: single
     trigger:
+      - platform: homeassistant
+        event: start
       - platform: state
         entity_id: binary_sensor.djhanggi_at_home
     action:
