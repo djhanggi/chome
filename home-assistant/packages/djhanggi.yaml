@@ -28,5 +28,5 @@ automation:
         data:
           dev_id: "djhanggi_sensor"
           location_name: >
-            {{ "home" if states("binary_sensor.djhanggi_at_home") else
+            {{ "home" if is_state("binary_sensor.djhanggi_at_home", "on") else
             "not_home" }}
