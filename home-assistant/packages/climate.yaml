@@ -26,3 +26,32 @@ scene:
         state: "on"
         oscillating: true
     icon: mdi:home-thermometer
+
+automation:
+  - id: cycle_ac_change_intervals
+    alias: Cycle AC - Change Intervals
+    mode: single
+    trigger:
+      - platform: state
+        entity_id: sensor.daytime_hours
+    action:
+      - if:
+          - condition: state
+            entity_id: sensor.daytime_hours
+            state: "True"
+        then:
+          - service: scene.apply
+            data:
+              entities:
+                input_number.cycle_ac_shutoff_timer_duration:
+                  state: "30.0"
+                input_number.cycle_ac_restart_timer_duration:
+                  state: "30.0"
+        else:
+          - service: scene.apply
+            data:
+              entities:
+                input_number.cycle_ac_shutoff_timer_duration:
+                  state: "10.0"
+                input_number.cycle_ac_restart_timer_duration:
+                  state: "50.0"
