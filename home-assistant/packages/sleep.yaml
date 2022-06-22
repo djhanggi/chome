@@ -104,3 +104,25 @@ script:
         target:
           entity_id: automation.cycle_ac
     icon: mdi:sleep
+
+ios:
+  actions:
+    - name: Apple Watch Sleep
+      background_color: "#ffffff"
+      label:
+        text: Sleep
+        color: "#ff0000"
+      icon:
+        icon: mdi:sleep
+        color: "#000000"
+
+automation:
+  - id: apple_watch_go_to_sleep
+    alias: "Apple Watch - Go to Sleep"
+    trigger:
+      platform: event
+      event_type: ios.action_fired
+      event_data:
+        actionName: Apple Watch Sleep
+    action:
+      service: script.go_to_sleep
