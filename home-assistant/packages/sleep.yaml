@@ -111,7 +111,7 @@ ios:
       background_color: "#ffffff"
       label:
         text: Sleep
-        color: "#ff0000"
+        color: "#000000"
       icon:
         icon: mdi:sleep
         color: "#000000"
