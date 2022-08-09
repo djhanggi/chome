@@ -8,12 +8,17 @@ automation:
   - id: backup_home_assistant
     alias: Backup Home Assistant
     trigger:
-      platform: time
-      at: "03:00:00"
+      - platform: homeassistant
+        event: shutdown
+        id: home_assistant_shutdown
+      - platform: time
+        at: "03:00:00"
     condition:
-      - condition: time
-        weekday:
-          - mon
-          - thu
+      - or:
+          - '{{ trigger.id == "home_assistant_shutdown" }}'
+          - condition: time
+            weekday:
+              - mon
+              - thu
     action:
       service: backup.create
