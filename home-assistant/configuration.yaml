@@ -28,8 +28,6 @@ input_text:
 logbook:
 logger:
   default: debug
-  logs:
-    homeassistant.components.webhook: debug
 map:
 media_source:
 mobile_app:
