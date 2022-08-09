@@ -10,6 +10,6 @@ services:
       - VERSION=docker
     volumes:
       - ./volumes/plex/config/:/config/
-      - ./volumes/plex/media/:/media/
+      - /mnt/skywalker-1/:/media/
     privileged: true
     restart: unless-stopped
