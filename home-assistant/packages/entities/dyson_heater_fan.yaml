@@ -196,20 +196,6 @@ automation:
                 increase_speed: >
                   {{ states("input_number.dyson_heater_fan_speed") | int <
                   states("input_number.dyson_heater_fan_target_speed") | int }}
-  - id: dyson_heater_fan_oscillate_on_start
-    alias: Dyson Heater Fan - Oscillate On Start
-    trigger:
-      - platform: state
-        entity_id: fan.dyson_heater_fan
-        from: "off"
-        to: "on"
-    action:
-      - service: fan.oscillate
-        target:
-          entity_id: fan.dyson_heater_fan
-        data:
-          oscillating: true
-    mode: single
 
 fan:
   - platform: template

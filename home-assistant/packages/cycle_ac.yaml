@@ -102,6 +102,28 @@ automation:
         target:
           entity_id: scene.cycle_ac
     mode: single
+  - id: cycle_ac_enable_automation
+    alias: Cycle AC - Enable Automation
+    trigger:
+      - platform: state
+        entity_id: automation.cycle_ac
+        from: "off"
+        to: "on"
+    action:
+      - if:
+          - condition: or
+            conditions:
+              - condition: state
+                entity_id: climate.living_room_ac
+                state: cool
+              - condition: state
+                entity_id: climate.bedroom_ac
+                state: cool
+        then:
+          - service: automation.trigger
+            target:
+              entity_id: automation.cycle_ac
+    mode: single
   - id: cycle_ac_disable_automation
     alias: Cycle AC - Disable Automation
     trigger:

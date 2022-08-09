@@ -62,3 +62,28 @@ light:
     entities:
       - light.bathroom_e
       - light.bathroom_w
+
+automation:
+  - id: turn_off_idle_kitchen_lights
+    alias: Turn Off Idle Kitchen Lights
+    trigger:
+      - platform: state
+        entity_id: switch.kitchen_lights
+        to: "on"
+        for:
+          minutes: 15
+    action:
+      - service: switch.turn_off
+        target:
+          entity_id: switch.kitchen_lights
+    mode: single
+
+# Get list of entity_ids of lights that are on:
+# entity_ids:
+#   {% set idle_lights = ["light.ceiling_e", "light.bookshelf"] %}
+#   {{ states.light | selectattr('state','eq','on') |
+#   selectattr('last_updated','lt',now() - timedelta(hours=0)) |
+#   map(attribute='entity_id') | select("in", idle_lights) | list}}
+
+# Expand all lights in a group to capture individually in scene:
+# {{expand(state_attr('light.woonkamer', 'entity_id'))|map(attribute='entity_id')|list}}
