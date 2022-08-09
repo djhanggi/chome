@@ -1,3 +1,0 @@
-google:
-  client_id: !secret google_chome_client_id
-  client_secret: !secret google_chome_client_secret
