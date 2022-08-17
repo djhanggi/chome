@@ -14,7 +14,7 @@ services:
     ports:
       - 51820:51820/udp
     volumes:
-      - ./volumes/wireguard/config/:/config/
+      - /mnt/docker/wireguard/config/:/config/
       - /lib/modules/:/lib/modules/
     cap_add:
       - NET_ADMIN

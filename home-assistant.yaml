@@ -5,12 +5,12 @@ services:
     image: ghcr.io/home-assistant/home-assistant:stable
     network_mode: host
     volumes:
-      - ./volumes/home-assistant/config/:/config/
-      - ./home-assistant/configuration.yaml:/config/configuration.yaml
-      - ./home-assistant/secrets.yaml:/config/secrets.yaml
-      - ./home-assistant/packages/:/config/packages/
-      - ./home-assistant/automations.yaml:/config/automations.yaml
-      - ./home-assistant/scenes.yaml:/config/scenes.yaml
-      - ./home-assistant/scripts.yaml:/config/scripts.yaml
+      - /mnt/docker/home-assistant/config/:/config/
+      - /mnt/chome/home-assistant/configuration.yaml:/config/configuration.yaml
+      - /mnt/chome/home-assistant/secrets.yaml:/config/secrets.yaml
+      - /mnt/chome/home-assistant/packages/:/config/packages/
+      - /mnt/chome/home-assistant/automations.yaml:/config/automations.yaml
+      - /mnt/chome/home-assistant/scenes.yaml:/config/scenes.yaml
+      - /mnt/chome/home-assistant/scripts.yaml:/config/scripts.yaml
     restart: unless-stopped
     privileged: true

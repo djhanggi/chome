@@ -12,9 +12,9 @@ services:
       - SUBDOMAINS=$SWAG_SUBDOMAINS
       - VALIDATION=http
     volumes:
-      - ./volumes/swag/config/:/config/
+      - /mnt/docker/swag/config/:/config/
       - type: bind
-        source: ./swag/default.conf
+        source: /mnt/docker/swag/default.conf
         target: /config/nginx/site-confs/default
         read_only: true
     cap_add:

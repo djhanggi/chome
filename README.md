@@ -16,17 +16,15 @@ To format, use `prettier --write **/*.yaml` with the existing .prettierrc.yaml.
 
 ### Storage
 
-- Create NAS + UPS setup
-  - Backup phones/laptops/Pi to NAS
-  - bespin storage on NAS
-  - regularly rsync this to the SSD stored in safe
-  - regularly backup/encrypt to 2292 + Google Drive + connected SSD
-  - regularly restic/backup to always-connected SSD
+- NAS
+  - Backup phones to NAS
+  - Encrypt/backup NAS to 2292 and connected SSD
+  - Encrypt/mirror NAS to SSD
+- Google Drive clean-up / archiving / migration
 - Serve NAS via Synology or Syncthing to devices
 - Serve photos/media via Plex and Photos equivalent
 - Set maximum log size for nginx/pihole/home-assistant
   - Version-control .confs
-- Migrate Google Drive
 
 ### Home Assistant
 

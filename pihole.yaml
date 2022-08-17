@@ -16,8 +16,8 @@ services:
       TEMPERATUREUNIT: k
       QUERY_LOGGING: "true"
     volumes:
-      - ./volumes/pihole/etc/pihole/:/etc/pihole/
-      - ./volumes/pihole/etc/dnsmasq.d/:/etc/dnsmasq.d/
+      - /mnt/docker/pihole/etc/pihole/:/etc/pihole/
+      - /mnt/docker/pihole/etc/dnsmasq.d/:/etc/dnsmasq.d/
     cap_add:
       - NET_ADMIN
     restart: unless-stopped

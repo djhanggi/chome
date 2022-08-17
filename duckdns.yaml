@@ -10,5 +10,5 @@ services:
       - TOKEN=$DUCKDNS_TOKEN
       - LOG_FILE=true
     volumes:
-      - ./volumes/duckdns/config/:/config/
+      - /mnt/docker/duckdns/config/:/config/
     restart: unless-stopped

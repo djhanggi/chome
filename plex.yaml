@@ -9,7 +9,7 @@ services:
       - PGID=$CHOME_GID
       - VERSION=docker
     volumes:
-      - ./volumes/plex/config/:/config/
-      - /mnt/skywalker-1/:/media/
+      - /mnt/docker/plex/config/:/config/
+      - /mnt/media/:/media/
     privileged: true
     restart: unless-stopped
