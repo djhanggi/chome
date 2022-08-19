@@ -7,6 +7,9 @@ services:
       - $HOST_IP:53:53/tcp
       - $HOST_IP:53:53/udp
       - $HOST_IP:81:80/tcp
+    options:
+      max-size: 512m
+      max-file: 2
     environment:
       TZ: $TIMEZONE
       WEBPASSWORD: $PIHOLE_PASSWORD

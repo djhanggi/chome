@@ -4,6 +4,8 @@ services:
     image: ghcr.io/linuxserver/duckdns
     container_name: duckdns
     network_mode: host
+    options:
+      max-size: 512k
     environment:
       - TZ=$TIMEZONE
       - SUBDOMAINS=$DUCKDNS_SUBDOMAIN

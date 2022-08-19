@@ -4,11 +4,15 @@ services:
     image: deconzcommunity/deconz
     container_name: deconz
     restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 512k
     ports: 
       - 82:82
       - 445:445
     volumes:
-      - /mnt/deconz/opt/deCONZ/:/opt/deCONZ/
+      - /mnt/docker/deconz/opt/deCONZ/:/opt/deCONZ/
     devices:
       - /dev/ttyACM0
     environment:

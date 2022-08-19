@@ -4,6 +4,9 @@ services:
     container_name: plex
     image: lscr.io/linuxserver/plex
     network_mode: host
+    options:
+      max-size: 512m
+      max-file: 2
     environment:
       - PUID=$CHOME_UID
       - PGID=$CHOME_GID

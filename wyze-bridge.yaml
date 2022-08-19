@@ -4,6 +4,8 @@ services:
     container_name: wyze-bridge
     restart: unless-stopped
     image: mrlt8/wyze-bridge:latest
+    options:
+      max-size: 512k
     network_mode: host
     environment:
       - WYZE_EMAIL=${WYZE_EMAIL}

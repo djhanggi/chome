@@ -4,6 +4,9 @@ services:
     image: ghcr.io/linuxserver/swag
     container_name: swag
     network_mode: host
+    options:
+      max-size: 512m
+      max-file: 2
     environment:
       - PUID=$CHOME_UID
       - PGID=$CHOME_GID
@@ -14,7 +17,7 @@ services:
     volumes:
       - /mnt/docker/swag/config/:/config/
       - type: bind
-        source: /mnt/docker/swag/default.conf
+        source: /mnt/chome/swag/default.conf
         target: /config/nginx/site-confs/default
         read_only: true
     cap_add:

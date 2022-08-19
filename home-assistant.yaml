@@ -4,6 +4,9 @@ services:
     container_name: homeassistant
     image: ghcr.io/home-assistant/home-assistant:stable
     network_mode: host
+    options:
+      max-size: 512m
+      max-file: 2
     volumes:
       - /mnt/docker/home-assistant/config/:/config/
       - /mnt/chome/home-assistant/configuration.yaml:/config/configuration.yaml
