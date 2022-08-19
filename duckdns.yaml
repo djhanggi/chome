@@ -1,16 +1,17 @@
 ---
 services:
   duckdns:
-    image: ghcr.io/linuxserver/duckdns
     container_name: duckdns
+    image: ghcr.io/linuxserver/duckdns
     network_mode: host
-    options:
-      max-size: 512k
     environment:
-      - TZ=$TIMEZONE
-      - SUBDOMAINS=$DUCKDNS_SUBDOMAIN
-      - TOKEN=$DUCKDNS_TOKEN
-      - LOG_FILE=true
+      LOG_FILE: true
+      SUBDOMAINS: $DUCKDNS_SUBDOMAIN
+      TOKEN: $DUCKDNS_TOKEN
+      TZ: $TIMEZONE
     volumes:
-      - /mnt/docker/duckdns/config/:/config/
+      - /mnt/duckdns/config/:/config/
+    logging:
+      options:
+        max-size: 512k
     restart: unless-stopped

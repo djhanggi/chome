@@ -4,27 +4,47 @@
 
 To format, use `prettier --write **/*.yaml` with the existing .prettierrc.yaml.
 
+The following order is used for docker-compose YAML:
+
+- container_name
+- image
+- network_mode
+- ports
+- environment
+- volumes
+- devices
+- options
+- cap_add
+- privileged
+- security_opt
+- sysctls
+- logging
+- restart
+
 ## TODOs
 
-### Networking / Admin
+### Next
 
-- Create .txt of hosts/IP addresses for records and use in pihole & elsewhere
-- Set up Docker networking and isolate services
-- Manage networking/configuration/constants/secrets in separate repository
-- PiHole DNS-over-HTTPS
 - Permissions for file systems / Docker
-
-### Storage
-
+- uid/gid
 - NAS
   - Backup phones to NAS
   - Encrypt/backup NAS to 2292 and connected SSD
   - Encrypt/mirror NAS to SSD
+- Set up Docker networking and isolate services
+- Version-control .confs
+
+### Networking / Admin
+
+- PiHole DNS-over-HTTPS
+- Create .txt of hosts/IP addresses for records and use in pihole & elsewhere
+- Manage networking/configuration/constants/secrets in separate repository
+
+### Storage
+
 - Google Drive clean-up / archiving / migration
 - Serve NAS via Synology or Syncthing to devices
 - Serve photos/media via Plex and Photos equivalent
-- Set maximum log size for nginx/pihole/home-assistant
-  - Version-control .confs
 
 ### Home Assistant
 
@@ -38,12 +58,14 @@ To format, use `prettier --write **/*.yaml` with the existing .prettierrc.yaml.
   - Use virtual temperature to offset to mimic cycling
   - Set mode
 - Notify on shutdown
+- Standardize ordering of keys in HASS
 
 ### Miscellaneous
 
 - Set up Portainer and monitoring/status
+- Set up monitoring/status webpage
 - Move WiFi names to secrets
-- Standardize ordering of keys
+- Standardize ordering of keys via script
 - Document setup for custom components and UI-managed items
 - Migrate Cornell Drive/Mail/Calendar
 - Use Proton Mail or self-hosted mail/calendar

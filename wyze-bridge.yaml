@@ -2,12 +2,13 @@
 services:
   wyze-bridge:
     container_name: wyze-bridge
-    restart: unless-stopped
     image: mrlt8/wyze-bridge:latest
-    options:
-      max-size: 512k
     network_mode: host
     environment:
-      - WYZE_EMAIL=${WYZE_EMAIL}
-      - WYZE_PASSWORD=${WYZE_PASSWORD}
-      - ENABLE_AUDIO=True
+      ENABLE_AUDIO: 'True'
+      WYZE_EMAIL: $WYZE_EMAIL
+      WYZE_PASSWORD: $WYZE_PASSWORD
+    logging:
+      options:
+        max-size: 512k
+    restart: unless-stopped

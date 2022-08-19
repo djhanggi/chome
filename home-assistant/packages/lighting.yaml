@@ -77,7 +77,6 @@ automation:
         target:
           entity_id: switch.kitchen_lights
     mode: single
-
 # Get list of entity_ids of lights that are on:
 # entity_ids:
 #   {% set idle_lights = ["light.ceiling_e", "light.bookshelf"] %}

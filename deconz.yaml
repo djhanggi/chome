@@ -1,25 +1,24 @@
 ---
 services:
   deconz:
-    image: deconzcommunity/deconz
     container_name: deconz
-    restart: always
-    logging:
-      driver: "json-file"
-      options:
-        max-size: 512k
-    ports: 
-      - 82:82
-      - 445:445
+    image: deconzcommunity/deconz
+    ports:
+      - $HOST_IP:82:82
+      - $HOST_IP:445:445
+    environment:
+      DEBUG_APS: 0
+      DEBUG_INFO: 1
+      DEBUG_OTAU: 0
+      DEBUG_ZCL: 0
+      DEBUG_ZDP: 0
+      DECONZ_WEB_PORT: 82
+      DECONZ_WS_PORT: 445
     volumes:
       - /mnt/docker/deconz/opt/deCONZ/:/opt/deCONZ/
     devices:
       - /dev/ttyACM0
-    environment:
-      - DECONZ_WEB_PORT=82
-      - DECONZ_WS_PORT=445
-      - DEBUG_INFO=1
-      - DEBUG_APS=0
-      - DEBUG_ZCL=0
-      - DEBUG_ZDP=0
-      - DEBUG_OTAU=0
+    restart: always
+    logging:
+      options:
+        max-size: 512k

@@ -1,26 +1,27 @@
 ---
 services:
   pihole:
-    image: pihole/pihole:latest
     container_name: pihole
+    image: pihole/pihole:latest
     ports:
       - $HOST_IP:53:53/tcp
       - $HOST_IP:53:53/udp
       - $HOST_IP:81:80/tcp
-    options:
-      max-size: 512m
-      max-file: 2
     environment:
+      DNSMASQ_LISTENING: all
+      PIHOLE_DNS_: 8.8.8.8;8.8.4.4
+      QUERY_LOGGING: "true"
+      ServerIP: $HOST_IP
+      TEMPERATUREUNIT: k
       TZ: $TIMEZONE
       WEBPASSWORD: $PIHOLE_PASSWORD
-      ServerIP: $HOST_IP
-      PIHOLE_DNS_: 8.8.8.8;8.8.4.4
-      DNSMASQ_LISTENING: all
-      TEMPERATUREUNIT: k
-      QUERY_LOGGING: "true"
     volumes:
-      - /mnt/docker/pihole/etc/pihole/:/etc/pihole/
       - /mnt/docker/pihole/etc/dnsmasq.d/:/etc/dnsmasq.d/
+      - /mnt/docker/pihole/etc/pihole/:/etc/pihole/
     cap_add:
       - NET_ADMIN
+    logging:
+      ptions:
+        max-file: 2
+        max-size: 512m
     restart: unless-stopped

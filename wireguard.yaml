@@ -1,26 +1,27 @@
 ---
 services:
   wireguard:
-    image: ghcr.io/linuxserver/wireguard
     container_name: wireguard
-    options:
-      max-size: 512m
-    environment:
-      - PUID=$CHOME_UID
-      - PGID=$CHOME_GID
-      - TZ=$TIMEZONE
-      - SERVERURL=$WIREGUARD_SERVER_URL
-      - SERVERPORT=51820
-      - PEERS=$WIREGUARD_PEERS
-      - PEERDNS=$HOST_IP
+    image: ghcr.io/linuxserver/wireguard
     ports:
-      - 51820:51820/udp
+      - $HOST_IP:51820:51820/udp
+    environment:
+      PEERDNS: $HOST_IP
+      PEERS: $WIREGUARD_PEERS
+      PGID: $CHOME_GID
+      PUID: $CHOME_UID
+      SERVERPORT: 51820
+      SERVERURL: $WIREGUARD_SERVER_URL
+      TZ: $TIMEZONE
     volumes:
-      - /mnt/docker/wireguard/config/:/config/
       - /lib/modules/:/lib/modules/
+      - /mnt/docker/wireguard/config/:/config/
     cap_add:
       - NET_ADMIN
       - SYS_MODULE
     sysctls:
       - net.ipv4.conf.all.src_valid_mark=1
+    logging:
+      options:
+        max-size: 512m
     restart: unless-stopped
