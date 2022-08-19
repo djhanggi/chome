@@ -1,0 +1,12 @@
+---
+services:
+  uptime-kuma:
+    container_name: uptime-kuma
+    # TODO: Update to latest once 1.18 is stable
+    image: louislam/uptime-kuma:beta
+    ports:
+      - $HOST_IP:3001:3001
+    volumes:
+      - /mnt/uptime-kuma/data/:/app/data/
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    restart: always
