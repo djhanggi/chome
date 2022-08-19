@@ -22,6 +22,6 @@ services:
       - NET_ADMIN
     logging:
       ptions:
-        max-file: 2
+        max-file: "2"
         max-size: 512m
     restart: unless-stopped
