@@ -19,6 +19,7 @@ conversation:
 counter:
 frontend:
 history:
+homeassistant_alerts:
 input_boolean:
 input_button:
 input_datetime:
