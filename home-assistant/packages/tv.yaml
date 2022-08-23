@@ -1,10 +1,4 @@
 ---
-homeassistant:
-  customize:
-    package.node_anchors:
-      harmony_lg_tv_device_id: &HARMONY_LG_TV_DEVICE_ID
-        device: !secret harmony_lg_tv_device_id
-
 script:
   tv_turn_off:
     alias: TV - Turn Off
@@ -13,7 +7,7 @@ script:
         target:
           entity_id: remote.harmony
         data:
-          <<: *HARMONY_LG_TV_DEVICE_ID
+          device: !secret harmony_lg_tv_device_id
           command: PowerOff
           num_repeats: 25
     icon: mdi:power-off
@@ -24,7 +18,7 @@ script:
         target:
           entity_id: remote.harmony
         data:
-          <<: *HARMONY_LG_TV_DEVICE_ID
+          device: !secret harmony_lg_tv_device_id
           command: VolumeUp
           num_repeats: 25
     icon: mdi:volume-plus
@@ -35,7 +29,7 @@ script:
         target:
           entity_id: remote.harmony
         data:
-          <<: *HARMONY_LG_TV_DEVICE_ID
+          device: !secret harmony_lg_tv_device_id
           command: VolumeDown
           num_repeats: 25
     icon: mdi:volume-minus

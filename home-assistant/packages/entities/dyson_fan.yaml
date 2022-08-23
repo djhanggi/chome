@@ -1,9 +1,6 @@
 ---
 homeassistant:
   customize:
-    package.node_anchors:
-      harmony_dyson_fan_device: &HARMONY_DYSON_FAN_DEVICE
-        device: !secret harmony_dyson_fan_device_id
     automation.dyson_fan_set_speed:
       icon: mdi:speedometer
     automation.dyson_fan_oscillate_on_start:
@@ -52,7 +49,7 @@ script:
         target:
           entity_id: remote.harmony
         data:
-          <<: *HARMONY_DYSON_FAN_DEVICE
+          device: !secret harmony_dyson_fan_device_id
           command: "{{ command }}"
     mode: single
     icon: mdi:fan

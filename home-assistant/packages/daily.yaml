@@ -125,18 +125,24 @@ scene:
         state: "off"
       light.ceiling_lights:
         state: "off"
-      light.living_room_lamp: &EVENING_LIGHT_SETTINGS
+      light.living_room_lamp:
         state: "on"
         brightness: 10
         color_temp: 500
-      light.bookshelf: *EVENING_LIGHT_SETTINGS
+      light.bookshelf:
+        state: "on"
+        brightness: 10
+        color_temp: 500
       light.hallway_lights:
         state: "off"
       light.bathroom_lights:
         state: "off"
       light.bedroom_lamp:
         state: "off"
-      light.bed: *EVENING_LIGHT_SETTINGS
+      light.bed:
+        state: "on"
+        brightness: 10
+        color_temp: 500
       switch.kitchen_lights:
         state: "off"
       switch.sunlight_lamp:

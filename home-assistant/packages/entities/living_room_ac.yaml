@@ -1,14 +1,11 @@
 ---
 homeassistant:
   customize:
-    package.node_anchors:
-      harmony_friedrich_ac_device: &HARMONY_FRIEDRICH_AC_DEVICE
-        device: !secret harmony_friedrich_ac_device_id
-      automation.living_room_ac_set_temperature:
-        icon: mdi:thermometer
-      switch.living_room_ac:
-        icon: mdi:air-conditioner
-        friendly_name: Living Room AC - Switch
+    automation.living_room_ac_set_temperature:
+      icon: mdi:thermometer
+    switch.living_room_ac:
+      icon: mdi:air-conditioner
+      friendly_name: Living Room AC - Switch
 
 logbook:
   exclude:
@@ -49,7 +46,7 @@ script:
         target:
           entity_id: remote.harmony
         data:
-          <<: *HARMONY_FRIEDRICH_AC_DEVICE
+          device: !secret harmony_friedrich_ac_device_id
           command: "{{ command }}"
     mode: single
     icon: mdi:air-conditioner
