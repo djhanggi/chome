@@ -5,7 +5,7 @@ services:
     image: mrlt8/wyze-bridge:latest
     network_mode: host
     environment:
-      ENABLE_AUDIO: 'True'
+      ENABLE_AUDIO: "True"
       WYZE_EMAIL: $WYZE_EMAIL
       WYZE_PASSWORD: $WYZE_PASSWORD
     logging:
