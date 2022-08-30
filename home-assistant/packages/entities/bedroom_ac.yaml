@@ -3,6 +3,10 @@ homeassistant:
   customize:
     automation.bedroom_ac_set_temperature:
       icon: mdi:thermometer
+    automation.bedroom_ac_correct_power_on:
+      icon: mdi:thermometer-check
+    sensor.bedroom_temperature_derivative:
+      icon: mdi:thermometer-check
     switch.bedroom_ac:
       icon: mdi:air-conditioner
       friendly_name: Bedroom AC - Switch
@@ -133,6 +137,23 @@ automation:
                 increase_temperature: >
                   {{ states("input_number.bedroom_ac_temperature") | int <
                   state_attr("climate.bedroom_ac", "temperature") | int }}
+  - id: bedroom_correct_power_on
+    alias: Bedroom AC - Correct Power On
+    description: >
+      Sync the physical Bedroom AC power based on
+      sensor.bedroom_temperature_derivative
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.bedroom_temperature_derivative
+        below: 0
+    condition: "{{ is_state('input_boolean.bedroom_power', 'off') }}"
+    action:
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.bedroom_power
+      - service: switch.turn_off
+        target:
+          entity_id: switch.bedroom
 
 switch:
   - platform: template
@@ -153,6 +174,16 @@ switch:
             entity_id: input_boolean.bedroom_ac_power
             state: "on"
           - service: script.bedroom_ac_toggle_power
+
+sensor:
+  - platform: derivative
+    # TODO: Add entity_id or unique_id
+    # entity_id: bedroom_temperature_derivative
+    source: sensor.bedroom_sonoff_temperature
+    name: bedroom_temperature_derivative
+    round: 1
+    unit_time: min
+    time_window: "00:05:00"
 
 climate:
   - platform: generic_thermostat
