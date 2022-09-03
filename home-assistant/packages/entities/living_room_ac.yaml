@@ -84,7 +84,7 @@ script:
               "Fan Only": "FanOnlyMode", 
             } %}
             {% set mode_command =
-              MODES[states("input_select.bedroom_ac_mode")] |
+              MODES[states("input_select.living_room_ac_mode")] |
               default("Cool")  %}  
             {{ mode_command }}
     mode: single
