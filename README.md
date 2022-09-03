@@ -2,9 +2,9 @@
 
 ## Formatting
 
-To format, use `prettier --write **/*.yaml` with the existing .prettierrc.yaml. 
+To format, use `prettier --write **/*.yaml` with the existing .prettierrc.yaml.
 
-Keys should be sorted in the order specified in the .sort-order*.yaml files.
+Keys should be sorted in the order specified in the .sort-order\*.yaml files.
 
 ## TODOs
 
@@ -21,9 +21,6 @@ Keys should be sorted in the order specified in the .sort-order*.yaml files.
   - Specify hosts for PiHole DNS as source of truth where container/hostnames
     live (or this will be moved to pFsense)
   - Version control hosts file as .conf
-- Migrate Cornell Calendar
-
-- Migrate Cornell Calendar
 
 - Docker / Pi / NAS Permissions (UID/GID)
   - read-only usually
