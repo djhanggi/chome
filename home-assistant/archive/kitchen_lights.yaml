@@ -12,9 +12,6 @@ logbook:
       - input_boolean.kitchen_lights_power
       - script.set_kitchen_lights_power
 
-ifttt:
-  key: !secret ifttt_key
-
 input_boolean:
   kitchen_lights_power:
     name: Kitchen Lights - Power
