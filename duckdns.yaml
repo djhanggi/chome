@@ -3,14 +3,14 @@ services:
   duckdns:
     container_name: duckdns
     image: ghcr.io/linuxserver/duckdns
+    restart: unless-stopped
     network_mode: host
+    volumes:
+      - $VOLUME_ROOT/docker/duckdns/config/:/config/
     environment:
       SUBDOMAINS: $DUCKDNS_SUBDOMAIN
       TOKEN: $DUCKDNS_TOKEN
       TZ: $TIMEZONE
-    volumes:
-      - $VOLUME_ROOT/docker/duckdns/config/:/config/
     logging:
       options:
         max-size: 512k
-    restart: unless-stopped

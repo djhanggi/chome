@@ -3,8 +3,12 @@ services:
   wireguard:
     container_name: wireguard
     image: ghcr.io/linuxserver/wireguard
+    restart: unless-stopped
     ports:
       - $HOST_IP:51820:51820/udp
+    volumes:
+      - /lib/modules/:/lib/modules/
+      - $VOLUME_ROOT/docker/wireguard/config/:/config/
     environment:
       PEERDNS: $HOST_IP
       PEERS: $WIREGUARD_PEERS
@@ -13,15 +17,11 @@ services:
       SERVERPORT: 51820
       SERVERURL: $WIREGUARD_SERVER_URL
       TZ: $TIMEZONE
-    volumes:
-      - /lib/modules/:/lib/modules/
-      - $VOLUME_ROOT/docker/wireguard/config/:/config/
+    logging:
+      options:
+        max-size: 512m
     cap_add:
       - NET_ADMIN
       - SYS_MODULE
     sysctls:
       - net.ipv4.conf.all.src_valid_mark=1
-    logging:
-      options:
-        max-size: 512m
-    restart: unless-stopped

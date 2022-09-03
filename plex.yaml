@@ -3,17 +3,17 @@ services:
   plex:
     container_name: plex
     image: lscr.io/linuxserver/plex
+    restart: unless-stopped
     network_mode: host
+    volumes:
+      - $VOLUME_ROOT/docker/plex/config/:/config/
+      - $VOLUME_ROOT/media/:/media/
     environment:
       PGID: $CHOME_GID
       PUID: $CHOME_UID
       VERSION: docker
-    volumes:
-      - $VOLUME_ROOT/docker/plex/config/:/config/
-      - $VOLUME_ROOT/media/:/media/
-    privileged: true
     logging:
       options:
         max-file: "2"
         max-size: 512m
-    restart: unless-stopped
+    privileged: true

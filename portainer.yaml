@@ -3,15 +3,15 @@ services:
   portainer:
     container_name: portainer
     image: portainer/portainer-ce:latest
+    restart: unless-stopped
     ports:
       - $HOST_IP:9500:9000
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - $VOLUME_ROOT/docker/portainer/data/:/data/
       - /var/run/docker.sock:/var/run/docker.sock:ro
-    security_opt:
-      - no-new-privileges:true
     logging:
       options:
         max-size: 512m
-    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true

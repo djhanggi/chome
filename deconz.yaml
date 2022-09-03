@@ -3,9 +3,14 @@ services:
   deconz:
     container_name: deconz
     image: deconzcommunity/deconz
+    restart: always
     ports:
       - $HOST_IP:82:82
       - $HOST_IP:445:445
+    volumes:
+      - $VOLUME_ROOT/docker/deconz/opt/deCONZ/:/opt/deCONZ/
+    devices:
+      - /dev/ttyACM0
     environment:
       DEBUG_APS: 0
       DEBUG_INFO: 1
@@ -14,11 +19,6 @@ services:
       DEBUG_ZDP: 0
       DECONZ_WEB_PORT: 82
       DECONZ_WS_PORT: 445
-    volumes:
-      - $VOLUME_ROOT/docker/deconz/opt/deCONZ/:/opt/deCONZ/
-    devices:
-      - /dev/ttyACM0
-    restart: always
     logging:
       options:
         max-size: 512k

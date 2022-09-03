@@ -3,10 +3,14 @@ services:
   pihole:
     container_name: pihole
     image: pihole/pihole:latest
+    restart: unless-stopped
     ports:
       - $HOST_IP:53:53/tcp
       - $HOST_IP:53:53/udp
       - $HOST_IP:81:80/tcp
+    volumes:
+      - $VOLUME_ROOT/docker/pihole/etc/dnsmasq.d/:/etc/dnsmasq.d/
+      - $VOLUME_ROOT/docker/pihole/etc/pihole/:/etc/pihole/
     environment:
       DNSMASQ_LISTENING: all
       PIHOLE_DNS_: 8.8.8.8;8.8.4.4
@@ -15,13 +19,9 @@ services:
       TEMPERATUREUNIT: k
       TZ: $TIMEZONE
       WEBPASSWORD: $PIHOLE_PASSWORD
-    volumes:
-      - $VOLUME_ROOT/docker/pihole/etc/dnsmasq.d/:/etc/dnsmasq.d/
-      - $VOLUME_ROOT/docker/pihole/etc/pihole/:/etc/pihole/
-    cap_add:
-      - NET_ADMIN
     logging:
       options:
         max-file: "2"
         max-size: 512m
-    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
