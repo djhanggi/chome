@@ -1,0 +1,10 @@
+---
+- container_name
+- image
+- restart
+- network_mode
+- ports
+- volumes
+- devices
+- environment
+- options

@@ -1,0 +1,69 @@
+---
+# Top-level integrations
+- homeassistant
+- logbook
+- input_boolean
+- input_number
+- input_select
+- input_datetime
+- timer
+- binary_sensor
+- sensor
+- template
+- script
+- automation
+- switch
+- group
+- scene
+
+# IDs
+- id
+- unique_id
+- entity_id
+- scene_id
+
+# Naming and descriptions
+- name
+- title
+- alias
+- friendly_name
+- type
+- description
+- icon
+
+# Entity specification
+- platform
+- mode
+- fields
+- trigger
+- condition
+- conditions
+- action
+- sequence
+- command
+- service
+- entities
+- state
+- data
+- target
+- value
+
+# Control flow
+- for
+- while
+- repeat
+- if
+- then
+- else
+
+# Intervals
+- from
+- to
+- min
+- max
+
+# Time
+- hours
+- minutes
+- seconds
+- milliseconds

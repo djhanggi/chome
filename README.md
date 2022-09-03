@@ -6,26 +6,14 @@ To format, use `prettier --write **/*.yaml` with the existing .prettierrc.yaml.
 
 The following order is used for docker-compose YAML:
 
-- container_name
-- image
-- network_mode
-- ports
-- environment
-- volumes
-- devices
-- options
-- cap_add
-- privileged
-- security_opt
-- sysctls
-- logging
-- restart
+
 
 ## TODOs
 
 ### Next
 
 - /mnt/docker/ on bespin
+- root of chome as .env variable (instead of /mnt/chome)
 - Docker Networking
 
   - Want to minimize use of host and define manual Docker networks to isolate
@@ -37,11 +25,12 @@ The following order is used for docker-compose YAML:
   - Specify hosts for PiHole DNS as source of truth where container/hostnames
     live (or this will be moved to pFsense)
   - Version control hosts file as .conf
+- Migrate Cornell Calendar
 
 - Docker / Pi / NAS Permissions (UID/GID)
-- NAS
-  - Encrypt/backup NAS to 2292 and connected SSD
-  - Encrypt/mirror NAS to SSD
+  - read-only usually
+  - Disable modification of existing files:
+- Invalid file name characters (radio lab, , French class)
 - Close router to public internet
 
 ### Networking / Admin
@@ -52,7 +41,6 @@ The following order is used for docker-compose YAML:
 
 ### Storage
 
-- Google Drive clean-up / archiving / migration
 - Serve NAS via Synology or Syncthing to devices
 - Clean up space regularly
 - Auto-canonicalize photos
@@ -60,26 +48,26 @@ The following order is used for docker-compose YAML:
 
 ### Home Assistant
 
+- Notify on shutdown + startup
 - Automate phone alarm and use as sunset time
 - Move secrets to each individual package
-- Use YAML for dashboards
 - Air Conditioning
   - cycle_ac
     - If AC is on while automation.cycle_ac is turned on, start timer
     - Snooze automation.cycle_ac for an hour at start of sleep
   - Use virtual temperature to offset to mimic cycling
   - Set mode
-- Notify on shutdown
-- Standardize ordering of keys in HASS
+  - Use derivative to figure out if AC is actually running + automatically
+    correct
+- Use YAML for dashboards
 
 ### Miscellaneous
 
-- Standardize ordering of keys via script
+- Standardize ordering of keys via script (global, then via nested YAML/yq path)
 - Set up / back up status page with reverse proxy
 - Set up homepage
 - Move WiFi names to secrets
 - Document setup for custom components and UI-managed items
-- Migrate Cornell Drive/Mail/Calendar
 - Use Proton Mail or self-hosted mail/calendar
 - Create second PiHole instance
   - primary default forwards to secondary, falls back to open DNS
@@ -87,6 +75,7 @@ The following order is used for docker-compose YAML:
 - [Matrix](https://github.com/spantaleev/matrix-docker-ansible-deploy/blob/master/docs/README.md)
   - Delete social media
   - Regularly purge chat applications
+- Migrate Cornell Mail
 
 # Getting YAML Keys
 
@@ -95,3 +84,6 @@ The following order is used for docker-compose YAML:
 # Sorting
 
 <!-- sed 's/key/slug/' | yq 'sort_keys(..)' | s/slug/key/' -->
+
+# Home Assistant Keys
+
