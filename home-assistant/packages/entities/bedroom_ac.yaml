@@ -32,6 +32,15 @@ input_number:
     step: 1.0
     icon: mdi:thermometer
 
+input_select:
+  bedroom_ac_mode:
+    name: Bedroom AC - Mode
+    options:
+      - Cool
+      - Money Saver
+      - Fan Only
+    icon: mdi:air-conditioner
+
 script:
   bedroom_ac_send_command:
     alias: Bedroom AC - Send Commmand
@@ -42,8 +51,8 @@ script:
         * increase_temperature
         * decrease_temperature
         * set_cool_mode
-        * set_fan_only_mode
         * set_money_saver_mode
+        * set_fan_only_mode
         * toggle_fan_speed
     sequence:
       - service: remote.send_command
@@ -60,8 +69,26 @@ script:
       - service: script.bedroom_ac_send_command
         data:
           command: toggle_power
+      - service: script.bedroom_ac_set_mode
     mode: single
     icon: mdi:power
+  bedroom_ac_set_mode:
+    alias: Bedroom AC - Set Mode
+    sequence:
+      - service: script.bedroom_ac_send_command
+        data:
+          command: |
+            {% set MODES = { 
+              "Cool": "set_cool_mode", 
+              "Money Saver": "set_money_saver_mode", 
+              "Fan Only": "set_fan_only_mode", 
+            } %}
+            {% set mode_command =
+              MODES[states("input_select.bedroom_ac_mode")] |
+              default("Cool")  %}  
+            {{ mode_command }}
+    mode: single
+    icon: mdi:air-conditioner
   bedroom_ac_toggle_power:
     alias: Bedroom AC - Toggle Power
     sequence:
@@ -166,9 +193,6 @@ switch:
             entity_id: input_boolean.bedroom_ac_power
             state: "off"
           - service: script.bedroom_ac_toggle_power
-          - service: script.bedroom_ac_send_command
-            data:
-              command: set_cool_mode
         turn_off:
           - condition: state
             entity_id: input_boolean.bedroom_ac_power

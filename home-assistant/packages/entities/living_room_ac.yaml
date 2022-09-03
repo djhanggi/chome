@@ -32,6 +32,15 @@ input_number:
     step: 1.0
     icon: mdi:thermometer
 
+input_select:
+  living_room_ac_mode:
+    name: Living Room AC - Mode
+    options:
+      - Cool
+      - Money Saver
+      - Fan Only
+    icon: mdi:air-conditioner
+
 script:
   living_room_ac_send_command:
     alias: Living Room AC - Send Commmand
@@ -42,8 +51,8 @@ script:
         * TempHotter
         * TempCooler
         * CoolMode
-        * FanMode
         * MoneySaverMode
+        * FanMode
         * FanModeUp
     sequence:
       - service: remote.send_command
@@ -60,8 +69,26 @@ script:
       - service: script.living_room_ac_send_command
         data:
           command: PowerToggle
+      - service: script.living_room_ac_set_mode
     mode: single
     icon: mdi:power
+  living_room_ac_set_mode:
+    alias: Living Room AC - Set Mode
+    sequence:
+      - service: script.living_room_ac_send_command
+        data:
+          command: |
+            {% set MODES = { 
+              "Cool": "CoolMode", 
+              "Money Saver": "MoneySaverMode", 
+              "Fan Only": "FanOnlyMode", 
+            } %}
+            {% set mode_command =
+              MODES[states("input_select.bedroom_ac_mode")] |
+              default("Cool")  %}  
+            {{ mode_command }}
+    mode: single
+    icon: mdi:air-conditioner
   living_room_ac_toggle_power:
     alias: Living Room AC - Toggle Power
     sequence:
@@ -166,9 +193,6 @@ switch:
             entity_id: input_boolean.living_room_ac_power
             state: "off"
           - service: script.living_room_ac_toggle_power
-          - service: script.living_room_ac_send_command
-            data:
-              command: CoolMode
         turn_off:
           - condition: state
             entity_id: input_boolean.living_room_ac_power
