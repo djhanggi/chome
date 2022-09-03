@@ -66,11 +66,6 @@ Keys should be sorted in the order specified in the .sort-order\*.yaml files.
 ### Home Assistant
 
 - Automate phone alarm and use as sunset time
-- Air Conditioning
-  - Use virtual temperature to offset to mimic cycling
-  - Set mode
-  - Use derivative to figure out if AC is actually running + automatically
-    correct
 - Use YAML for dashboards
 
 ### Miscellaneous
@@ -89,7 +84,7 @@ Keys should be sorted in the order specified in the .sort-order\*.yaml files.
   - Regularly purge chat applications
 - Migrate Cornell Mail
 
-# YAML Sorting
+### YAML Sorting
 
 Getting all keys:
 `yq '.. | select((tag == "!!map" or tag == "!!seq") | not) | path | .[]' | sort | uniq`
