@@ -39,28 +39,19 @@ automation:
             - light.bedroom_lamp
             - light.bed
             - switch.sunlight_lamp
-            - fan.dyson_fan
-            - fan.dyson_heater_fan
             - climate.living_room_ac
             - climate.bedroom_ac
             - remote.harmony
-            - automation.cycle_ac
       - service: scene.apply
         data:
           entities:
             group.lighting:
-              state: "off"
-            fan.dyson_fan:
-              state: "off"
-            fan.dyson_heater_fan:
               state: "off"
             climate.living_room_ac:
               state: "off"
             climate.bedroom_ac:
               state: "off"
             remote.harmony:
-              state: "off"
-            automation.cycle_ac:
               state: "off"
   - id: return
     alias: Return
