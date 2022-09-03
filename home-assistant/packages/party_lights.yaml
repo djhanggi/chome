@@ -85,7 +85,7 @@ script:
     icon: mdi:party-popper
 
 automation:
-  - id: reset_scene_before_party_lights
+  - id: reset_scene_before_party_lights_2
     alias: Reset scene.before_party_lights
     mode: single
     trigger:
@@ -95,9 +95,7 @@ automation:
       - service: scene.create
         data:
           scene_id: before_party_lights
-          entities:
-            automation.reset_scene_before_party_lights:
-              state: "on"
+          entities: {}
 
 switch:
   - platform: template

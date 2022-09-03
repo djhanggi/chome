@@ -77,7 +77,7 @@ automation:
       - service: automation.trigger
         target:
           entity_id: automation.reset_scene_return
-  - id: reset_scene_return
+  - id: reset_scene_return_2
     alias: Reset scene.return
     mode: single
     trigger:
@@ -87,6 +87,4 @@ automation:
       - service: scene.create
         data:
           scene_id: return
-          entities:
-            automation.reset_scene_return:
-              state: "on"
+          entities: {}

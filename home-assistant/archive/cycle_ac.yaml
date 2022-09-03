@@ -143,7 +143,7 @@ automation:
         target:
           entity_id: automation.reset_scene_cycle_ac
     mode: single
-  - id: reset_scene_cycle_ac
+  - id: reset_scene_cycle_ac_2
     alias: Reset scene.cycle_ac
     mode: single
     trigger:
@@ -153,6 +153,4 @@ automation:
       - service: scene.create
         data:
           scene_id: cycle_ac
-          entities:
-            automation.reset_scene_cycle_ac:
-              state: "on"
+          entities: {}
