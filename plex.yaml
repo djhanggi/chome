@@ -9,8 +9,8 @@ services:
       PUID: $CHOME_UID
       VERSION: docker
     volumes:
-      - /mnt/docker/plex/config/:/config/
-      - /mnt/media/:/media/
+      - $VOLUME_ROOT/docker/plex/config/:/config/
+      - $VOLUME_ROOT/media/:/media/
     privileged: true
     logging:
       options:

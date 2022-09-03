@@ -16,8 +16,8 @@ services:
       TZ: $TIMEZONE
       WEBPASSWORD: $PIHOLE_PASSWORD
     volumes:
-      - /mnt/docker/pihole/etc/dnsmasq.d/:/etc/dnsmasq.d/
-      - /mnt/docker/pihole/etc/pihole/:/etc/pihole/
+      - $VOLUME_ROOT/docker/pihole/etc/dnsmasq.d/:/etc/dnsmasq.d/
+      - $VOLUME_ROOT/docker/pihole/etc/pihole/:/etc/pihole/
     cap_add:
       - NET_ADMIN
     logging:

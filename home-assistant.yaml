@@ -5,13 +5,13 @@ services:
     image: ghcr.io/home-assistant/home-assistant:stable
     network_mode: host
     volumes:
-      - /mnt/chome/home-assistant/automations.yaml:/config/automations.yaml
-      - /mnt/chome/home-assistant/configuration.yaml:/config/configuration.yaml
-      - /mnt/chome/home-assistant/packages/:/config/packages/
-      - /mnt/chome/home-assistant/scenes.yaml:/config/scenes.yaml
-      - /mnt/chome/home-assistant/scripts.yaml:/config/scripts.yaml
-      - /mnt/chome/home-assistant/secrets.yaml:/config/secrets.yaml
-      - /mnt/docker/home-assistant/config/:/config/
+      - $VOLUME_ROOT/chome/home-assistant/automations.yaml:/config/automations.yaml
+      - $VOLUME_ROOT/chome/home-assistant/configuration.yaml:/config/configuration.yaml
+      - $VOLUME_ROOT/chome/home-assistant/packages/:/config/packages/
+      - $VOLUME_ROOT/chome/home-assistant/scenes.yaml:/config/scenes.yaml
+      - $VOLUME_ROOT/chome/home-assistant/scripts.yaml:/config/scripts.yaml
+      - $VOLUME_ROOT/chome/home-assistant/secrets.yaml:/config/secrets.yaml
+      - $VOLUME_ROOT/docker/home-assistant/config/:/config/
     privileged: true
     logging:
       options:

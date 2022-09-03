@@ -15,7 +15,7 @@ services:
       TZ: $TIMEZONE
     volumes:
       - /lib/modules/:/lib/modules/
-      - /mnt/docker/wireguard/config/:/config/
+      - $VOLUME_ROOT/docker/wireguard/config/:/config/
     cap_add:
       - NET_ADMIN
       - SYS_MODULE

@@ -10,8 +10,6 @@ Keys should be sorted in the order specified in the .sort-order*.yaml files.
 
 ### Next
 
-- /mnt/docker/ on bespin
-- root of chome as .env variable (instead of /mnt/chome)
 - Docker Networking
 
   - Want to minimize use of host and define manual Docker networks to isolate

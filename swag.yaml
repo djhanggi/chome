@@ -12,9 +12,9 @@ services:
       URL: $SWAG_DOMAIN
       VALIDATION: http
     volumes:
-      - /mnt/docker/swag/config/:/config/
+      - $VOLUME_ROOT/docker/swag/config/:/config/
       - read_only: true
-        source: /mnt/chome/swag/default.conf
+        source: $VOLUME_ROOT/chome/swag/default.conf
         target: /config/nginx/site-confs/default
         type: bind
     cap_add:

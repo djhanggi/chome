@@ -9,7 +9,7 @@ services:
       TOKEN: $DUCKDNS_TOKEN
       TZ: $TIMEZONE
     volumes:
-      - /mnt/docker/duckdns/config/:/config/
+      - $VOLUME_ROOT/docker/duckdns/config/:/config/
     logging:
       options:
         max-size: 512k

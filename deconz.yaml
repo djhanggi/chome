@@ -15,7 +15,7 @@ services:
       DECONZ_WEB_PORT: 82
       DECONZ_WS_PORT: 445
     volumes:
-      - /mnt/docker/deconz/opt/deCONZ/:/opt/deCONZ/
+      - $VOLUME_ROOT/docker/deconz/opt/deCONZ/:/opt/deCONZ/
     devices:
       - /dev/ttyACM0
     restart: always

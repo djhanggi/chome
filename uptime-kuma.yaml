@@ -7,6 +7,6 @@ services:
     ports:
       - $HOST_IP:3001:3001
     volumes:
-      - /mnt/docker/uptime-kuma/data/:/app/data/
+      - $VOLUME_ROOT/docker/uptime-kuma/data/:/app/data/
       - /var/run/docker.sock:/var/run/docker.sock:ro
     restart: always
