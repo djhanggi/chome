@@ -1,7 +1,7 @@
 ---
 homeassistant:
   customize:
-    automation.update_djhanggi_device_tracker:
+    automation.update_device_tracker_djhanggi_sensor:
       icon: mdi:home-map-marker
 
 template:

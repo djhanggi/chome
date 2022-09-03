@@ -1,10 +1,8 @@
 ---
 homeassistant:
   customize:
-    automation.shutoff_bedroom_ac:
-      icon: mdi:timer
-    automation.restart_bedroom_ac:
-      icon: mdi:timer
+    automation.apple_watch_go_to_sleep:
+      icon: mdi:sleep
 
 logbook:
   exclude:

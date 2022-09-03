@@ -1,0 +1,5 @@
+---
+homeassistant:
+  customize:
+    sensor.hacs:
+      icon: mdi:cog

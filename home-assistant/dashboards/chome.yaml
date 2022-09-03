@@ -1,3 +1,4 @@
+---
 title: CHOME
 views:
   - theme: Backend-selected
@@ -112,20 +113,10 @@ views:
                     name: Cool CHOME
                   - entity: scene.bedroom_cool_climate
                     name: Cool Bedroom
-                  - entity: sensor.living_room_sonoff_humidity
-                    name: Living Room Humidity
                   - entity: sensor.bedroom_broadlink_humidity
                     name: Bedroom Humidity
                 show_header_toggle: false
                 state_color: false
-          - type: horizontal-stack
-            cards:
-              - type: entities
-                entities:
-                  - entity: automation.cycle_ac
-                    name: Cycle AC
-                  - entity: timer.cycle_ac_shutoff_timer
-                  - entity: timer.cycle_ac_restart_timer
       - type: entities
         entities:
           - entity: switch.living_room_plant_light
@@ -298,16 +289,8 @@ views:
           - entity: input_datetime.plant_sunset_time
       - type: entities
         entities:
-          - entity: input_number.cycle_ac_shutoff_timer_duration
-          - entity: input_number.cycle_ac_restart_timer_duration
-          - entity: automation.cycle_ac_change_intervals
-      - type: entities
-        entities:
           - entity: automation.away
           - entity: automation.return
-      - type: entities
-        entities:
-          - entity: automation.turn_off_idle_kitchen_lights
       - type: entities
         entities:
           - entity: automation.dyson_fan_oscillate_on_start
@@ -379,5 +362,50 @@ views:
         type: calendar
         entities:
           - calendar.djhanggi_gmail_com
-          - calendar.djh325
           - calendar.daniel_hanggi_braze_com
+  - theme: Backend-selected
+    title: NAS
+    path: nas
+    icon: mdi:database
+    badges: []
+    cards:
+      - type: entities
+        entities:
+          - update.bespin_nas_dsm_update
+          - binary_sensor.bespin_nas_security_status
+          - sensor.bespin_nas_download_throughput
+          - sensor.bespin_nas_upload_throughput
+          - sensor.bespin_nas_memory_available_real
+          - sensor.bespin_nas_memory_available_swap
+          - sensor.bespin_nas_memory_total_real
+          - sensor.bespin_nas_memory_total_swap
+          - sensor.bespin_nas_memory_usage_real
+          - sensor.bespin_nas_temperature
+          - sensor.bespin_nas_volume_1_average_disk_temp
+          - sensor.bespin_nas_volume_1_status
+          - sensor.bespin_nas_volume_1_used_space
+          - sensor.bespin_nas_volume_1_volume_used
+          - sensor.bespin_nas_cpu_load_average_15_min
+          - sensor.bespin_nas_cpu_load_average_5_min
+          - sensor.bespin_nas_cpu_utilization_total
+          - sensor.bespin_nas_cpu_utilization_user
+          - button.bespin_nas_reboot
+          - button.bespin_nas_shutdown
+      - type: entities
+        entities:
+          - sensor.bespin_nas_drive_1_status
+          - sensor.bespin_nas_drive_2_status
+          - sensor.bespin_nas_drive_3_status
+          - sensor.bespin_nas_drive_4_status
+          - sensor.bespin_nas_drive_1_temperature
+          - sensor.bespin_nas_drive_2_temperature
+          - sensor.bespin_nas_drive_3_temperature
+          - sensor.bespin_nas_drive_4_temperature
+          - binary_sensor.bespin_nas_drive_1_below_min_remaining_life
+          - binary_sensor.bespin_nas_drive_2_below_min_remaining_life
+          - binary_sensor.bespin_nas_drive_3_below_min_remaining_life
+          - binary_sensor.bespin_nas_drive_4_below_min_remaining_life
+          - binary_sensor.bespin_nas_drive_1_exceeded_max_bad_sectors
+          - binary_sensor.bespin_nas_drive_2_exceeded_max_bad_sectors
+          - binary_sensor.bespin_nas_drive_3_exceeded_max_bad_sectors
+          - binary_sensor.bespin_nas_drive_4_exceeded_max_bad_sectors

@@ -1,6 +1,8 @@
 ---
 homeassistant:
   customize:
+    automation.reset_scene_before_party_lights:
+      icon: mdi:cancel
     switch.party_lights:
       icon: mdi:party-popper
     scene.before_party_lights:

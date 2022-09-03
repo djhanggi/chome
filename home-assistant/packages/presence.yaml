@@ -5,6 +5,8 @@ homeassistant:
       icon: mdi:location-exit
     automation.return:
       icon: mdi:location-enter
+    automation.reset_scene_return:
+      icon: mdi:cancel
     scene.return:
       friendly_name: Presence - Return Scene
       icon: mdi:location-enter

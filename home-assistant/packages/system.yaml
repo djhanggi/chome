@@ -1,0 +1,26 @@
+---
+homeassistant:
+  customize:
+    automation.notify_on_system_change:
+      icon: mdi:bell-cancel
+
+automation:
+  - id: notify_on_system_change
+    alias: Notify on System Change
+    mode: single
+    trigger:
+      - platform: homeassistant
+        id: shutdown
+        event: shutdown
+      - platform: homeassistant
+        id: start
+        event: start
+    action:
+      - service: notify.notify
+        data:
+          message: >
+            {% if trigger.id == "shutdown" %}
+              Home Assistant is shutting down
+            {% else %}
+              Home Assistant has started
+            {% end %}
