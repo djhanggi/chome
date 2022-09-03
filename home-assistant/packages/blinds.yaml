@@ -12,7 +12,7 @@ scene:
     entities:
       cover.smart_roller_shade_curtain:
         state: open
-        current_position: 30
+        current_position: 40
     icon: mdi:blinds-open
   - id: closed_blinds
     name: Closed Blinds
