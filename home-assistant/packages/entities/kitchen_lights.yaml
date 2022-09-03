@@ -13,8 +13,7 @@ logbook:
       - script.set_kitchen_lights_power
 
 ifttt:
-  key:
-    djhanggi_wyze_ifttt: !secret djhanggi_wyze_ifttt
+  key: !secret ifttt_key
 
 input_boolean:
   kitchen_lights_power:

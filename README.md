@@ -45,7 +45,6 @@ Keys should be sorted in the order specified in the .sort-order\*.yaml files.
 
 - Notify on shutdown + startup
 - Automate phone alarm and use as sunset time
-- Move secrets to each individual package
 - Air Conditioning
   - cycle_ac
     - If AC is on while automation.cycle_ac is turned on, start timer
