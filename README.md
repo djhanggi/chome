@@ -2,11 +2,9 @@
 
 ## Formatting
 
-To format, use `prettier --write **/*.yaml` with the existing .prettierrc.yaml.
+To format, use `prettier --write **/*.yaml` with the existing .prettierrc.yaml. 
 
-The following order is used for docker-compose YAML:
-
-
+Keys should be sorted in the order specified in the .sort-order*.yaml files.
 
 ## TODOs
 
@@ -25,6 +23,8 @@ The following order is used for docker-compose YAML:
   - Specify hosts for PiHole DNS as source of truth where container/hostnames
     live (or this will be moved to pFsense)
   - Version control hosts file as .conf
+- Migrate Cornell Calendar
+
 - Migrate Cornell Calendar
 
 - Docker / Pi / NAS Permissions (UID/GID)
@@ -77,13 +77,9 @@ The following order is used for docker-compose YAML:
   - Regularly purge chat applications
 - Migrate Cornell Mail
 
-# Getting YAML Keys
+# YAML Sorting
 
-<!-- yq '.. | select((tag == "!!map" or tag == "!!seq") | not) | path | .[]' | sort | uniq -->
+Getting all keys:
+`yq '.. | select((tag == "!!map" or tag == "!!seq") | not) | path | .[]' | sort | uniq`
 
-# Sorting
-
-<!-- sed 's/key/slug/' | yq 'sort_keys(..)' | s/slug/key/' -->
-
-# Home Assistant Keys
-
+Replacing keys: `sed 's/key/slug/' | yq 'sort_keys(..)' | s/slug/key/'`
