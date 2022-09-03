@@ -23,4 +23,4 @@ automation:
               Home Assistant is shutting down
             {% else %}
               Home Assistant has started
-            {% end %}
+            {% endif %}
