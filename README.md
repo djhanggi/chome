@@ -65,12 +65,8 @@ Keys should be sorted in the order specified in the .sort-order\*.yaml files.
 
 ### Home Assistant
 
-- Notify on shutdown + startup
 - Automate phone alarm and use as sunset time
 - Air Conditioning
-  - cycle_ac
-    - If AC is on while automation.cycle_ac is turned on, start timer
-    - Snooze automation.cycle_ac for an hour at start of sleep
   - Use virtual temperature to offset to mimic cycling
   - Set mode
   - Use derivative to figure out if AC is actually running + automatically

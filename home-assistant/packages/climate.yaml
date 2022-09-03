@@ -5,10 +5,8 @@ scene:
     entities:
       climate.living_room_ac:
         state: cool
-        temperature: 67
       climate.bedroom_ac:
         state: cool
-        temperature: 67
       fan.dyson_fan:
         state: "on"
         oscillating: true
@@ -16,45 +14,8 @@ scene:
         state: "on"
         oscillating: true
     icon: mdi:home-thermometer
-  - id: bedroom_cool_climate
-    name: Bedroom Cool Climate
-    entities:
-      climate.bedroom_ac:
-        state: cool
-        temperature: 67
-      fan.dyson_heater_fan:
-        state: "on"
-        oscillating: true
-    icon: mdi:home-thermometer
 
 automation:
-  - id: cycle_ac_change_intervals
-    alias: Cycle AC - Change Intervals
-    mode: single
-    trigger:
-      - platform: state
-        entity_id: sensor.daytime_hours
-    action:
-      - if:
-          - condition: state
-            entity_id: sensor.daytime_hours
-            state: "True"
-        then:
-          - service: scene.apply
-            data:
-              entities:
-                input_number.cycle_ac_shutoff_timer_duration:
-                  state: "30.0"
-                input_number.cycle_ac_restart_timer_duration:
-                  state: "30.0"
-        else:
-          - service: scene.apply
-            data:
-              entities:
-                input_number.cycle_ac_shutoff_timer_duration:
-                  state: "10.0"
-                input_number.cycle_ac_restart_timer_duration:
-                  state: "50.0"
   - id: dyson_fan_oscillate_on_start
     alias: Dyson Fan - Oscillate On Start
     trigger:
