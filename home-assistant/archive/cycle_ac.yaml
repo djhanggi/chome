@@ -153,4 +153,7 @@ automation:
       - service: scene.create
         data:
           scene_id: cycle_ac
-          entities: {}
+          entities: 
+            automation.reset_scene_cycle_ac:
+              state: "on"
+
