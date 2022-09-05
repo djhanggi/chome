@@ -79,7 +79,7 @@ script:
             {% set MODES = { 
               "Cool": "CoolMode", 
               "Money Saver": "MoneySaverMode", 
-              "Fan Only": "FanOnlyMode", 
+              "Fan Only": "FanMode", 
             } %}
             {% set mode_command =
               MODES[states("input_select.living_room_ac_mode")] |
