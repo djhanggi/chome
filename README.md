@@ -46,15 +46,15 @@ Keys should be sorted in the order specified in the .sort-order\*.yaml files.
 
 - Docker / Pi / NAS Permissions (UID/GID)
   - read-only usually
-  - Disable modification of existing files:
-- Invalid file name characters (radio lab, , French class)
-- Close router to public internet
+  - Disable modification of existing files
 
 ### Networking / Admin
 
 - PiHole DNS-over-HTTPS
 - Manage networking/configuration/constants/secrets in separate repository
 - fail2ban
+- Restrict most access to behind VPN unless specifically required
+  - HA behind VPN
 
 ### Storage
 
@@ -75,13 +75,13 @@ Keys should be sorted in the order specified in the .sort-order\*.yaml files.
 - Set up / back up status page with reverse proxy
 - Set up homepage
 - Move WiFi names to secrets
-- Use Proton Mail or self-hosted mail/calendar
 - Create second PiHole instance
   - primary default forwards to secondary, falls back to open DNS
   - secondary blocks optional websites (like social media) and can be turned off
 - [Matrix](https://github.com/spantaleev/matrix-docker-ansible-deploy/blob/master/docs/README.md)
   - Delete social media
   - Regularly purge chat applications
+- Use Proton Mail or self-hosted mail/calendar
 - Migrate Cornell Mail
 
 ### YAML Sorting
