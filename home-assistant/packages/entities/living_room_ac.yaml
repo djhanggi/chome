@@ -162,6 +162,16 @@ automation:
                 increase_temperature: >
                   {{ states("input_number.living_room_ac_temperature") | int <
                   state_attr("climate.living_room_ac", "temperature") | int }}
+  - id: living_room_ac_set_mode
+    alias: Living Room AC - Set Mode
+    description: >
+      Sets the AC mode to the mode specified by input_select.living_room_ac_mode
+    trigger:
+      - platform: state
+        entity_id: input_select.living_room_ac_mode
+    mode: single
+    action:
+      - service: script.living_room_ac_set_mode
 
 switch:
   - platform: template
