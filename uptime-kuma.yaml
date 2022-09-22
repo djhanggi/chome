@@ -2,8 +2,7 @@
 services:
   uptime-kuma:
     container_name: uptime-kuma
-    # TODO: Update to latest once 1.18 is stable
-    image: louislam/uptime-kuma:beta
+    image: louislam/uptime-kuma:latest
     restart: always
     ports:
       - $HOST_IP:3001:3001
