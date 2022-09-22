@@ -28,6 +28,16 @@ To format, use `prettier --write **/*.yaml` with the existing .prettierrc.yaml.
 
 Keys should be sorted in the order specified in the .sort-order\*.yaml files.
 
+## Bitwarden
+
+- Serial numbers should be placed in the Serial Numbers secure note
+- Put a member number in the respective Login entry, unless there is none; then
+  put in the Rewards Card Numbers secure note
+- Put recovery codes in the Authenticator Backup Codes secure note and the
+  corresponding login entry
+- Don't duplicate attachments or entries in the identity entry
+- Sort custom fields alphabetically
+
 ## TODOs
 
 ### Next
@@ -83,6 +93,11 @@ Keys should be sorted in the order specified in the .sort-order\*.yaml files.
   - Regularly purge chat applications
 - Use Proton Mail or self-hosted mail/calendar
 - Migrate Cornell Mail
+
+### Bitwarden
+
+- Sort custom fields alphabetically except for predefined order
+- Use hidden fields
 
 ### YAML Sorting
 
