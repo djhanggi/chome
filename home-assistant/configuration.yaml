@@ -34,7 +34,12 @@ media_source:
 mobile_app:
 my:
 person:
+recorder:
+  auto_purge: true
+  purge_keep_days: 10
+  commit_interval: 5
 scene: !include scenes.yaml
+schedule:
 script: !include scripts.yaml
 stream:
 sun:
