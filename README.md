@@ -28,7 +28,7 @@ To format, use `prettier --write **/*.yaml` with the existing .prettierrc.yaml.
 
 Keys should be sorted in the order specified in the .sort-order\*.yaml files.
 
-## Bitwarden
+## Bitwarden Linting
 
 - Serial numbers should be placed in the Serial Numbers secure note
 - Put a member number in the respective Login entry, unless there is none; then
@@ -42,6 +42,8 @@ Keys should be sorted in the order specified in the .sort-order\*.yaml files.
 
 ### Next
 
+- zstyle for zsh + ohmyzsh
+- /mnt/{chome,docker} vs. on SSD
 - Docker Networking
 
   - Want to minimize use of host and define manual Docker networks to isolate
@@ -81,6 +83,7 @@ Keys should be sorted in the order specified in the .sort-order\*.yaml files.
 ### Miscellaneous
 
 - Canonicalizing photo script
+- Diff tool
 - Standardize ordering of keys via script (global, then via nested YAML/yq path)
 - Set up / back up status page with reverse proxy
 - Set up homepage
@@ -102,6 +105,7 @@ Keys should be sorted in the order specified in the .sort-order\*.yaml files.
 ### YAML Sorting
 
 Getting all keys:
-`yq '.. | select((tag == "!!map" or tag == "!!seq") | not) | path | .[]' | sort | uniq`
+`yq '.. | select((tag == "!!map" or tag == "!!seq") | not) | path | .[]' | sort
+| uniq`
 
 Replacing keys: `sed 's/key/slug/' | yq 'sort_keys(..)' | s/slug/key/'`
