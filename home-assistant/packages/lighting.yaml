@@ -62,7 +62,7 @@ light:
     entities:
       - light.bathroom_e
       - light.bathroom_w
-
+#
 # Add input_number for the length of time
 # automation:
 #   - id: turn_off_idle_kitchen_lights
@@ -86,4 +86,5 @@ light:
 #   map(attribute='entity_id') | select("in", idle_lights) | list}}
 
 # Expand all lights in a group to capture individually in scene:
-# {{expand(state_attr('light.woonkamer', 'entity_id'))|map(attribute='entity_id')|list}}
+# {{expand(state_attr('light.woonkamer', 'entity_id'))|
+# map(attribute='entity_id')|list}}

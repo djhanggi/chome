@@ -75,15 +75,14 @@ script:
     sequence:
       - service: script.living_room_ac_send_command
         data:
-          command: |
-            {% set MODES = { 
-              "Cool": "CoolMode", 
-              "Money Saver": "MoneySaverMode", 
-              "Fan Only": "FanMode", 
-            } %}
-            {% set mode_command =
+          command: >
+            {% set MODES = {
+              "Cool": "CoolMode",
+              "Money Saver": "MoneySaverMode",
+              "Fan Only": "FanMode",
+            } %} {% set mode_command =
               MODES[states("input_select.living_room_ac_mode")] |
-              default("Cool")  %}  
+              default("Cool") %}
             {{ mode_command }}
     mode: single
     icon: mdi:air-conditioner

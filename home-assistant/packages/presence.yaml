@@ -87,6 +87,6 @@ automation:
       - service: scene.create
         data:
           scene_id: return
-          entities: 
+          entities:
             automation.reset_scene_return:
               state: "on"

@@ -75,15 +75,14 @@ script:
     sequence:
       - service: script.bedroom_ac_send_command
         data:
-          command: |
-            {% set MODES = { 
-              "Cool": "set_cool_mode", 
-              "Money Saver": "set_money_saver_mode", 
-              "Fan Only": "set_fan_only_mode", 
-            } %}
-            {% set mode_command =
+          command: >
+            {% set MODES = {
+              "Cool": "set_cool_mode",
+              "Money Saver": "set_money_saver_mode",
+              "Fan Only": "set_fan_only_mode",
+            } %} {% set mode_command =
               MODES[states("input_select.bedroom_ac_mode")] |
-              default("Cool")  %}  
+              default("Cool") %}
             {{ mode_command }}
     mode: single
     icon: mdi:air-conditioner
