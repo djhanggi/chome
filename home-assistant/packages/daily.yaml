@@ -77,8 +77,6 @@ scene:
       fan.dyson_heater_fan:
         state: "on"
         oscillating: true
-      climate.bedroom_ac:
-        state: cool
     icon: mdi:weather-sunset-up
   - id: daytime
     name: Daytime
