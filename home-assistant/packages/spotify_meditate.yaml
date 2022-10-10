@@ -1,0 +1,21 @@
+---
+script:
+  spotify_meditate:
+    alias: Spotify Meditate
+    icon: mdi:meditation
+    mode: single
+    sequence:
+      - service: media_player.play_media
+        data:
+          media_content_id: spotify:playlist:37i9dQZF1DWVS1recTqXhf
+          media_content_type: spotify://playlist
+        target:
+          entity_id: media_player.spotify_djhanggi
+      - service: media_player.shuffle_set
+        data:
+          shuffle: true
+        target:
+          entity_id: media_player.spotify_djhanggi
+      - service: media_player.media_next_track
+        target:
+          entity_id: media_player.spotify_djhanggi
