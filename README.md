@@ -67,6 +67,7 @@ Keys should be sorted in the order specified in the .sort-order\*.yaml files.
 - fail2ban
 - Restrict most access to behind VPN unless specifically required
   - HA behind VPN
+- Firefox Relay, Privacy Card, & VPN
 
 ### Storage
 
@@ -74,6 +75,8 @@ Keys should be sorted in the order specified in the .sort-order\*.yaml files.
 - Serve NAS via Synology or Syncthing to devices
 - Serve photos/media via Plex and Photos equivalent
 - Auto-canonicalize photos
+- Encrypt /documents + setup protection rules
+- Set up file + photo serving and deprecate Google
 
 ### Home Assistant
 
@@ -96,6 +99,8 @@ Keys should be sorted in the order specified in the .sort-order\*.yaml files.
   - Regularly purge chat applications
 - Use Proton Mail or self-hosted mail/calendar
 - Migrate Cornell Mail
+- Research free + reputable news providers
+- Research privacy-focused keyboard for Android + iOS
 
 ### Bitwarden
 
