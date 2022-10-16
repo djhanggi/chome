@@ -35,3 +35,20 @@ automation:
       - service: switch.turn_off
         target:
           entity_id: switch.party_lights
+  - id: notify_on_silent_phone_ring
+    alias: Notify on Silent Phone Ring
+    mode: single
+    trigger:
+      - platform: state
+        entity_id: sensor.scarif_phone_state
+        from: idle
+        to: ringing
+    condition:
+      - condition: template
+        value_template: >
+          {{ not is_state("sensor.scarif_do_not_disturb_sensor", "Off") or
+          states("sensor.scarif_volume_level_ringer") | int < 5 }}
+    action:
+      - service: notify.notify
+        data:
+          message: scarif is ringing
