@@ -9,33 +9,18 @@ homeassistant:
     switch.bedroom_plant_light:
       device_class: light
       icon: mdi:flower
-    switch.humidifer:
-      device_class: switch
-      icon: mdi:humidifer
-
-input_datetime:
-  plant_sunrise_time:
-    name: Plant Sunrise Time
-    has_time: true
-    initial: "07:15:00"
-    icon: mdi:weather-sunset-up
-  plant_sunset_time:
-    name: Plant Sunset Time
-    has_time: true
-    initial: "21:45:00"
-    icon: mdi:weather-night
 
 automation:
   - id: plant_care
     alias: Plant Care
-    description: Turns on plant lighting and humidifers.
+    description: Turns on/off plant care entities (lights, etc.).
     trigger:
       - platform: time
         id: plant_sunrise_trigger
-        at: input_datetime.plant_sunrise_time
+        at: input_datetime.morning_start_time
       - platform: time
         id: plant_sunset_trigger
-        at: input_datetime.plant_sunset_time
+        at: input_datetime.evening_start_time
     action:
       - service: >
           {% if trigger.id == "plant_sunrise_trigger" %}
@@ -49,6 +34,4 @@ automation:
           entity_id:
             - switch.living_room_plant_light
             - switch.bedroom_plant_light
-            # TODO(djhanggi): Re-enable in the fall.
-            # - switch.humidifier
     mode: queued
