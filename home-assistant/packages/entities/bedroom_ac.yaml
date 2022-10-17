@@ -67,25 +67,11 @@ script:
       - service: script.bedroom_ac_send_command
         data:
           command: toggle_power
-      - service: script.bedroom_ac_set_mode
+      - service: automation.trigger
+        target:
+          entity_id: automation.bedroom_ac_set_mode
     mode: single
     icon: mdi:power
-  bedroom_ac_set_mode:
-    alias: Bedroom AC - Set Mode
-    sequence:
-      - service: script.bedroom_ac_send_command
-        data:
-          command: >
-            {% set MODES = {
-              "Cool": "set_cool_mode",
-              "Money Saver": "set_money_saver_mode",
-              "Fan Only": "set_fan_only_mode",
-            } %} {% set mode_command =
-              MODES[states("input_select.bedroom_ac_mode")] |
-              default("Cool") %}
-            {{ mode_command }}
-    mode: single
-    icon: mdi:air-conditioner
   bedroom_ac_toggle_power:
     alias: Bedroom AC - Toggle Power
     sequence:
@@ -170,7 +156,17 @@ automation:
         entity_id: input_select.bedroom_ac_mode
     mode: single
     action:
-      - service: script.bedroom_ac_set_mode
+      - service: script.bedroom_ac_send_command
+        data:
+          command: >
+            {% set MODES = {
+              "Cool": "set_cool_mode",
+              "Money Saver": "set_money_saver_mode",
+              "Fan Only": "set_fan_only_mode",
+            } %} {% set mode_command =
+              MODES[states("input_select.bedroom_ac_mode")] |
+              default("Cool") %}
+            {{ mode_command }}
 
 switch:
   - platform: template
