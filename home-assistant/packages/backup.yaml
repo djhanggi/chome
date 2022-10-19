@@ -13,7 +13,7 @@ automation:
     condition:
       - condition: time
         weekday:
-          - mon
-          - thu
+          - wed
+          - sun
     action:
       service: backup.create
