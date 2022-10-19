@@ -1,18 +1,12 @@
 ---
 scene:
-  - id: chome_cool_climate
-    name: CHOME Cool Climate
+  - id: fans_on
+    name: Fans On
     entities:
-      climate.living_room_ac:
-        state: cool
-      climate.bedroom_ac:
-        state: cool
       fan.dyson_fan:
         state: "on"
-        oscillating: true
       fan.dyson_heater_fan:
         state: "on"
-        oscillating: true
     icon: mdi:home-thermometer
 
 automation:
