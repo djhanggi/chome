@@ -26,7 +26,6 @@ automation:
         data:
           scene_id: return
           snapshot_entities:
-            - switch.adaptive_lighting_all_light_bulbs
             - light.ceiling_e
             - light.ceiling_w
             - light.living_room_lamp
@@ -48,9 +47,9 @@ automation:
             group.lighting:
               state: "off"
             climate.living_room_ac:
-              state: "off"
+              temperature: 75
             climate.bedroom_ac:
-              state: "off"
+              temperature: 75
             remote.harmony:
               state: "off"
   - id: return
