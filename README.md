@@ -81,7 +81,6 @@ Keys should be sorted in the order specified in the .sort-order\*.yaml files.
 ### Home Assistant
 
 - Automate phone alarm and use as sunset time
-- Use YAML for dashboards
 
 ### Miscellaneous
 
