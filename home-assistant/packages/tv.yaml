@@ -9,7 +9,6 @@ script:
         data:
           device: !secret harmony_lg_tv_device_id
           command: PowerOff
-          num_repeats: 25
     icon: mdi:power-off
   tv_volume_increase_25:
     alias: TV Volume +25
@@ -21,6 +20,7 @@ script:
           device: !secret harmony_lg_tv_device_id
           command: VolumeUp
           num_repeats: 25
+    mode: queued
     icon: mdi:volume-plus
   tv_volume_decrease_25:
     alias: TV Volume -25
@@ -32,4 +32,5 @@ script:
           device: !secret harmony_lg_tv_device_id
           command: VolumeDown
           num_repeats: 25
+    mode: queued
     icon: mdi:volume-minus
