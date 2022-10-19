@@ -133,7 +133,35 @@ scene:
         state: "off"
     icon: mdi:weather-sunset
 
+script:
+  snooze_morning_start_time:
+    alias: Snooze Morning Start Time
+    sequence:
+      - service: input_datetime.set_datetime
+        target:
+          entity_id: input_datetime.morning_start_time
+        data:
+          time: >
+            {{ (today_at(states('input_datetime.morning_start_time')) +
+               timedelta(minutes=30)).strftime('%H:%M:%S') }}
+    icon: mdi:alarm-snooze
+
 automation:
+  - id: set_morning_start_time_to_sunrise
+    alias: Set Morning Start Time to Sunrise
+    trigger:
+      - platform: time
+        at: input_datetime.evening_start_time
+    action:
+      - service: input_datetime.set_datetime
+        target:
+          entity_id: input_datetime.morning_start_time
+        data:
+          time: >-
+            {{ as_timestamp(state_attr("sun.sun", "next_rising")) |
+            timestamp_custom("%H:%M") }}
+    mode: single
+
   - id: morning
     alias: Morning
     description: Applies morning scenes at Morning Start Time.
@@ -150,6 +178,12 @@ automation:
           - '{{ is_state("input_boolean.open_blinds_in_morning", "on") }}'
         then:
           - scene: scene.ajar_blinds
+      - service: media_player.volume_set
+        target:
+          entity_id: media_player.bedroom_speaker
+        data:
+          volume_level: 0.45
+      - service: script.spotify_meditate
     mode: single
   - id: evening
     alias: Evening

@@ -38,19 +38,4 @@ script:
             channel: Set Alarm
             timeout: 1
     icon: mdi:alarm-bell
-
-automation:
-  - id: set_morning_start_time_to_sunrise
-    alias: Set Morning Start Time to Sunrise
-    trigger:
-      - platform: time
-        at: input_datetime.evening_start_time
-    action:
-      - service: input_datetime.set_datetime
-        target:
-          entity_id: input_datetime.morning_start_time
-        data:
-          time: >-
-            {{ as_timestamp(state_attr("sun.sun", "next_rising")) |
-            timestamp_custom("%H:%M") }}
-    mode: single
+  
