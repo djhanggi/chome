@@ -70,6 +70,8 @@ scene:
         state: "on"
       light.bed:
         state: "on"
+      switch.adaptive_lighting_sleep_mode_all_light_bulbs:
+        state: "off"
       switch.sunlight_lamp:
         state: "on"
       switch.monitor:
@@ -103,18 +105,12 @@ scene:
   - id: evening
     name: Evening
     entities:
-      switch.adaptive_lighting_all_light_bulbs:
-        state: "off"
       light.ceiling_lights:
         state: "off"
       light.living_room_lamp:
         state: "on"
-        brightness: 10
-        color_temp: 500
       light.bookshelf:
         state: "on"
-        brightness: 10
-        color_temp: 500
       light.hallway_lights:
         state: "off"
       light.bathroom_lights:
@@ -123,8 +119,8 @@ scene:
         state: "off"
       light.bed:
         state: "on"
-        brightness: 10
-        color_temp: 500
+      switch.adaptive_lighting_sleep_mode_all_light_bulbs:
+        state: "on"
       switch.kitchen_lights:
         state: "off"
       switch.sunlight_lamp:
