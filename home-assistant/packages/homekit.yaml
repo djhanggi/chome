@@ -4,7 +4,6 @@ homekit:
     mode: bridge
     filter:
       include_entities:
-        - switch.adaptive_lighting_all_light_bulbs
         - light.ceiling_lights
         - light.living_room_lamp
         - light.bookshelf
@@ -21,10 +20,9 @@ homekit:
         - climate.bedroom_ac
         - fan.dyson_fan
         - fan.dyson_heater_fan
+        - remote.harmony
+
     entity_config:
-      switch.adaptive_lighting_all_light_bulbs:
-        name: Sun-Matched Lighting
-        type: switch
       switch.kitchen_lights:
         type: switch
       switch.living_room_plant_light:
@@ -39,3 +37,5 @@ homekit:
         name: Living Room Fan
       fan.dyson_heater_fan:
         name: Bedroom Fan
+      remote.harmony:
+        name: TV
