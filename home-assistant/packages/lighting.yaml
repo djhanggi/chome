@@ -18,13 +18,23 @@ logbook:
 adaptive_lighting:
   - name: All Light Bulbs
     lights:
-      - light.all_light_bulbs
+      - light.ceiling_e
+      - light.ceiling_w
+      - light.living_room_lamp
+      - light.bookshelf
+      - light.hallway_e
+      - light.hallway_w
+      - light.bathroom_e
+      - light.bathroom_w
+      - light.bedroom_lamp
+      - light.bed
+    sleep_brightness: 1
+    sleep_color_temp: 1000
 
 group:
   lighting:
     name: Lighting
     entities:
-      - switch.adaptive_lighting_all_light_bulbs
       - light.all_light_bulbs
       - switch.kitchen_lights
       - switch.sunlight_lamp
