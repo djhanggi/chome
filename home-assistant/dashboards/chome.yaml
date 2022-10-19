@@ -5,126 +5,24 @@ views:
     icon: mdi:home-assistant
     badges: []
     cards:
-      - type: vertical-stack
-        cards:
-          - title: Lighting
-            type: entities
-            entities:
-              - name: Adaptive Lighting
-                entity: switch.adaptive_lighting_all_light_bulbs
-              - entity: light.ceiling_lights
-              - entity: light.living_room_lamp
-              - entity: light.bookshelf
-              - entity: switch.kitchen_lights
-              - entity: light.hallway_lights
-              - entity: light.bathroom_lights
-              - entity: light.bedroom_lamp
-              - entity: light.bed
-              - entity: switch.sunlight_lamp
-            show_header_toggle: true
-          - type: entities
-            entities:
-              - entity: switch.living_room_plant_light
-                hold_action:
-                  action: navigate
-                  navigation_path: /lovelace-chome/config
-              - entity: switch.bedroom_plant_light
-                hold_action:
-                  action: navigate
-                  navigation_path: /lovelace-chome/config
-          - name: Extra Lighting
-            type: button
-            icon: mdi:flashlight
-            show_icon: false
-            show_name: true
-            show_state: false
+      - type: entities
+        entities:
+          - entity: light.all_light_bulbs
             tap_action:
               action: navigate
-              navigation_path: /lovelace-chome/lighting
-      - type: vertical-stack
-        cards:
-          - type: horizontal-stack
-            cards:
-              - type: button
-                entity: scene.morning
-                show_icon: true
-                show_name: true
-                show_state: false
-                tap_action:
-                  action: toggle
-              - type: button
-                entity: scene.daytime
-                show_icon: true
-                show_name: true
-                show_state: false
-                tap_action:
-                  action: toggle
-              - type: button
-                entity: scene.evening
-                show_icon: true
-                show_name: true
-                tap_action:
-                  action: toggle
-              - name: Sleep
-                type: button
-                entity: script.go_to_sleep
-                show_icon: true
-                show_name: true
-                tap_action:
-                  action: toggle
-          - type: horizontal-stack
-            cards:
-              - name: 'Off'
-                type: button
-                entity: scene.chome_off
-                show_icon: true
-                show_name: true
-                tap_action:
-                  action: toggle
-              - name: Return
-                type: button
-                entity: scene.return
-                show_icon: true
-                show_name: true
-                show_state: false
-                tap_action:
-                  action: toggle
-      - type: vertical-stack
-        cards:
-          - type: horizontal-stack
-            cards:
-              - type: entity
-                entity: fan.dyson_fan
-              - type: entity
-                entity: fan.dyson_heater_fan
-          - type: horizontal-stack
-            cards:
-              - type: thermostat
-                entity: climate.living_room_ac
-                hold_action:
-                  action: navgiate
-                  navigation_path: /lovelace-chome/lighting/
-              - type: thermostat
-                entity: climate.bedroom_ac
-          - name: AC Controls
-            type: button
-            hold_action:
-              action: none
-            show_icon: false
-            show_name: true
-            tap_action:
-              action: navigate
-              navigation_path: /lovelace-chome/climate
-          - type: horizontal-stack
-            cards:
-              - type: entities
-                entities:
-                  - name: Cool CHOME
-                    entity: scene.chome_cool_climate
-                  - name: Bedroom Humidity
-                    entity: sensor.bedroom_broadlink_humidity
-                show_header_toggle: false
-                state_color: false
+              navigation_path: /lovelace-chome/lighting/
+          - name: Adaptive Lighting
+            entity: switch.adaptive_lighting_all_light_bulbs
+          - entity: light.ceiling_lights
+          - entity: light.living_room_lamp
+          - entity: light.bookshelf
+          - entity: switch.kitchen_lights
+          - entity: light.hallway_lights
+          - entity: light.bathroom_lights
+          - entity: light.bedroom_lamp
+          - entity: light.bed
+          - entity: switch.sunlight_lamp
+        show_header_toggle: false
       - type: vertical-stack
         cards:
           - type: horizontal-stack
@@ -156,10 +54,84 @@ views:
               - name: Blinds
                 entity: cover.smart_roller_shade_curtain
             show_header_toggle: false
+      - type: vertical-stack
+        cards:
+          - type: entities
+            entities:
+              - entity: person.djhanggi
+                hold_action:
+                  action: more-info
+                tap_action:
+                  action: navigate
+                  navigation_path: /lovelace-chome/presence/
+              - entity: scene.chome_off
+                hold_action:
+                  action: more-info
+                tap_action:
+                  action: navigate
+                  navigation_path: /lovelace-chome/presence/
+              - name: Return
+                entity: scene.return
+                hold_action:
+                  action: more-info
+                tap_action:
+                  action: navigate
+                  navigation_path: /lovelace-chome/presence/
+      - type: vertical-stack
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: entity
+                entity: fan.dyson_fan
+              - type: entity
+                entity: fan.dyson_heater_fan
+          - type: horizontal-stack
+            cards:
+              - type: entities
+                entities:
+                  - entity: scene.fans_on
+                    hold_action:
+                      action: more-info
+                    tap_action:
+                      action: navigate
+                      navigation_path: /lovelace-chome/climate
+                  - name: Bedroom Humidity
+                    entity: sensor.bedroom_broadlink_humidity
+                    hold_action:
+                      action: more-info
+                    tap_action:
+                      action: navigate
+                      navigation_path: /lovelace-chome/climate
+                show_header_toggle: false
+                state_color: false
+          - type: horizontal-stack
+            cards:
+              - type: thermostat
+                entity: climate.living_room_ac
+              - type: thermostat
+                entity: climate.bedroom_ac
       - type: entities
         entities:
+          - entity: scene.morning
+            hold_action:
+              action: more-info
+            tap_action:
+              action: navigate
+              navigation_path: /lovelace-chome/sleep/
+          - entity: scene.daytime
+            hold_action:
+              action: more-info
+            tap_action:
+              action: navigate
+              navigation_path: /lovelace-chome/sleep/
+          - entity: scene.evening
+            hold_action:
+              action: more-info
+            tap_action:
+              action: navigate
+              navigation_path: /lovelace-chome/sleep/
           - name: Sleep
-            entity: script.go_to_sleep
+            entity: script.play_random_bedroom_sleep_sound
             hold_action:
               action: more-info
             tap_action:
@@ -171,66 +143,12 @@ views:
             tap_action:
               action: navigate
               navigation_path: /lovelace-chome/sleep/
-    path: main
-    theme: Backend-selected
-  - title: Overview
-    icon: mdi:list-status
-    badges: []
-    cards:
-      - type: vertical-stack
-        cards:
-          - type: entities
-            entities:
-              - entity: person.djhanggi
-          - type: entities
-            entities:
-              - name: scarif
-                entity: sensor.scarif_battery_level
-              - name: DND
-                entity: sensor.scarif_do_not_disturb_sensor
-              - name: Next Alarm
-                entity: sensor.scarif_next_alarm
-          - type: entities
-            entities:
-              - name: cantonica
-                entity: sensor.cantonica_battery_level
-              - name: Focus
-                entity: binary_sensor.cantonica_focus
-          - type: entities
-            entities:
-              - name: Pocket Casts
-                entity: sensor.pocketcasts_unlistened_episodes
-      - type: vertical-stack
-        cards:
-          - type: weather-forecast
-            entity: weather.chome
-          - type: custom:sun-card
-          - type: sensor
-            detail: 1
-            entity: sensor.moon
-            graph: none
-            hours_to_show: 24
-      - type: entities
-        entities:
-          - entity: input_datetime.next_alarm_time
-          - entity: script.set_alarm_on_scarif
-          - entity: script.sync_next_alarm_time
-        show_header_toggle: false
-        state_color: false
-      - type: entities
-        entities:
-          - entity: switch.monitor
-        show_header_toggle: false
-        state_color: false
-      - type: entities
-        entities:
-          - name: PiHole
-            entity: switch.bespin_pihole
-          - entity: script.snooze_pihole
-          - name: Ads Blocked - Today
-            entity: sensor.bespin_pihole_ads_blocked_today
-          - name: DNS Queries - Today
-            entity: sensor.bespin_pihole_dns_queries_today
+          - entity: script.snooze_morning_start_time
+            hold_action:
+              action: more-info
+            tap_action:
+              action: navigate
+              navigation_path: /lovelace-chome/sleep/
       - type: vertical-stack
         cards:
           - type: entities
@@ -240,146 +158,48 @@ views:
                   action: more-info
                 tap_action:
                   action: navigate
-                  navigation_path: /lovelace-chome/plex/
-              - name: Plex
-                entity: sensor.plex_chome
+                  navigation_path: /lovelace-chome/media/
+              - entity: script.tv_volume_increase_25
                 hold_action:
                   action: more-info
                 tap_action:
                   action: navigate
-                  navigation_path: /lovelace-chome/plex/
-          - name: Speakers
-            type: button
-            hold_action:
-              action: none
-            show_icon: false
-            show_name: true
-            tap_action:
-              action: navigate
-              navigation_path: /lovelace-chome/speakers
-      - type: grid
-        cards:
-          - type: media-control
-            entity: media_player.spotify_djhanggi
-        columns: 1
-        square: false
+                  navigation_path: /lovelace-chome/media/
+              - entity: script.tv_volume_decrease_25
+                hold_action:
+                  action: more-info
+                tap_action:
+                  action: navigate
+                  navigation_path: /lovelace-chome/media/
+    path: main
+    theme: Backend-selected
+  - title: Other Devices
+    type: sidebar
+    icon: mdi:devices
+    badges: []
+    cards:
+      - type: entities
+        entities:
+          - name: scarif
+            entity: sensor.scarif_battery_level
+          - name: DND
+            entity: sensor.scarif_do_not_disturb_sensor
+          - name: Next Alarm
+            entity: sensor.scarif_next_alarm
+          - entity: automation.flash_lights_on_silent_phone_ring
+          - entity: automation.notify_on_silent_phone_ring
+      - type: entities
+        entities:
+          - name: cantonica
+            entity: sensor.cantonica_battery_level
+          - name: Focus
+            entity: binary_sensor.cantonica_focus
+      - type: entities
+        entities:
+          - entity: switch.monitor
+        show_header_toggle: false
+        state_color: false
     path: overview
-    theme: Backend-selected
-  - title: Config
-    icon: mdi:cog
-    badges: []
-    cards:
-      - type: entities
-        entities:
-          - entity: automation.away
-          - entity: automation.return
-      - type: entities
-        entities:
-          - automation.backup_home_assistant
-      - type: entities
-        entities:
-          - automation.flash_lights_on_silent_phone_ring
-      - type: entities
-        entities:
-          - name: Living Room Sonoff Battery
-            entity: sensor.living_room_sonoff_battery
-            secondary_info: last-updated
-      - type: entities
-        entities:
-          - entity: automation.plant_care
-    path: config
-    theme: Backend-selected
-  - title: Cameras
-    icon: mdi:video
-    badges: []
-    cards:
-      - type: grid
-        cards:
-          - type: entities
-            entities:
-              - name: Living Room Camera
-                entity: switch.living_room_cam
-          - name: Living Room Camera
-            type: picture-entity
-            camera_image: camera.living_room
-            camera_view: live
-            entity: camera.living_room
-            show_name: false
-            show_state: false
-          - type: horizontal-stack
-            cards:
-              - name: Cast to Hoth
-                type: button
-                entity: ''
-                show_icon: false
-                show_name: true
-                tap_action:
-                  action: call-service
-                  service: camera.play_stream
-                  target:
-                    entity_id: camera.living_room
-                  service_data:
-                    media_player: media_player.cast_hoth
-              - name: Stop Casting to Hoth
-                type: button
-                entity: ''
-                show_icon: false
-                show_name: true
-                tap_action:
-                  action: call-service
-                  service: media_player.media_stop
-                  target:
-                    entity_id: media_player.cast_hoth
-                  service_data: {}
-        columns: 1
-        square: false
-    path: cameras
-    theme: Backend-selected
-  - title: NAS
-    icon: mdi:database
-    badges: []
-    cards:
-      - type: entities
-        entities:
-          - update.bespin_nas_dsm_update
-          - binary_sensor.bespin_nas_security_status
-          - sensor.bespin_nas_download_throughput
-          - sensor.bespin_nas_upload_throughput
-          - sensor.bespin_nas_memory_available_real
-          - sensor.bespin_nas_memory_available_swap
-          - sensor.bespin_nas_memory_total_real
-          - sensor.bespin_nas_memory_total_swap
-          - sensor.bespin_nas_memory_usage_real
-          - sensor.bespin_nas_temperature
-          - sensor.bespin_nas_volume_1_average_disk_temp
-          - sensor.bespin_nas_volume_1_status
-          - sensor.bespin_nas_volume_1_used_space
-          - sensor.bespin_nas_volume_1_volume_used
-          - sensor.bespin_nas_cpu_load_average_15_min
-          - sensor.bespin_nas_cpu_load_average_5_min
-          - sensor.bespin_nas_cpu_utilization_total
-          - sensor.bespin_nas_cpu_utilization_user
-          - button.bespin_nas_reboot
-          - button.bespin_nas_shutdown
-      - type: entities
-        entities:
-          - sensor.bespin_nas_drive_1_status
-          - sensor.bespin_nas_drive_2_status
-          - sensor.bespin_nas_drive_3_status
-          - sensor.bespin_nas_drive_4_status
-          - sensor.bespin_nas_drive_1_temperature
-          - sensor.bespin_nas_drive_2_temperature
-          - sensor.bespin_nas_drive_3_temperature
-          - sensor.bespin_nas_drive_4_temperature
-          - binary_sensor.bespin_nas_drive_1_below_min_remaining_life
-          - binary_sensor.bespin_nas_drive_2_below_min_remaining_life
-          - binary_sensor.bespin_nas_drive_3_below_min_remaining_life
-          - binary_sensor.bespin_nas_drive_4_below_min_remaining_life
-          - binary_sensor.bespin_nas_drive_1_exceeded_max_bad_sectors
-          - binary_sensor.bespin_nas_drive_2_exceeded_max_bad_sectors
-          - binary_sensor.bespin_nas_drive_3_exceeded_max_bad_sectors
-          - binary_sensor.bespin_nas_drive_4_exceeded_max_bad_sectors
-    path: nas
     theme: Backend-selected
   - title: Lighting
     type: sidebar
@@ -395,13 +215,10 @@ views:
           - entity: light.hallway_w
           - entity: light.bathroom_e
           - entity: light.bathroom_w
-      - title: Party Lights
-        type: entities
+      - type: entities
         entities:
-          - entity: switch.party_lights
-          - entity: input_number.party_lights_speed
-          - entity: script.apply_party_lights_scene
-        show_header_toggle: false
+          - entity: switch.living_room_plant_light
+          - entity: switch.bedroom_plant_light
       - type: entities
         entities:
           - name: Adaptive Lighting - Brightness
@@ -410,7 +227,49 @@ views:
             entity: switch.adaptive_lighting_adapt_color_all_light_bulbs
           - name: Adaptive Lighting - Sleep Mode
             entity: switch.adaptive_lighting_sleep_mode_all_light_bulbs
+      - title: Party Lights
+        type: entities
+        entities:
+          - entity: switch.party_lights
+          - entity: input_number.party_lights_speed
+          - entity: script.apply_party_lights_scene
+        show_header_toggle: false
     path: lighting
+    subview: true
+    theme: Backend-selected
+  - title: Sleep
+    type: sidebar
+    icon: mdi:bed-clock
+    badges: []
+    cards:
+      - type: entities
+        entities:
+          - entity: input_datetime.morning_start_time
+          - entity: input_datetime.evening_start_time
+          - entity: automation.set_morning_start_time_to_sunrise
+          - entity: automation.morning
+          - entity: input_boolean.open_blinds_in_morning
+          - entity: automation.evening
+          - entity: automation.plant_care
+        show_header_toggle: false
+        state_color: false
+        view_layout:
+          position: main
+      - type: entities
+        entities:
+          - entity: input_select.sleep_sound
+            hold_action:
+              action: call-service
+              service: script.play_bedroom_sleep_sound
+          - entity: script.spotify_meditate
+      - type: entities
+        entities:
+          - entity: input_datetime.next_alarm_time
+          - entity: script.set_alarm_on_scarif
+          - entity: script.sync_next_alarm_time
+        show_header_toggle: false
+        state_color: false
+    path: sleep
     subview: true
     theme: Backend-selected
   - title: Climate
@@ -441,33 +300,29 @@ views:
     path: climate
     subview: true
     theme: Backend-selected
-  - title: Plex
+  - title: Media
     type: sidebar
-    icon: mdi:plex
+    icon: mdi:play
     badges: []
     cards:
-      - type: grid
+      - type: entities
+        entities:
+          - sensor.pocketcasts_unlistened_episodes
+      - type: media-control
+        entity: media_player.spotify_djhanggi
+      - type: vertical-stack
         cards:
           - type: entities
             entities:
-              - entity: remote.harmony
-              - entity: script.tv_volume_decrease_25
-              - entity: script.tv_volume_increase_25
+              - entity: sensor.plex_chome
+          - type: media-control
+            entity: media_player.plex_hoth
+      - type: vertical-stack
+        cards:
           - type: media-control
             entity: media_player.cast_hoth
           - type: media-control
             entity: media_player.android_tv_hoth
-          - type: media-control
-            entity: media_player.plex_hoth
-        columns: 1
-        square: false
-    path: plex
-    subview: true
-    theme: Backend-selected
-  - title: Speakers
-    icon: mdi:speaker
-    badges: []
-    cards:
       - type: grid
         cards:
           - type: media-control
@@ -478,32 +333,18 @@ views:
             entity: media_player.outer_rim
         columns: 1
         square: false
-    path: speakers
+    path: media
     subview: true
     theme: Backend-selected
-  - title: Sleep
+  - title: Presence
     type: sidebar
-    icon: mdi:bed-clock
+    icon: mdi:map-marker-radius
     badges: []
     cards:
       - type: entities
         entities:
-          - entity: input_datetime.morning_start_time
-          - entity: input_datetime.evening_start_time
-          - entity: automation.set_morning_start_time_to_sunrise
-          - entity: automation.morning
-          - entity: input_boolean.open_blinds_in_morning
-          - entity: automation.evening
-        show_header_toggle: false
-        state_color: false
-        view_layout:
-          position: main
-      - type: entities
-        entities:
-          - entity: input_select.sleep_sound
-            hold_action:
-              action: call-service
-              service: script.play_bedroom_sleep_sound
-    path: sleep
+          - entity: automation.away
+          - entity: automation.return
+    path: presence
     subview: true
     theme: Backend-selected

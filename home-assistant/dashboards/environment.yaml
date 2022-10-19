@@ -1,0 +1,21 @@
+---
+views:
+  - title: Environment
+    type: sidebar
+    icon: mdi:earth
+    badges: []
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: weather-forecast
+            entity: weather.chome
+          - type: custom:sun-card
+          - type: sensor
+            detail: 1
+            entity: sensor.moon
+            graph: none
+            hours_to_show: 24
+      - type: iframe
+        aspect_ratio: 50%
+        url: https://www.tidespro.com/us/new-york/the-battery-new-york-harbor/widget/tidetableweek?apikey=4112a76b444d4d74af97265b46547458
+    theme: Backend-selected

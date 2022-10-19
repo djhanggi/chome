@@ -1,0 +1,200 @@
+---
+title: Server
+views:
+  - title: Home Page
+    icon: mdi:folder-home-outline
+    badges: []
+    cards:
+      - name: Portainer
+        type: button
+        icon: mdi:docker
+        entity: ""
+        hold_action:
+          action: none
+        show_icon: true
+        show_name: true
+        show_state: false
+        tap_action:
+          action: url
+          url_path: http://192.168.1.175:9500
+      - name: Uptime
+        type: button
+        icon: mdi:gauge
+        entity: ""
+        hold_action:
+          action: none
+        show_icon: true
+        show_name: true
+        show_state: false
+        tap_action:
+          action: url
+          url_path: http://192.168.1.175:3001
+      - name: NAS
+        type: button
+        icon: mdi:database
+        entity: ""
+        hold_action:
+          action: none
+        show_icon: true
+        show_name: true
+        show_state: false
+        tap_action:
+          action: url
+          url_path: http://192.168.1.152:5000
+      - name: PiHole
+        type: button
+        icon: mdi:pi-hole
+        entity: ""
+        hold_action:
+          action: none
+        show_icon: true
+        show_name: true
+        show_state: false
+        tap_action:
+          action: url
+          url_path: http://192.168.1.175:81
+      - name: Plex
+        type: button
+        icon: mdi:plex
+        entity: ""
+        hold_action:
+          action: none
+        show_icon: true
+        show_name: true
+        show_state: false
+        tap_action:
+          action: url
+          url_path: http://192.168.1.175:32400
+      - name: ConBee
+        type: button
+        icon: mdi:zigbee
+        entity: ""
+        hold_action:
+          action: none
+        show_icon: true
+        show_name: true
+        show_state: false
+        tap_action:
+          action: url
+          url_path: http://192.168.1.175:82
+      - name: Router
+        type: button
+        icon: mdi:router
+        entity: ""
+        hold_action:
+          action: none
+        show_icon: true
+        show_name: true
+        show_state: true
+        tap_action:
+          action: url
+          url_path: http://192.168.1.10
+      - name: Wyze Bridge
+        type: button
+        icon: mdi:video
+        entity: ""
+        hold_action:
+          action: none
+        show_icon: true
+        show_name: true
+        show_state: false
+        tap_action:
+          action: url
+          url_path: http://192.168.1.175:5000/
+      - name: NAS-2292
+        type: button
+        icon: mdi:database
+        entity: ""
+        hold_action:
+          action: none
+        show_icon: true
+        show_name: true
+        show_state: false
+        tap_action:
+          action: url
+          url_path: http://10.10.30.16
+    path: homepage
+    theme: Backend-selected
+  - title: Cameras
+    icon: mdi:video
+    badges: []
+    cards:
+      - type: grid
+        cards:
+          - type: entities
+            entities:
+              - name: Living Room Camera
+                entity: switch.living_room_cam
+          - name: Living Room Camera
+            type: picture-entity
+            camera_image: camera.living_room
+            camera_view: live
+            entity: camera.living_room
+            show_name: false
+            show_state: false
+        columns: 1
+        square: false
+    path: cameras
+    theme: Backend-selected
+  - title: PiHole
+    type: sidebar
+    icon: mdi:pi-hole
+    badges: []
+    cards:
+      - type: entities
+        entities:
+          - name: PiHole
+            entity: switch.bespin_pihole
+          - entity: script.snooze_pihole
+          - name: Ads Blocked - Today
+            entity: sensor.bespin_pihole_ads_blocked_today
+          - name: DNS Queries - Today
+            entity: sensor.bespin_pihole_dns_queries_today
+    path: pihole
+    theme: Backend-selected
+  - title: NAS
+    icon: mdi:database
+    badges: []
+    cards:
+      - type: entities
+        entities:
+          - update.bespin_nas_dsm_update
+          - binary_sensor.bespin_nas_security_status
+          - sensor.bespin_nas_download_throughput
+          - sensor.bespin_nas_upload_throughput
+          - sensor.bespin_nas_memory_available_real
+          - sensor.bespin_nas_memory_available_swap
+          - sensor.bespin_nas_memory_total_real
+          - sensor.bespin_nas_memory_total_swap
+          - sensor.bespin_nas_memory_usage_real
+          - sensor.bespin_nas_temperature
+          - sensor.bespin_nas_volume_1_average_disk_temp
+          - sensor.bespin_nas_volume_1_status
+          - sensor.bespin_nas_volume_1_used_space
+          - sensor.bespin_nas_volume_1_volume_used
+          - sensor.bespin_nas_cpu_load_average_15_min
+          - sensor.bespin_nas_cpu_load_average_5_min
+          - sensor.bespin_nas_cpu_utilization_total
+          - sensor.bespin_nas_cpu_utilization_user
+          - button.bespin_nas_reboot
+          - button.bespin_nas_shutdown
+      - type: entities
+        entities:
+          - sensor.bespin_nas_drive_1_status
+          - sensor.bespin_nas_drive_2_status
+          - sensor.bespin_nas_drive_3_status
+          - sensor.bespin_nas_drive_4_status
+          - sensor.bespin_nas_drive_1_temperature
+          - sensor.bespin_nas_drive_2_temperature
+          - sensor.bespin_nas_drive_3_temperature
+          - sensor.bespin_nas_drive_4_temperature
+          - binary_sensor.bespin_nas_drive_1_below_min_remaining_life
+          - binary_sensor.bespin_nas_drive_2_below_min_remaining_life
+          - binary_sensor.bespin_nas_drive_3_below_min_remaining_life
+          - binary_sensor.bespin_nas_drive_4_below_min_remaining_life
+          - binary_sensor.bespin_nas_drive_1_exceeded_max_bad_sectors
+          - binary_sensor.bespin_nas_drive_2_exceeded_max_bad_sectors
+          - binary_sensor.bespin_nas_drive_3_exceeded_max_bad_sectors
+          - binary_sensor.bespin_nas_drive_4_exceeded_max_bad_sectors
+    path: nas
+    theme: Backend-selected
