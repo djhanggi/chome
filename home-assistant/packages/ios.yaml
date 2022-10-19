@@ -1,0 +1,27 @@
+---
+homeassistant:
+  customize:
+    automation.apple_watch_go_to_sleep:
+      icon: mdi:sleep
+
+automation:
+  - id: ios_sleep
+    alias: iOS - Sleep
+    trigger:
+      platform: event
+      event_data:
+        actionName: iOS Sleep
+      event_type: ios.action_fired
+    action:
+      service: script.go_to_sleep
+
+ios:
+  actions:
+    - name: iOS Sleep
+      icon:
+        icon: mdi:sleep
+        color: "#000000"
+      background_color: "#ffffff"
+      label:
+        color: "#000000"
+        text: Sleep

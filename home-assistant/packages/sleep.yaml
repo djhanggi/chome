@@ -1,123 +1,30 @@
 ---
-homeassistant:
-  customize:
-    automation.apple_watch_go_to_sleep:
-      icon: mdi:sleep
-
-logbook:
-  exclude:
-    entities:
-      - sensor.sleep_sound_content_id
-
-input_select:
-  sleep_sound:
-    name: Sleep Sound
-    options:
-      - Country
-      - Ocean
-      - Rain
-      - Rainforest
-      - River
-      - Thunderstorm
-      - Waterfall
-    initial: River
-    icon: mdi:bell-sleep
-
-template:
-  - sensor:
-      - unique_id: sleep_sound_content_id
-        name: Sleep Sound Content ID
-        state: |
-          {% set SOUNDS = {
-              "Country":
-          "https://storage.googleapis.com/relaxation-sounds/country_night_3600.mp3",
-              "Ocean":
-          "https://storage.googleapis.com/relaxation-sounds/ocean_3600.mp3",
-              "Rain":
-          "https://storage.googleapis.com/relaxation-sounds/rain_3600.mp3",
-              "Rainforest":
-          "https://storage.googleapis.com/relaxation-sounds/rainforest_600.m4a",
-              "River":
-          "https://storage.googleapis.com/relaxation-sounds/river_3600.mp3",
-              "Thunderstorm":
-          "https://storage.googleapis.com/relaxation-sounds/thunderstorm_3600.mp3",
-              "Waterfall":
-          "https://storage.googleapis.com/relaxation-sounds/waterfall_600.m4a",
-            } %}
-          {% set state = states("input_select.sleep_sound") %}
-          {{ SOUNDS[state] }}
-        icon: mdi:bell-sleep
-
 script:
-  play_bedroom_sleep_sound:
-    alias: Play Bedroom Sleep Sound
+  go_to_sleep:
+    alias: Go to Sleep
+    fields:
+      meditate:
+        name: Meditate
+        description: Whether to play meditation sounds or a random sleep sound
+        default: false
     sequence:
       - service: media_player.volume_set
         target:
           entity_id: media_player.bedroom_speaker
         data:
-          volume_level: 0.25
-      - service: media_player.play_media
-        target:
-          entity_id: media_player.bedroom_speaker
-        data:
-          media_content_id: >
-            {{ states("sensor.sleep_sound_content_id") }}
-          media_content_type: music
-    icon: mdi:bell-sleep
-  go_to_sleep:
-    alias: Go to Sleep
-    sequence:
-      - service: input_select.select_option
-        target:
-          entity_id: input_select.sleep_sound
-        data:
-          option: >
-            {{ state_attr("input_select.sleep_sound", "options") | random }}
-      - service: script.play_bedroom_sleep_sound
+          volume_level: 0.45
+      - service: >
+          {% if meditate %} 
+            script.play_random_bedroom_sleep_sound
+          {% else %}
+            script.spotify_meditate
+          {% endif %}
       - service: scene.turn_on
         target:
           entity_id: scene.chome_off
       - service: script.tv_turn_off
-      - service: script.set_kitchen_lights_power
-        data:
-          power: false
-      - service: input_number.set_value
-        target:
-          entity_id: input_number.cycle_ac_shutoff_timer_duration
-        data:
-          value: "10"
-      - service: input_number.set_value
-        target:
-          entity_id: input_number.cycle_ac_restart_timer_duration
-        data:
-          value: "30"
       - service: fan.turn_on
         target:
           entity_id: fan.dyson_heater_fan
-      - service: automation.trigger
-        target:
-          entity_id: automation.cycle_ac
     icon: mdi:sleep
 
-ios:
-  actions:
-    - name: Apple Watch Sleep
-      background_color: "#ffffff"
-      label:
-        text: Sleep
-        color: "#000000"
-      icon:
-        icon: mdi:sleep
-        color: "#000000"
-
-automation:
-  - id: apple_watch_go_to_sleep
-    alias: "Apple Watch - Go to Sleep"
-    trigger:
-      platform: event
-      event_type: ios.action_fired
-      event_data:
-        actionName: Apple Watch Sleep
-    action:
-      service: script.go_to_sleep
