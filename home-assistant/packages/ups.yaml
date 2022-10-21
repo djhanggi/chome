@@ -1,0 +1,14 @@
+---
+automation:
+  - id: ups_using_battery
+    alias: UPS Using Battery
+    mode: single
+    trigger:
+      - platform: template
+        value_template: >
+          {{ not (states('sensor.ups_status') | regex_search('^Online')) }}
+    condition: []
+    action:
+      - service: notify.notify
+        data:
+          message: UPS is using battery
