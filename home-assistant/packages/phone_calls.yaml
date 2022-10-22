@@ -13,30 +13,43 @@ automation:
         from: idle
         to: ringing
     condition:
-      - condition: template
-        value_template: >
-          {{ not is_state("sensor.scarif_do_not_disturb_sensor", "Off") or
-          states("sensor.scarif_volume_level_ringer") | int < 5 }}
       - entity_id: person.djhanggi
         condition: state
         state: home
     action:
-      - service: notify.notify
-        data:
-          message: scarif is ringing
-      - service: switch.turn_on
-        target:
-          entity_id: switch.party_lights
-      - service: notify.mobile_app_scarif
-        data:
-          command: normal
-          message: command_ringer_mode
-      - delay:
-          seconds: 5
-      - service: switch.turn_off
-        target:
-          entity_id: switch.party_lights
-      - service: notify.mobile_app_scarif
-        data:
-          command: vibrate
-          message: command_ringer_mode
+      - parallel:
+          - if:
+              - condition: template
+                value_template: >
+                  {{ not is_state("sensor.scarif_ringer_mode", "normal") or
+                  states("sensor.scarif_volume_level_ringer") | int < 5 }}
+            then:
+              - service: notify.mobile_app_cantonica
+                data:
+                  message: scarif is ringing
+              - service: switch.turn_on
+                target:
+                  entity_id: switch.party_lights
+              - delay:
+                  seconds: 5
+              - service: switch.turn_off
+                target:
+                  entity_id: switch.party_lights
+          - if:
+              - condition: template
+                value_template: >
+                  {{ is_state("sensor.scarif_do_not_disturb_sensor", "off")
+                  and is_state("sensor.scarif_ringer_mode", "vibrate") }}
+            then:
+              - service: notify.mobile_app_scarif
+                data:
+                  message: command_ringer_mode
+                  data:
+                    command: normal
+              - delay:
+                  seconds: 5
+              - service: notify.mobile_app_scarif
+                data:
+                  message: command_ringer_mode
+                  data:
+                    command: vibrate
