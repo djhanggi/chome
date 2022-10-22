@@ -81,6 +81,8 @@ Keys should be sorted in the order specified in the .sort-order\*.yaml files.
 ### Home Assistant
 
 - Automate phone alarm and use as sunset time
+- Use YAML for dashboards
+- Morse code service
 
 ### Miscellaneous
 
@@ -109,7 +111,6 @@ Keys should be sorted in the order specified in the .sort-order\*.yaml files.
 ### YAML Sorting
 
 Getting all keys:
-`yq '.. | select((tag == "!!map" or tag == "!!seq") | not) | path | .[]' | sort
-| uniq`
+`yq '.. | select((tag == "!!map" or tag == "!!seq") | not) | path | .[]' | sort | uniq`
 
 Replacing keys: `sed 's/key/slug/' | yq 'sort_keys(..)' | s/slug/key/'`
