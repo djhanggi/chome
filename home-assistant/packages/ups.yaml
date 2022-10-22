@@ -1,14 +1,30 @@
 ---
 automation:
-  - id: ups_using_battery
-    alias: UPS Using Battery
+  - id: notify_ups_change
+    alias: Notify UPS Change
     mode: single
     trigger:
-      - platform: template
-        value_template: >
-          {{ not (states('sensor.ups_status') | regex_search('^Online')) }}
-    condition: []
+      - entity_id: sensor.ups_status
+        platform: state
     action:
       - service: notify.notify
         data:
-          message: UPS is using battery
+          message: |
+            {% if not (states('sensor.ups_status') | regex_search('^Online')) %}
+              UPS is using battery
+            {% else %}
+              UPS is online
+            {% endif %}
+  - id: ups_shutdown
+    alias: UPS-Triggered Shut-Down
+    trigger:
+      - entity_id: sensor.ups_battery_charge
+        platform: numeric_state
+        below: 50
+    action:
+      - service: button.press
+        target:
+          entity_id: button.bespin_nas_shutdown
+      - service: notify.notify
+        data:
+          message: Shutting down NAS because of UPS battery
