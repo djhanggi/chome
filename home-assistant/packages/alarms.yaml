@@ -3,6 +3,8 @@ homeassistant:
   customize:
     automation.set_morning_start_time_to_sunrise:
       icon: mdi:weather-sunset-up
+    automation.sync_next_alarm_time:
+      icon: mdi:phone-clock
 
 input_datetime:
   next_alarm_time:
@@ -11,9 +13,31 @@ input_datetime:
     icon: mdi:alarm-check
 
 script:
-  sync_next_alarm_time:
-    alias: Sync Next Alarm Time from Scarif
+  set_alarm_on_scarif:
+    alias: Set Alarm On Scarif
     sequence:
+      - service: notify.mobile_app_scarif
+        data:
+          message: command_activity
+          data:
+            channel: Set Alarm
+            timeout: 1
+            intent_action: android.intent.action.SET_ALARM
+            intent_extras: >
+              {% set times = states('input_datetime.next_alarm_time').split(':')
+              %}  {% set hours = times[0] %}  {% set minutes = times[1] %}
+              android.intent.extra.alarm.HOUR:{{ hours
+              }},android.intent.extra.alarm.MINUTES:{{ minutes
+              }},android.intent.extra.alarm.SKIP_UI:true
+    icon: mdi:alarm-bell
+
+automation:
+  - id: sync_next_alarm_time_from_scarif
+    alias: Sync Next Alarm Time from Scarif
+    trigger:
+      - platform: state
+        entity_id: sensor.scarif_next_alarm
+    action:
       - service: input_datetime.set_datetime
         target:
           entity_id: input_datetime.next_alarm_time
@@ -24,18 +48,4 @@ script:
               | timestamp_custom("%H:%M:%S")
               | default("00:00:00", True)
             }}
-    icon: mdi:phone-clock
-  set_alarm_on_scarif:
-    alias: Set Alarm On Scarif
-    sequence:
-      - service: notify.mobile_app_scarif
-        data:
-          title: Set Alarm
-          message: >
-            {{ state_attr("input_datetime.next_alarm_time", "timestamp") |
-            timestamp_custom("%H:%M", False) }}
-          data:
-            channel: Set Alarm
-            timeout: 1
-    icon: mdi:alarm-bell
-  
+    mode: restart
