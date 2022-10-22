@@ -22,6 +22,10 @@
 - entity_id
 - scene_id
 
+# Credentials
+- username
+- password
+
 # Naming and descriptions
 - name
 - title
