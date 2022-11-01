@@ -131,7 +131,7 @@ views:
               action: navigate
               navigation_path: /lovelace-chome/sleep/
           - name: Sleep
-            entity: script.play_random_bedroom_sleep_sound
+            entity: script.go_to_sleep
             hold_action:
               action: more-info
             tap_action:

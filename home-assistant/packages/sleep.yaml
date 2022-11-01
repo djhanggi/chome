@@ -16,9 +16,9 @@ script:
           entity_id: media_player.bedroom_speaker
       - service: |
           {% if meditate is defined and meditate %} 
-            script.play_random_bedroom_sleep_sound
-          {% else %}
             script.spotify_meditate
+          {% else %}
+            script.play_random_bedroom_sleep_sound
           {% endif %}
       - service: scene.turn_on
         target:

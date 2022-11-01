@@ -61,7 +61,7 @@ script:
           media_content_type: music
     icon: mdi:bell-sleep
   play_random_bedroom_sleep_sound:
-    alias: Go to Sleep
+    alias: Play Random Bedroom Sleep Sound
     sequence:
       - service: input_select.select_option
         target:
