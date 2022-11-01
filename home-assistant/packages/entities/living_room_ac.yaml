@@ -5,6 +5,8 @@ homeassistant:
       icon: mdi:thermometer
     automation.living_room_ac_correct_power_on:
       icon: mdi:thermometer-check
+    automation.living_room_ac_set_mode:
+      icon: mdi:air-conditioner
     switch.living_room_ac:
       icon: mdi:air-conditioner
       friendly_name: Living Room AC - Switch
@@ -72,22 +74,6 @@ script:
           entity_id: automation.living_room_ac_set_mode
     mode: single
     icon: mdi:power
-  living_room_ac_set_mode:
-    alias: Living Room AC - Set Mode
-    sequence:
-      - service: script.living_room_ac_send_command
-        data:
-          command: >
-            {% set MODES = {
-              "Cool": "CoolMode",
-              "Money Saver": "MoneySaverMode",
-              "Fan Only": "FanMode",
-            } %} {% set mode_command =
-              MODES[states("input_select.living_room_ac_mode")] |
-              default("Cool") %}
-            {{ mode_command }}
-    mode: single
-    icon: mdi:air-conditioner
   living_room_ac_toggle_power:
     alias: Living Room AC - Toggle Power
     sequence:
@@ -163,7 +149,27 @@ automation:
                 increase_temperature: >
                   {{ states("input_number.living_room_ac_temperature") | int <
                   state_attr("climate.living_room_ac", "temperature") | int }}
-
+  - id: living_room_ac_set_mode
+    alias: Living Room AC - Set Mode
+    description: >
+      Sets the AC mode to the mode specified by input_select.living_room_ac_mode
+    trigger:
+      - platform: state
+        entity_id: input_select.living_room_ac_mode
+    mode: single
+    action:
+      - service: script.living_room_ac_send_command
+        data:
+          command: |
+            {% set MODES = {
+              "Cool": "CoolMode",
+              "Money Saver": "MoneySaverMode",
+              "Fan Only": "FanMode",
+            } %} 
+            {% set mode_command =
+              MODES[states("input_select.living_room_ac_mode")] |
+              default("Cool") %}
+            {{ mode_command }}
 switch:
   - platform: template
     switches:

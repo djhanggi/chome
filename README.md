@@ -81,6 +81,7 @@ Keys should be sorted in the order specified in the .sort-order\*.yaml files.
 ### Home Assistant
 
 - Automate phone alarm and use as sunset time
+- Add detection for when stove is on and unattended
 - Use YAML for dashboards
 - Morse code service
 
@@ -102,11 +103,13 @@ Keys should be sorted in the order specified in the .sort-order\*.yaml files.
 - Migrate Cornell Mail
 - Research free + reputable news providers
 - Research privacy-focused keyboard for Android + iOS
+- RSS tool
 
 ### Bitwarden
 
 - Sort custom fields alphabetically except for predefined order
 - Use hidden fields
+- Bitwarden folder for 'Active' sites for end-of-life help
 
 ### YAML Sorting
 
