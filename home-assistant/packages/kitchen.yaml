@@ -1,48 +1,20 @@
 ---
+homeassistant:
+  customize:
+    automation.turn_off_idle_kitchen_lights:
+      icon: mdi:lightbulb-auto
+
 automation:
-  - id: kitchen_lights_motion_detected
-    alias: Kitchen Lights - Motion Detected
+  - id: turn_off_idle_kitchen_lights
+    alias: Turn Off Idle Kitchen Lights
     mode: single
     trigger:
       - entity_id: binary_sensor.motion_sensor_presence
         platform: state
-        to: "on"
-    action:
-      - service: switch.turn_on
-        target:
-          entity_id: switch.kitchen_lights
-  - id: kitchen_lights_no_motion_detected
-    alias: Kitchen Lights - No Motion Detected
-    mode: single
-    trigger:
-      - entity_id: binary_sensor.motion_sensor_presence
-        platform: state
+        for:
+          minutes: 5
         from: "on"
     action:
       - service: switch.turn_off
         target:
           entity_id: switch.kitchen_lights
-  - id: kitchen_stove_on_with_no_motion
-    alias: Kitchen Stove On with No Motion
-    mode: single
-    trigger:
-      - entity_id: binary_sensor.motion_sensor_presence
-        platform: state
-        from: "on"
-    condition:
-      - condition: numeric_state
-        entity_id: sensor.kitchen_temperature_derivative
-        above: 0.5
-    action:
-      - service: switch.turn_on
-        target:
-          entity_id: switch.kitchen_lights
-      - service: notify.notify
-        data:
-          message: The stove is on!
-
-sensor:
-  - platform: derivative
-    name: kitchen_temperature_derivative
-    source: sensor.motion_sensor_temperature
-    time_window: "00:01:00"
