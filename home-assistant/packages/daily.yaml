@@ -97,6 +97,8 @@ scene:
         state: "on"
       light.bed:
         state: "off"
+      switch.adaptive_lighting_sleep_mode_all_light_bulbs:
+        state: "off"
       switch.sunlight_lamp:
         state: "off"
       switch.monitor:
@@ -138,8 +140,9 @@ script:
           entity_id: input_datetime.morning_start_time
         data:
           time: >
+            {% set minutes = minutes if minutes is defined else 30 %}
             {{ (today_at(states('input_datetime.morning_start_time')) +
-               timedelta(minutes=30)).strftime('%H:%M:%S') }}
+               timedelta(minutes=minutes)).strftime('%H:%M:%S') }}
     icon: mdi:alarm-snooze
 
 automation:
