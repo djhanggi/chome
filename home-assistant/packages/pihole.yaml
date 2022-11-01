@@ -3,10 +3,20 @@ script:
   snooze_pihole:
     alias: Snooze PiHole
     description: Snooze PiHole for 30 seconds
+    icon: mdi:pi-hole
+    fields:
+      seconds:
+        name: Seconds
+        description: How many seconds to snooze for
+        default: false
     sequence:
       - service: pi_hole.disable
+        data:
+          duration: |
+            {% set seconds = seconds if seconds is defined else 30 %}
+            {% set hours = (seconds // 60) // 60 %}
+            {% set minutes = (seconds // 60) % 60 %}
+            {% set seconds = seconds % 60 %}
+            "{{ hours }}:{{minutes}}:{{seconds}}"
         target:
           entity_id: switch.bespin_pihole
-        data:
-          duration: "00:00:30"
-    icon: mdi:pi-hole
