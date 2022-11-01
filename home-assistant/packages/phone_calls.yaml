@@ -1,8 +1,9 @@
 ---
 homeassistant:
   customize:
-    automation.flash_lights_on_silent_phone_ring:
+    automation.notify_phone_at_home:
       icon: mdi:alarm-bell
+
 automation:
   - id: notify_phone_at_home
     alias: Notify Phone at Home

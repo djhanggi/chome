@@ -3,8 +3,8 @@ homeassistant:
   customize:
     automation.bedroom_ac_set_temperature:
       icon: mdi:thermometer
-    automation.bedroom_ac_correct_power_on:
-      icon: mdi:thermometer-check
+    automation.bedroom_ac_set_mode:
+      icon: mdi:air-conditioner
     switch.bedroom_ac:
       icon: mdi:air-conditioner
       friendly_name: Bedroom AC - Switch

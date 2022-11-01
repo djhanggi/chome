@@ -1,8 +1,10 @@
 ---
 homeassistant:
   customize:
-    automation.apple_watch_go_to_sleep:
+    automation.ios_sleep:
       icon: mdi:sleep
+    automation.ios_snooze:
+      icon: mdi:alarm-snooze
 
 automation:
   - id: ios_sleep
