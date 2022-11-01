@@ -13,7 +13,16 @@ automation:
         actionName: iOS Sleep
       event_type: ios.action_fired
     action:
-      service: script.go_to_sleep
+      - service: script.go_to_sleep
+  - id: ios_snooze
+    alias: iOS - Snooze
+    trigger:
+      platform: event
+      event_data:
+        actionName: iOS Snooze
+      event_type: ios.action_fired
+    action:
+      - service: script.snooze_morning_start_time
 
 ios:
   actions:
@@ -25,3 +34,11 @@ ios:
       label:
         color: "#000000"
         text: Sleep
+    - name: iOS Snooze
+      icon:
+        icon: mdi:alarm-snooze
+        color: "#000000"
+      background_color: "#ffffff"
+      label:
+        color: "#000000"
+        text: Snooze

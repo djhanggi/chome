@@ -2,19 +2,20 @@
 script:
   go_to_sleep:
     alias: Go to Sleep
+    icon: mdi:sleep
     fields:
       meditate:
         name: Meditate
-        description: Whether to play meditation sounds or a random sleep sound
+        description: Whether to play meditation sounds instead of a random sleep sound
         default: false
     sequence:
       - service: media_player.volume_set
-        target:
-          entity_id: media_player.bedroom_speaker
         data:
           volume_level: 0.45
-      - service: >
-          {% if meditate %} 
+        target:
+          entity_id: media_player.bedroom_speaker
+      - service: |
+          {% if meditate is defined and meditate %} 
             script.play_random_bedroom_sleep_sound
           {% else %}
             script.spotify_meditate
@@ -26,5 +27,3 @@ script:
       - service: fan.turn_on
         target:
           entity_id: fan.dyson_heater_fan
-    icon: mdi:sleep
-
