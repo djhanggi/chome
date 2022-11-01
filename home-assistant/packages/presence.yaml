@@ -46,10 +46,6 @@ automation:
           entities:
             group.lighting:
               state: "off"
-            climate.living_room_ac:
-              temperature: 75
-            climate.bedroom_ac:
-              temperature: 75
             remote.harmony:
               state: "off"
   - id: return
