@@ -21,6 +21,6 @@ automation:
           message: >
             {% if trigger.id == "shutdown" %}
               Home Assistant is shutting down
-            {% else %}
+            {% elif trigger.id == "start" %}
               Home Assistant has started
             {% endif %}
