@@ -27,3 +27,11 @@ script:
       - service: fan.turn_on
         target:
           entity_id: fan.dyson_heater_fan
+      - service: humidifier.turn_on
+        target:
+          entity_id: humidifier.levoit_humidifier
+      - service: humidifier.set_humidity
+        target:
+          entity_id: humidifier.levoit_humidifier
+        data:
+          humidity: 50
