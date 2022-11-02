@@ -5,6 +5,8 @@ homeassistant:
       icon: mdi:sleep
     automation.ios_snooze:
       icon: mdi:alarm-snooze
+    automation.ios_meditate:
+      icon: mdi:meditation
 
 automation:
   - id: ios_sleep
@@ -25,6 +27,15 @@ automation:
       event_type: ios.action_fired
     action:
       - service: script.snooze_morning_start_time
+  - id: ios_meditate
+    alias: ios_meditate
+    trigger:
+      platform: event
+      event_data:
+        actionName: iOS Meditate
+      event_type: ios.action_fired
+    action:
+      - service: script.spotify_meditate
 
 ios:
   actions:
@@ -44,3 +55,11 @@ ios:
       label:
         color: "#000000"
         text: Snooze
+    - name: iOS Meditate
+      icon:
+        icon: mdi:meditation
+        color: "#000000"
+      background_color: "#ffffff"
+      label:
+        color: "#000000"
+        text: Meditate
