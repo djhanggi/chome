@@ -18,9 +18,16 @@ automation:
     action:
       - service: notify.notify
         data:
+          message: "clear_notification"
+          data:
+            tag: automation.notify_on_system_change
+      - service: notify.notify
+        data:
           message: >
             {% if trigger.id == "shutdown" %}
               Home Assistant is shutting down
             {% elif trigger.id == "start" %}
               Home Assistant has started
             {% endif %}
+          data:
+            tag: automation.notify_on_system_change
