@@ -5,8 +5,10 @@ scene:
     entities:
       fan.dyson_fan:
         state: "on"
+        oscillating: true
       fan.dyson_heater_fan:
         state: "on"
+        oscillating: true
     icon: mdi:home-thermometer
 
 automation:
