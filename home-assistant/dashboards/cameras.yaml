@@ -1,0 +1,23 @@
+---
+views:
+  - title: Cameras
+    type: sidebar
+    icon: mdi:video
+    badges: []
+    cards:
+      - type: grid
+        cards:
+          - type: entities
+            entities:
+              - name: Living Room Camera
+                entity: switch.living_room_cam
+          - name: Living Room Camera
+            type: picture-entity
+            camera_image: camera.living_room
+            camera_view: live
+            entity: camera.living_room
+            show_name: false
+            show_state: false
+        columns: 1
+        square: false
+    theme: Backend-selected
