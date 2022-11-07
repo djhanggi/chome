@@ -15,6 +15,8 @@ running the compose files. Manual setup includes:
   - Google Calendar
   - HACS
     - Adaptive Lighting
+    - Spotcast
+    - VeSync
     - Wyze
   - PiHole
   - Plex
@@ -45,7 +47,6 @@ Keys should be sorted in the order specified in the .sort-order\*.yaml files.
 - zstyle for zsh + ohmyzsh
 - /mnt/{chome,docker} vs. on SSD
 - Docker Networking
-
   - Want to minimize use of host and define manual Docker networks to isolate
     services
   - Add a container to several networks if communication is necessary between
@@ -55,7 +56,6 @@ Keys should be sorted in the order specified in the .sort-order\*.yaml files.
   - Specify hosts for PiHole DNS as source of truth where container/hostnames
     live (or this will be moved to pFsense)
   - Version control hosts file as .conf
-
 - Docker / Pi / NAS Permissions (UID/GID)
   - read-only usually
   - Disable modification of existing files
@@ -80,9 +80,12 @@ Keys should be sorted in the order specified in the .sort-order\*.yaml files.
 
 ### Home Assistant
 
-- Automate phone alarm and use as sunset time
+- Disable camera when not sleeping and home
+- Automate phone alarm and use as sunrise time
+  - Sync to Google Home
+  - Disable morning blinds if earlier than sunrise
+  - Offset from lights
 - Add detection for when stove is on and unattended
-- Use YAML for dashboards
 - Morse code service
 
 ### Miscellaneous

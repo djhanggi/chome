@@ -1,0 +1,38 @@
+---
+script:
+  go_on_vacation:
+    alias: Go on Vacation
+    icon: mdi:airplane-alert
+    mode: single
+    sequence:
+      - service: homeassistant.turn_off
+        data: {}
+        target:
+          entity_id:
+            - automation.away
+            - automation.evening
+            - automation.morning
+            - automation.return
+            - input_boolean.open_blinds_in_morning
+            - light.all_light_bulbs
+            - switch.sunlight_lamp
+            - humidifier.levoit_humidifier
+            - fan.dyson_fan
+            - fan.dyson_heater_fan
+            - climate.bedroom_ac
+            - climate.living_room_ac
+            - remote.harmony
+  return_from_vacation:
+    alias: Return from Vacation
+    icon: mdi:airplane-alert
+    mode: single
+    sequence:
+      - service: homeassistant.turn_on
+        data: {}
+        target:
+          entity_id:
+            - automation.away
+            - automation.evening
+            - automation.morning
+            - automation.return
+            - input_boolean.open_blinds_in_morning
