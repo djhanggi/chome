@@ -38,6 +38,7 @@ automation:
             - light.bedroom_lamp
             - light.bed
             - switch.sunlight_lamp
+            - switch.living_room_cam
             - climate.living_room_ac
             - climate.bedroom_ac
             - remote.harmony
@@ -48,6 +49,9 @@ automation:
               state: "off"
             remote.harmony:
               state: "off"
+      - service: switch.turn_on
+        target:
+          entity_id: switch.living_room_cam
   - id: return
     alias: Return
     description: Turns on entities when returning.
