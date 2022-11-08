@@ -1,0 +1,35 @@
+---
+homeassistant:
+  customize:
+    automation.backup_home_assistant:
+      icon: mdi:bed-single
+
+automation:
+  - id: bedroom_button_press
+    alias: Bedroom Button Press
+    mode: single
+    trigger:
+      - platform: event
+        event_type: deconz_event
+        variables:
+          press_type: |
+            {% if trigger.event.data.event == 1002 %}
+              single_press
+            {% elif trigger.event.data.event == 1004 %}
+              double_press
+            {% elif trigger.event.data.event == 1001 %}
+              long_press
+            {% elif trigger.event.data.event == 1003 %}
+              long_press_end
+            {% endif %}
+    action:
+      - service: homeassistant.turn_on
+        target:
+          entity_id: |
+            {% if press_type == "single_press" %}
+              script.go_to_sleep
+            {% elif press_type == "double_press" %}
+              scene.closed_blinds
+            {% elif press_type == "long_press" %}
+              script.snooze_morning_start_time
+            {% endif %}
