@@ -80,6 +80,11 @@ Keys should be sorted in the order specified in the .sort-order\*.yaml files.
 
 ### Home Assistant
 
+- Bedroom Button
+  - Calculate how long long press is held to increase snooze time
+  - Toggle between open & closed blinds
+    - Only not while sleeping
+- Add sleep detection
 - Disable camera when not sleeping and home
 - Automate phone alarm and use as sunrise time
   - Sync to Google Home
