@@ -3,6 +3,8 @@ homeassistant:
   customize:
     automation.notify_ups_change:
       icon: mdi:battery-alert
+    automation.ups_shutdown:
+      icon: mdi:battery-alert
 
 automation:
   - id: notify_ups_change

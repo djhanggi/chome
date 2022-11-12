@@ -3,7 +3,7 @@ homeassistant:
   customize:
     automation.set_morning_start_time_to_sunrise:
       icon: mdi:weather-sunset-up
-    automation.sync_next_alarm_time:
+    automation.sync_next_alarm_time_from_scarif:
       icon: mdi:phone-clock
 
 input_datetime:
