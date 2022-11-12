@@ -192,7 +192,7 @@ climate:
     unique_id: living_room_ac
     name: Living Room AC
     heater: switch.living_room_ac
-    target_sensor: sensor.living_room_sonoff_temperature
+    target_sensor: sensor.sonoff_temperature_living_room_temperature
     min_temp: 60
     max_temp: 90
     ac_mode: true
