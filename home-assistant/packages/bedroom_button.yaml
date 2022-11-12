@@ -1,7 +1,7 @@
 ---
 homeassistant:
   customize:
-    automation.backup_home_assistant:
+    automation.bedroom_button_press:
       icon: mdi:bed-single
 
 automation:
