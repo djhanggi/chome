@@ -3,7 +3,7 @@ homeassistant:
   customize:
     automation.notify_ups_change:
       icon: mdi:battery-alert
-    automation.ups_shutdown:
+    automation.ups_triggered_shutdown:
       icon: mdi:battery-alert
 
 automation:
@@ -22,7 +22,7 @@ automation:
             {% else %}
               UPS is online
             {% endif %}
-  - id: ups_shutdown
+  - id: ups_triggered_shutdown
     alias: UPS-Triggered Shut-Down
     trigger:
       - entity_id: sensor.ups_battery_charge
