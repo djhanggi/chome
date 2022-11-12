@@ -9,7 +9,7 @@ automation:
     alias: Turn Off Idle Kitchen Lights
     mode: single
     trigger:
-      - entity_id: binary_sensor.motion_sensor_presence
+      - entity_id: binary_sensor.aqara_motion_kitchen
         platform: state
         for:
           minutes: 5
