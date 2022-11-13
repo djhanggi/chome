@@ -1,0 +1,29 @@
+---
+homeassistant:
+  customize:
+    automation.using_desk_chair:
+      icon: mdi:chair-rolling
+
+automation:
+  - id: using_desk_chair
+    alias: Using Desk Chair
+    mode: single
+    trigger:
+      - entity_id: binary_sensor.aqara_vibration_desk_chair
+        platform: state
+        to: "on"
+    condition:
+      - condition: template
+        value_template: >
+          {% set daytime_timestamp = states("scene.daytime") | as_timestamp %}
+          {% set evening_timestamp = states("scene.evening") | as_timestamp %}
+          {% set sleep_timestamp = state_attr("script.go_to_sleep",
+          "last_triggered") | as_timestamp %} {{ daytime_timestamp <
+          evening_timestamp or daytime_timestamp < sleep_timestamp }}
+    action:
+      - service: scene.turn_on
+        target:
+          entity_id: scene.daytime
+      - service: switch.turn_off
+        target:
+          entity_id: switch.living_room_cam
