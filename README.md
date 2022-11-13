@@ -85,6 +85,7 @@ Keys should be sorted in the order specified in the .sort-order\*.yaml files.
   - Toggle between open & closed blinds
     - Only not while sleeping
 - Add sleep detection
+- UPS: Shut down Pi/Docker
 - Disable camera when not sleeping and home
 - Automate phone alarm and use as sunrise time
   - Sync to Google Home
@@ -92,6 +93,7 @@ Keys should be sorted in the order specified in the .sort-order\*.yaml files.
   - Offset from lights
 - Add detection for when stove is on and unattended
 - Morse code service
+- Find my phone (unsilence phone and ring)
 
 ### Miscellaneous
 
