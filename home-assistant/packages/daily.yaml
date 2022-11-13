@@ -103,6 +103,11 @@ scene:
         state: "off"
       switch.monitor:
         state: "on"
+      fan.dyson_fan:
+        state: "on"
+        oscillating: true
+      fan.dyson_heater_fan:
+        state: "off"
     icon: mdi:weather-sunny
   - id: evening
     name: Evening
