@@ -1,0 +1,111 @@
+---
+homeassistant:
+  customize:
+    automation.play_peloton_class:
+      icon: mdi:yoga
+
+script:
+  play_peloton_class:
+    alias: Play Peloton Class
+    icon: mdi:yoga
+    mode: single
+    sequence:
+      - service: script.tv_turn_on
+      - service: androidtv.adb_command
+        data:
+          command: RESUME
+        target:
+          entity_id: media_player.android_tv_hoth
+      - delay:
+          seconds: 1
+      - service: androidtv.adb_command
+        data:
+          command: am force-stop com.onepeloton.callisto
+        target:
+          entity_id: media_player.android_tv_hoth
+      - delay:
+          seconds: 1
+      - service: androidtv.adb_command
+        data:
+          command: >
+            am start -a android.intent.action.VIEW -d -n
+            com.onepeloton.callisto/.MainActivity
+        target:
+          entity_id: media_player.android_tv_hoth
+      - delay:
+          seconds: 10
+      - repeat:
+          sequence:
+            - service: androidtv.adb_command
+              data:
+                command: "{{ repeat.item }}"
+              target:
+                entity_id: media_player.android_tv_hoth
+            - delay:
+                milliseconds: 750
+          for_each:
+            # Navigate to Classes
+            - LEFT
+            - DOWN
+            - CENTER
+            # Navigate to Yoga
+            - RIGHT
+            - CENTER
+            # Navigate to Filters
+            - UP
+            - RIGHT
+            - CENTER
+            # Navigate to Length
+            - DOWN
+            - CENTER
+            # Select 5- and 10-minute classes
+            - CENTER
+            - DOWN
+            - CENTER
+            - BACK
+            # Filter by Not Taken
+            - DOWN
+            - DOWN
+            - DOWN
+            - DOWN
+            - DOWN
+            - DOWN
+            - DOWN
+            - DOWN
+            - DOWN
+            - CENTER
+            # Go back to class page
+            - BACK
+            # Select first class
+            - CENTER
+            # Play first class
+            - CENTER
+
+automation:
+  - id: play_peloton_class
+    alias: Play Peloton Class
+    mode: single
+    trigger:
+      - id: noon
+        platform: time
+        at: "12:00:30"
+      - id: evening
+        platform: time
+        at: input_datetime.evening_start_time
+    condition:
+      - entity_id: person.djhanggi
+        condition: state
+        state: home
+      - entity_id: calendar.daniel_hanggi_braze_com
+        condition: state
+        state: "off"
+      - condition: template
+        value_template: |
+          {% set last_midnight = now().replace(hour=0, minute=0, second=0) | as_timestamp %}
+          {% set last_peloton = state_attr("script.play_peloton_class",
+          "last_triggered") | as_timestamp %} 
+          {{ last_peloton < last_midnight }}
+    action:
+      - service: script.turn_on
+        target:
+          entity_id: script.play_peloton_class
