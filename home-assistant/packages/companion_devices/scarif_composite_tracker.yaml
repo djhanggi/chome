@@ -6,7 +6,8 @@ homeassistant:
   
 logbook:
   exclude:
-    - automation.update_scarif_composite_tracker
+    entities:
+      - automation.update_scarif_composite_tracker
 
 automation:
   - id: update_scarif_composite_tracker
