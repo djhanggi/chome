@@ -1,0 +1,84 @@
+---
+logbook:
+  exclude:
+    entities:
+      - sensor.relaxation_sound_content_id
+
+input_select:
+  relaxation_sound:
+    name: Relaxation Sound
+    icon: mdi:meditation
+    initial: River
+    options:
+      - Country
+      - Fireplace
+      - Ocean
+      - Rain
+      - Rainforest
+      - River
+      - Thunderstorm
+      - Waterfall
+      - Wind
+
+template:
+  - sensor:
+      - unique_id: relaxation_sound_content_id
+        name: Relaxation Sound Content ID
+        icon: mdi:meditation
+        state: |
+          {% set SOUNDS = {
+              "Country":
+          "https://storage.googleapis.com/relaxation-sounds/country_night_3600.mp3",
+              "Fireplace":
+          "https://storage.googleapis.com/relaxation-sounds/fireplace_3600.mp3",
+              "Forest":
+          "https://storage.googleapis.com/relaxation-sounds/forest_3600.mp3",
+              "Ocean":
+          "https://storage.googleapis.com/relaxation-sounds/ocean_3600.mp3",
+              "Rain":
+          "https://storage.googleapis.com/relaxation-sounds/rain_3600.mp3",
+              "Rainforest":
+          "https://storage.googleapis.com/relaxation-sounds/rainforest_600.m4a",
+              "River":
+          "https://storage.googleapis.com/relaxation-sounds/river_3600.mp3",
+              "Thunderstorm":
+          "https://storage.googleapis.com/relaxation-sounds/thunderstorm_3600.mp3",
+              "Waterfall":
+          "https://storage.googleapis.com/relaxation-sounds/waterfall_600.m4a",
+              "Wind":
+          "https://storage.googleapis.com/relaxation-sounds/wind_600.m4a",
+            } %}
+          {% set state = states("input_select.relaxation_sound") %}
+          {{ SOUNDS[state] }}
+
+script:
+  play_random_relaxation_sound:
+    alias: Play Random Relaxation Sound
+    icon: mdi:meditation
+    fields:
+      media_player_id:
+        description: The entity_id of the media_player
+    sequence:
+      - service: input_select.select_option
+        data:
+          option: |
+            {{ state_attr("input_select.relaxation_sound", "options") | random }}
+        target:
+          entity_id: input_select.relaxation_sound
+      - service: script.play_relaxation_sound
+        data:
+          media_player_id: "{{ media_player_id }}"
+  play_relaxation_sound:
+    alias: Play Relaxation Sound
+    icon: mdi:meditation
+    fields:
+      media_player_id:
+        description: The entity_id of the media_player
+    sequence:
+      - service: media_player.play_media
+        data:
+          media_content_id: |
+            {{ states("sensor.relaxation_sound_content_id") }}
+          media_content_type: music
+        target:
+          entity_id: "{{ media_player_id }}"

@@ -1,0 +1,48 @@
+---
+script:
+  tv_turn_on:
+    alias: TV - Turn On
+    icon: mdi:power-on
+    sequence:
+      - service: remote.send_command
+        data:
+          command: PowerOn
+          device: !secret harmony_lg_tv_device_id
+        target:
+          entity_id: remote.harmony
+      - service: remote.turn_on
+        target:
+          entity_id: remote.harmony
+  tv_turn_off:
+    alias: TV - Turn Off
+    icon: mdi:power-off
+    sequence:
+      - service: remote.send_command
+        data:
+          command: PowerOff
+          device: !secret harmony_lg_tv_device_id
+        target:
+          entity_id: remote.harmony
+      - service: remote.turn_off
+        target:
+          entity_id: remote.harmony
+  tv_volume_change:
+    alias: TV Volume Change
+    icon: mdi:volume-minus
+    mode: queued
+    fields:
+      delta:
+        description: Integer amount to change [-100,100]
+    sequence:
+      - service: remote.send_command
+        data:
+          command: |
+            {% if delta > 0 %}
+              VolumeUp
+            {% else %}
+              VolumeDown
+            {% endif %}
+          device: !secret harmony_lg_tv_device_id
+          num_repeats: "{{ delta | abs }}"
+        target:
+          entity_id: remote.harmony
