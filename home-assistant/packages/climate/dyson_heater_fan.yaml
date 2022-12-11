@@ -3,15 +3,15 @@ homeassistant:
   customize:
     automation.dyson_heater_fan_set_speed:
       icon: mdi:speedometer
-    automation.dyson_heater_fan_oscillate_on_start:
-      icon: mdi:rotate-360
 
 logbook:
   exclude:
     entities:
       - input_boolean.dyson_heater_fan_power
       - input_boolean.dyson_heater_fan_oscillating
+      - input_number.dyson_heater_fan_speed
       - input_boolean.dyson_heater_fan_target_speed
+      - input_select.dyson_heater_fan_next_power_command
       - script.dyson_heater_fan_send_command
       - script.dyson_heater_fan_toggle_power
       - script.dyson_heater_fan_toggle_oscillate

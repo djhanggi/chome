@@ -1,0 +1,35 @@
+---
+homeassistant:
+  customize:
+    automation.oscillate_fans_on_start:
+      icon: mdi:fan
+
+automation:
+  - id: oscillate_fans_on_start
+    alias: Oscillate Fans on Start
+    mode: single
+    trigger:
+      - entity_id:
+          - fan.dyson_fan
+          - fan.dyson_heater_fan
+        platform: state
+        from: "off"
+        to: "on"
+    action:
+      - service: fan.oscillate
+        data:
+          oscillating: true
+        target:
+          entity_id: "{{ trigger.entity_id }}"
+
+scene:
+  - id: fans_on
+    name: Fans On
+    icon: mdi:home-thermometer
+    entities:
+      fan.dyson_fan:
+        state: "on"
+        oscillating: true
+      fan.dyson_heater_fan:
+        state: "on"
+        oscillating: true

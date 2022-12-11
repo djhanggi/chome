@@ -3,8 +3,6 @@ homeassistant:
   customize:
     automation.living_room_ac_set_temperature:
       icon: mdi:thermometer
-    automation.living_room_ac_correct_power_on:
-      icon: mdi:thermometer-check
     automation.living_room_ac_set_mode:
       icon: mdi:air-conditioner
     switch.living_room_ac:
@@ -14,9 +12,12 @@ homeassistant:
 logbook:
   exclude:
     entities:
+      - input_boolean.living_room_ac_power
+      - input_number.living_room_ac_temperature
       - script.living_room_ac_send_command
       - script.living_room_ac_toggle_power
-      - script.living_room_ac_toggle_temperature
+      - automation.living_room_ac_toggle_temperature
+      - automation.living_room_ac_set_mode
       - switch.living_room_ac
 
 input_boolean:

@@ -12,9 +12,12 @@ homeassistant:
 logbook:
   exclude:
     entities:
+      - input_boolean.bedroom_ac_power
+      - input_number.bedroom_ac_temperature
       - script.bedroom_ac_send_command
       - script.bedroom_ac_toggle_power
-      - script.bedroom_ac_toggle_temperature
+      - automation.bedroom_ac_toggle_temperature
+      - automation.bedroom_ac_set_mode
       - switch.bedroom_ac
 
 input_boolean:
