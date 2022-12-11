@@ -14,6 +14,7 @@ logbook:
       - light.ceiling_lights
       - light.hallway_lights
       - light.bathroom_lights
+      - sensor.turned_on_lights
 
 group:
   lighting:

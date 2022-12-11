@@ -1,6 +1,6 @@
 ---
 homeassistant:
-  customize: 
+  customize:
     automation.set_morning_start_time_to_sunrise:
       icon: mdi:weather-sunny
 

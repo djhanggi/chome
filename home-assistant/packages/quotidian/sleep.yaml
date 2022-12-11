@@ -16,10 +16,11 @@ script:
           {% if meditate is defined and meditate %} 
             script.spotify_meditate
           {% else %}
-            script.play_random_relaxation_sound
+            script.play_relaxation_sound
           {% endif %}
         data:
           media_player_id: media_player.bedroom_speaker
+          randomize: true
 
 scene:
   - id: sleep

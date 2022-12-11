@@ -1,8 +1,14 @@
 ---
 homeassistant:
   customize:
-    automation.presence_aware_camera:
+    automation.presence_camera:
       icon: mdi:camera-marker
+
+logbook:
+  exclude:
+    entities:
+      - camera.living_room
+      - automation.presence_camera
 
 automation:
   - id: presence_camera

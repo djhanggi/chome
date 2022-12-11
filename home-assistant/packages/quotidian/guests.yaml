@@ -4,12 +4,28 @@ script:
     alias: Setup Guest
     icon: mdi:airplane-alert
     mode: single
+    fields:
+      reset:
+        description: Resets HA back as if there were no guest
+        default: false
     sequence:
-      - service: homeassistant.turn_off
+      - service: >
+          {% if reset | default(false) %}
+            homeassistant.turn_on
+          {% else %}
+            homeassistant.turn_off
+          {% endif %}
         target:
           entity_id:
+            - automation.daytime
+            - automation.evening
+            - automation.play_peloton_class
+            - automation.presence_bathroom_lights
+            - automation.presence_desk_chair
+            - automation.presence_kitchen_lights
             - automation.set_morning_start_time_to_sunrise
-            - automation.turn_off_idle_bathroom_lights
+            - automation.shut_off_desk_lamp
+            - switch.living_room_cam
       - service: input_datetime.set_datetime
         target:
           entity_id: input_datetime.morning_start_time
@@ -20,8 +36,6 @@ script:
     icon: mdi:airplane-alert
     mode: single
     sequence:
-      - service: homeassistant.turn_on
-        target:
-          entity_id:
-            - automation.set_morning_start_time_to_sunrise
-            - automation.turn_off_idle_bathroom_lights
+      - service: script.setup_guest
+        data:
+          reset: true

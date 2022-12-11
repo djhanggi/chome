@@ -3,20 +3,22 @@ homeassistant:
   customize:
     automation.away:
       icon: mdi:location-exit
-    automation.reset_scene_return:
-      icon: mdi:cancel
     automation.return:
       icon: mdi:location-enter
+    automation.reset_scene_return:
+      icon: mdi:cancel
     scene.away_return_scene:
       friendly_name: Away - Return Scene
       icon: mdi:location-enter
+
 automation:
   - id: away
     alias: Away
     mode: single
     trigger:
-      - entity_id: person.djhanggi
+      - id: presence
         platform: state
+        entity_id: person.djhanggi
         from: home
         to: not_home
     variables:
@@ -25,10 +27,13 @@ automation:
         - switch.living_room_cam
         - remote.harmony
     action:
-      - service: scene.create
-        data:
-          scene_id: away_return_scene
-          snapshot_entities: "{{ light_entities + non_light_entities }}"
+      - if:
+          - '{{ trigger.id == "presence" }}'
+        then:
+          - service: scene.create
+            data:
+              scene_id: away_return_scene
+              snapshot_entities: "{{ light_entities + non_light_entities }}"
       - service: scene.apply
         data:
           entities: |
@@ -43,8 +48,8 @@ automation:
     alias: Return
     mode: single
     trigger:
-      - entity_id: person.djhanggi
-        platform: state
+      - platform: state
+        entity_id: person.djhanggi
         from: not_home
         to: home
     action:
