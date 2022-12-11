@@ -1,0 +1,28 @@
+---
+homeassistant:
+  customize:
+    automation.using_desk_chair:
+      icon: mdi:chair-rolling
+
+automation:
+  - id: using_desk_chair
+    alias: Using Desk Chair
+    mode: single
+    trigger:
+      - entity_id: binary_sensor.aqara_vibration_desk_chair
+        platform: state
+        to: "on"
+    condition:
+      - condition: state
+        entity_id: binary_sensor.asleep
+        state: "on"
+    action:
+      - service: scene.turn_on
+        target:
+          entity_id: scene.daytime
+      - service: switch.turn_off
+        target:
+          entity_id: switch.living_room_cam
+      - service: switch.turn_on
+        target:
+          entity_id: switch.desk_lamp

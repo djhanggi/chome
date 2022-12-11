@@ -1,0 +1,41 @@
+---
+homeassistant:
+  customize:
+    automation.presence_aware_kitchen_lights:
+      icon: mdi:lightbulb-auto
+
+sensor:
+  - name: Kitchen Temperature Derivative
+    platform: derivative
+    source: sensor.aqara_temperature_kitchen_temperature
+    time_window: "00:05:00"
+    unit_time: min
+
+automation:
+  - id: presence_aware_kitchen_lights
+    alias: Presence-Aware Kitchen Lights
+    mode: single
+    trigger:
+      - id: enter
+        entity_id: binary_sensor.aqara_motion_kitchen
+        platform: state
+        to: "on"
+      - id: exit
+        entity_id: binary_sensor.aqara_motion_kitchen
+        platform: state
+        for:
+          minutes: 5
+        from: "on"
+    condition:
+      - condition: template
+        value_template: |
+          {{ states("sensor.daytime_hours") or trigger.id != "enter" }}
+    action:
+      - service: |
+          {% if trigger.id == "enter" %}
+            homeassistant.turn_on
+          {% elif trigger.id == "exit" %}
+            homeassistant.turn_off
+          {% endif %}
+        target:
+          entity_id: switch.kitchen_lights

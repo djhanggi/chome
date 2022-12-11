@@ -1,0 +1,34 @@
+---
+homeassistant:
+  customize:
+    automation.presence_aware_bathroom_lights:
+      icon: mdi:lightbulb-auto
+    
+automation:
+  - id: presence_aware_bathroom_lights
+    alias: Presence-Aware Bathroom Lights
+    mode: single
+    trigger:
+      - id: enter
+        entity_id: binary_sensor.aqara_motion_bathroom
+        platform: state
+        to: "on"
+      - id: exit
+        entity_id: binary_sensor.aqara_motion_bathroom
+        platform: state
+        for:
+          minutes: 5
+        from: "on"
+    condition:
+      - condition: template
+        value_template: |
+          {{ not is_state("binary_sensor.asleep", "on") or trigger.id != "enter" }}
+    action:
+      - service: |
+          {% if trigger.id == "enter" %}
+            homeassistant.turn_on
+          {% elif trigger.id == "exit" %}
+            homeassistant.turn_off
+          {% endif %}
+        target:
+          entity_id: light.bathroom_lights
