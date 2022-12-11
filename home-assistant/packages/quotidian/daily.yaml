@@ -1,182 +1,29 @@
 ---
 homeassistant:
   customize:
-    sensor.daytime_hours:
-      icon: mdi:brightness-6
     automation.morning:
+      icon: mdi:weather-sunny
+    automation.daytime:
       icon: mdi:weather-sunny
     automation.evening:
       icon: mdi:weather-sunset
-    automation.set_morning_start_time_to_sunrise:
-      icon: mdi:weather-sunset-up
-
+    
 input_boolean:
   open_blinds_in_morning:
     name: Open Blinds in Morning
     icon: mdi:blinds-open
 
-input_datetime:
-  morning_start_time:
-    name: Morning Start Time
-    has_time: true
-    initial: "07:45:00"
-    icon: mdi:weather-sunset-up
-  evening_start_time:
-    name: Evening Start Time
-    has_time: true
-    initial: "21:30:00"
-    icon: mdi:weather-night
-
-template:
-  - sensor:
-      - unique_id: daytime_hours
-        name: Daytime Hours
-        state: >
-          {{ now().strftime("%H:%M:%S") >=
-          states("input_datetime.morning_start_time") and
-          now().strftime("%H:%M:%S") <
-          states("input_datetime.evening_start_time") }}
-
-scene:
-  - id: "chome_off"
-    name: "CHOME Off"
-    entities:
-      group.lighting:
-        state: "off"
-      switch.monitor:
-        state: "off"
-      fan.dyson_fan:
-        state: "off"
-      fan.dyson_heater_fan:
-        state: "off"
-      climate.living_room_ac:
-        state: "off"
-      climate.bedroom_ac:
-        state: "off"
-      remote.harmony:
-        current_activity: PowerOff
-        state: "off"
-    icon: mdi:power-off
-  - id: morning
-    name: Morning
-    entities:
-      switch.adaptive_lighting_all_light_bulbs:
-        state: "on"
-      light.ceiling_e:
-        state: "on"
-      light.hallway_e:
-        state: "on"
-      light.bathroom_e:
-        state: "on"
-      light.bedroom_lamp:
-        state: "on"
-      light.bed:
-        state: "on"
-      switch.adaptive_lighting_sleep_mode_all_light_bulbs:
-        state: "off"
-      switch.sunlight_lamp:
-        state: "on"
-      switch.monitor:
-        state: "on"
-      fan.dyson_heater_fan:
-        state: "on"
-        oscillating: true
-    icon: mdi:weather-sunset-up
-  - id: daytime
-    name: Daytime
-    entities:
-      switch.adaptive_lighting_all_light_bulbs:
-        state: "on"
-      light.ceiling_e:
-        state: "on"
-      light.ceiling_w:
-        state: "on"
-      light.living_room_lamp:
-        state: "on"
-      light.bathroom_e:
-        state: "on"
-      light.bedroom_lamp:
-        state: "on"
-      light.bed:
-        state: "off"
-      switch.adaptive_lighting_sleep_mode_all_light_bulbs:
-        state: "off"
-      switch.sunlight_lamp:
-        state: "off"
-      switch.monitor:
-        state: "on"
-      fan.dyson_fan:
-        state: "on"
-        oscillating: true
-      fan.dyson_heater_fan:
-        state: "off"
-    icon: mdi:weather-sunny
-  - id: evening
-    name: Evening
-    entities:
-      light.ceiling_lights:
-        state: "off"
-      light.living_room_lamp:
-        state: "on"
-      light.bookshelf:
-        state: "on"
-      light.hallway_lights:
-        state: "off"
-      light.bathroom_lights:
-        state: "off"
-      light.bedroom_lamp:
-        state: "off"
-      light.bed:
-        state: "on"
-      switch.adaptive_lighting_sleep_mode_all_light_bulbs:
-        state: "on"
-      switch.kitchen_lights:
-        state: "off"
-      switch.sunlight_lamp:
-        state: "off"
-      switch.monitor:
-        state: "off"
-    icon: mdi:weather-sunset
-
-script:
-  snooze_morning_start_time:
-    alias: Snooze Morning Start Time
-    sequence:
-      - service: input_datetime.set_datetime
-        target:
-          entity_id: input_datetime.morning_start_time
-        data:
-          time: >
-            {% set minutes = minutes if minutes is defined else 30 %}
-            {{ (today_at(states('input_datetime.morning_start_time')) +
-               timedelta(minutes=minutes)).strftime('%H:%M:%S') }}
-    icon: mdi:alarm-snooze
-
 automation:
-  - id: set_morning_start_time_to_sunrise
-    alias: Set Morning Start Time to Sunrise
-    trigger:
-      - platform: time
-        at: input_datetime.evening_start_time
-    action:
-      - service: input_datetime.set_datetime
-        target:
-          entity_id: input_datetime.morning_start_time
-        data:
-          time: >-
-            {{ as_timestamp(state_attr("sun.sun", "next_rising")) |
-            timestamp_custom("%H:%M") }}
-    mode: single
-
   - id: morning
     alias: Morning
-    description: Applies morning scenes at Morning Start Time.
+    mode: single
     trigger:
-      - platform: time
-        at: input_datetime.morning_start_time
+      - platform: state
+        entity_id: sensor.phase_of_day
+        to: Morning
     condition:
-      - condition: state
-        entity_id: person.djhanggi
+      - entity_id: person.djhanggi
+        condition: state
         state: home
     action:
       - scene: scene.morning
@@ -184,27 +31,116 @@ automation:
           - '{{ is_state("input_boolean.open_blinds_in_morning", "on") }}'
         then:
           - scene: scene.ajar_blinds
-      - service: media_player.volume_set
-        target:
-          entity_id: media_player.bedroom_speaker
-        data:
-          volume_level: 0.45
       - service: script.spotify_meditate
+        data:
+          media_player_id: media_player.bedroom_speaker
+  - id: daytime
+    alias: Daytime
     mode: single
-  - id: evening
-    alias: Evening
-    description: Applies evening scenes at Evening Start Time.
     trigger:
-      - platform: time
-        at: input_datetime.evening_start_time
+      - platform: state
+        entity_id: sensor.phase_of_day
+        to: Daytime
     condition:
-      - condition: state
-        entity_id: person.djhanggi
+      - entity_id: person.djhanggi
+        condition: state
         state: home
     action:
-      - scene: scene.closed_blinds
+      - scene: scene.daytime
+  - id: evening
+    alias: Evening
+    mode: single
+    trigger:
+      - platform: state
+        entity_id: sensor.phase_of_day
+        to: Evening
+    condition:
+      - entity_id: person.djhanggi
+        condition: state
+        state: home
+    action:
       - service: homeassistant.turn_off
         target:
           entity_id: group.lighting
       - scene: scene.evening
-    mode: single
+      - scene: scene.closed_blinds
+
+scene:
+  - id: morning
+    name: Morning
+    icon: mdi:weather-sunset-up
+    entities:
+      light.bed:
+        state: "on"
+      light.bedroom_lamp:
+        state: "on"
+      light.ceiling_e:
+        state: "on"
+      light.hallway_e:
+        state: "on"
+      switch.adaptive_lighting_all_light_bulbs:
+        state: "on"
+      switch.adaptive_lighting_sleep_mode_all_light_bulbs:
+        state: "off"
+      switch.monitor:
+        state: "on"
+      switch.sunlight_lamp:
+        state: "on"
+      media_player.bedroom_speaker:
+        state: "idle"
+        volume_level: 0.45
+  - id: daytime
+    name: Daytime
+    icon: mdi:weather-sunny
+    entities:
+      fan.dyson_fan:
+        state: "on"
+        oscillating: true
+      fan.dyson_heater_fan:
+        state: "off"
+      light.bed:
+        state: "off"
+      light.bedroom_lamp:
+        state: "on"
+      light.ceiling_e:
+        state: "on"
+      light.ceiling_w:
+        state: "on"
+      light.living_room_lamp:
+        state: "on"
+      switch.adaptive_lighting_all_light_bulbs:
+        state: "on"
+      switch.adaptive_lighting_sleep_mode_all_light_bulbs:
+        state: "off"
+      switch.monitor:
+        state: "on"
+      switch.sunlight_lamp:
+        state: "off"
+  - id: evening
+    name: Evening
+    icon: mdi:weather-sunset
+    entities:
+      light.bed:
+        state: "on"
+      light.bedroom_lamp:
+        state: "off"
+      light.bookshelf:
+        state: "on"
+      light.ceiling_lights:
+        state: "off"
+      light.hallway_lights:
+        state: "off"
+      light.living_room_lamp:
+        state: "on"
+      switch.adaptive_lighting_sleep_mode_all_light_bulbs:
+        state: "on"
+      switch.monitor:
+        state: "off"
+      switch.sunlight_lamp:
+        state: "off"
+      fan.dyson_heater_fan:
+        state: "on"
+        oscillating: true
+      humidifier.levoit_humidifier:
+        state: "on"
+        humidity: 50

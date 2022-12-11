@@ -5,24 +5,30 @@ homeassistant:
       icon: mdi:chair-rolling
 
 automation:
-  - id: using_desk_chair
-    alias: Using Desk Chair
+  - id: presence_desk_chair
+    alias: Presence - Desk Chair
     mode: single
     trigger:
       - entity_id: binary_sensor.aqara_vibration_desk_chair
         platform: state
         to: "on"
-    condition:
-      - condition: state
-        entity_id: binary_sensor.asleep
-        state: "on"
     action:
-      - service: scene.turn_on
-        target:
-          entity_id: scene.daytime
-      - service: switch.turn_off
-        target:
-          entity_id: switch.living_room_cam
-      - service: switch.turn_on
-        target:
-          entity_id: switch.desk_lamp
+      - if:
+          - '{{ is_state("sensor.phase_of_day", "Morning") }}'
+        then:
+          - service: scene.turn_on
+            target:
+              entity_id: scene.daytime
+          - service: switch.turn_off
+            target:
+              entity_id: switch.living_room_cam
+      - if:
+          - condition: template
+            value_template: |
+              {% set last_desk_lamp_time = states("sensor.last_desk_lamp_timestamp") %}
+              {% set last_midnight = now().replace(hour=0, minute=0, second=0) | as_timestamp %}
+              {{ last_desk_lamp_time == "unknown" or last_desk_lamp_time < last_midnight }}
+        then:
+          - service: switch.turn_on
+            target:
+              entity_id: switch.desk_lamp

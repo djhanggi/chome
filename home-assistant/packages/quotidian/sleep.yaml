@@ -10,11 +10,8 @@ script:
           Whether to play meditation sounds instead of a random sleep sound
         default: false
     sequence:
-      - service: media_player.volume_set
-        data:
-          volume_level: 0.45
-        target:
-          entity_id: media_player.bedroom_speaker
+      - scene: scene.sleep
+      - service: script.tv_turn_off
       - service: |
           {% if meditate is defined and meditate %} 
             script.spotify_meditate
@@ -23,31 +20,26 @@ script:
           {% endif %}
         data:
           media_player_id: media_player.bedroom_speaker
-      - service: scene.turn_on
-        target:
-          entity_id: scene.chome_off
-      - service: script.tv_turn_off
-      - service: switch.turn_on
-        target:
-          entity_id: switch.living_room_cam
-      - service: fan.turn_on
-        target:
-          entity_id: fan.dyson_heater_fan
-      - service: humidifier.turn_on
-        target:
-          entity_id: humidifier.levoit_humidifier
-      - service: humidifier.set_humidity
-        target:
-          entity_id: humidifier.levoit_humidifier
-        data:
-          humidity: 50
 
-template:
-  - binary_sensor:
-      - unique_id: asleep
-        name: Asleep
-        state: |
-          {% set daytime_timestamp = states("scene.daytime") | as_timestamp %}
-          {% set sleep_timestamp = state_attr("script.go_to_sleep",
-          "last_triggered") | as_timestamp %} 
-          {{ daytime_timestamp < sleep_timestamp }}
+scene:
+  - id: sleep
+    name: Sleep
+    icon: mdi:sleep
+    entities:
+      input_boolean.is_sleeping:
+        state: "on"
+      fan.dyson_heater_fan:
+        state: "on"
+        oscillating: true
+      group.lighting:
+        state: "off"
+      humidifier.levoit_humidifier:
+        state: "on"
+        humidity: 50
+      media_player.bedroom_speaker:
+        state: "idle"
+        volume_level: 0.45
+      remote.harmony:
+        state: "off"
+      switch.adaptive_lighting_sleep_mode_all_light_bulbs:
+        state: "on"

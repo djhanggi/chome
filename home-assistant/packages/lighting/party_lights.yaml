@@ -1,8 +1,6 @@
 ---
 homeassistant:
   customize:
-    automation.reset_scene_before_party_lights:
-      icon: mdi:cancel
     switch.party_lights:
       icon: mdi:party-popper
     scene.before_party_lights:
@@ -15,7 +13,6 @@ logbook:
       - input_boolean.party_lights_on
       - script.party_lights_animation
       - script.apply_party_lights_scene
-      - automation.reset_scene_before_party_lights
 
 input_boolean:
   party_lights_on:
@@ -86,21 +83,6 @@ script:
           transition: 0.1
     icon: mdi:party-popper
 
-automation:
-  - id: reset_scene_before_party_lights
-    alias: Reset scene.before_party_lights
-    mode: single
-    trigger:
-      - platform: homeassistant
-        event: start
-    action:
-      - service: scene.create
-        data:
-          scene_id: before_party_lights
-          entities:
-            automation.reset_scene_before_party_lights:
-              state: "on"
-
 switch:
   - platform: template
     switches:
@@ -138,6 +120,9 @@ switch:
           - service: scene.turn_on
             target:
               entity_id: scene.before_party_lights
-          - service: automation.trigger
-            target:
-              entity_id: automation.reset_scene_before_party_lights
+          - service: scene.create
+            data:
+              scene_id: before_party_lights
+              entities:
+                switch.party_lights:
+                  state: "off"

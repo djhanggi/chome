@@ -22,6 +22,7 @@ group:
       - light.all_light_bulbs
       - switch.kitchen_lights
       - switch.sunlight_lamp
+      - switch.desk_lamp
 
 light:
   - platform: group
@@ -56,3 +57,12 @@ light:
     entities:
       - light.bathroom_e
       - light.bathroom_w
+
+template:
+  - sensor:
+      - unique_id: turned_on_lights
+        name: Turned On Lights
+        state: >
+          {% set light_bulbs_on = expand('light.all_light_bulbs') | selectattr('state', 'eq', 'on') %}
+          {{ light_bulbs_on | map(attribute='entity_id') | list | to_json }}
+

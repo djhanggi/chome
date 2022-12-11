@@ -1,0 +1,36 @@
+---
+homeassistant:
+  customize:
+    automation.presence_aware_camera:
+      icon: mdi:camera-marker
+
+automation:
+  - id: presence_camera
+    alias: Presence - Camera
+    mode: single
+    trigger:
+      - id: away
+        entity_id: person.djhanggi
+        platform: state
+        to: away
+      - id: home
+        entity_id: person.djhanggi
+        platform: state
+        to: home
+      - id: sleeping
+        entity_id: input_boolean.is_sleeping
+        platform: state
+        to: "on"
+      - id: daytime
+        entity_id: sensor.phase_of_day
+        platform: state
+        to: Daytime
+    action:
+      - service: |
+          {% if trigger.id == "away" or trigger.id == "sleeping" %}
+            switch.turn_on
+          {% else %}
+            switch.turn_off
+          {% endif %}
+        target:
+          entity_id: switch.living_room_cam
