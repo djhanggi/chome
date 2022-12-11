@@ -1,7 +1,7 @@
 ---
 script:
   tv_turn_on:
-    alias: TV - Turn nn
+    alias: TV - Turn on
     icon: mdi:power-on
     sequence:
       - service: remote.send_command
