@@ -80,6 +80,24 @@ Keys should be sorted in the order specified in the .sort-order\*.yaml files.
 
 ### Home Assistant
 
+- Daily Helpers
+  - Next Alarm
+  - Morning
+  - Woken Up
+  - Daytime
+  - Evening
+  - Sleep
+  - Is Asleep
+  - Backup Time / "Server Time"
+  - Calendar in use
+  - Latest Midnight
+  - Recent script runs (sleep, peloton)
+  - #   - Backup Time / "Server Time"
+  - #   - Recent script runs (sleep, peloton)
+  - #   - Next Alarm -> Own package
+
+- Custom Jinja filter to convert seconds into time string
+- Reorganized daily package and add utilities for time
 - Dyson Heater Fan - Heat Mode
 - Bedroom Button
   - Calculate how long long press is held to increase snooze time

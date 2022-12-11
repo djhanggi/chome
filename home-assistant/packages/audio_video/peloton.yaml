@@ -90,13 +90,14 @@ automation:
         platform: time
         at: "12:00:30"
       - id: evening
-        platform: time
-        at: input_datetime.evening_start_time
+        platform: state
+        entity_id: sensor.phase_of_day
+        to: Evening
     condition:
       - entity_id: person.djhanggi
         condition: state
         state: home
-      - entity_id: calendar.daniel_hanggi_braze_com
+      - entity_id: binary_sensor.daniel_hanggi_braze_com
         condition: state
         state: "off"
       - condition: template
