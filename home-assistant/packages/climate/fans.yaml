@@ -21,15 +21,3 @@ automation:
           oscillating: true
         target:
           entity_id: "{{ trigger.entity_id }}"
-
-scene:
-  - id: fans_on
-    name: Fans On
-    icon: mdi:home-thermometer
-    entities:
-      fan.dyson_fan:
-        state: "on"
-        oscillating: true
-      fan.dyson_heater_fan:
-        state: "on"
-        oscillating: true
