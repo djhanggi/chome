@@ -9,25 +9,25 @@ automation:
     alias: Notify on System Change
     mode: single
     trigger:
-      - platform: homeassistant
-        id: shutdown
+      - id: shutdown
+        platform: homeassistant
         event: shutdown
-      - platform: homeassistant
-        id: start
+      - id: start
+        platform: homeassistant
         event: start
     action:
       - service: notify.notify
         data:
-          message: "clear_notification"
           data:
             tag: automation.notify_on_system_change
+          message: clear_notification
       - service: notify.notify
         data:
-          message: >
+          data:
+            tag: automation.notify_on_system_change
+          message: |
             {% if trigger.id == "shutdown" %}
               Home Assistant is shutting down
             {% elif trigger.id == "start" %}
               Home Assistant has started
             {% endif %}
-          data:
-            tag: automation.notify_on_system_change

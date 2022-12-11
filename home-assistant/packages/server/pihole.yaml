@@ -17,6 +17,6 @@ script:
             {% set hours = (seconds // 60) // 60 %}
             {% set minutes = (seconds // 60) % 60 %}
             {% set seconds = seconds % 60 %}
-            "{{ hours }}:{{minutes}}:{{seconds}}"
+            "{{ '%02d' % hours }}:{{ '%02d' % minutes }}:{{ '%02d' % seconds }}"
         target:
           entity_id: switch.bespin_pihole
