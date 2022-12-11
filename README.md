@@ -80,6 +80,7 @@ Keys should be sorted in the order specified in the .sort-order\*.yaml files.
 
 ### Home Assistant
 
+- Dyson Heater Fan - Heat Mode
 - Bedroom Button
   - Calculate how long long press is held to increase snooze time
   - Toggle between open & closed blinds
