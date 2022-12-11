@@ -12,6 +12,7 @@ services:
       - $VOLUME_ROOT/chome/home-assistant/scripts.yaml:/config/scripts.yaml
       - $VOLUME_ROOT/chome/home-assistant/secrets.yaml:/config/secrets.yaml
       - $VOLUME_ROOT/docker/home-assistant/config/:/config/
+      - $VOLUME_ROOT/media/:/media/
     privileged: true
     logging:
       options:
