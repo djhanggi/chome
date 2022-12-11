@@ -1,0 +1,27 @@
+---
+script:
+  setup_guest:
+    alias: Setup Guest
+    icon: mdi:airplane-alert
+    mode: single
+    sequence:
+      - service: homeassistant.turn_off
+        target:
+          entity_id:
+            - automation.set_morning_start_time_to_sunrise
+            - automation.turn_off_idle_bathroom_lights
+      - service: input_datetime.set_datetime
+        target:
+          entity_id: input_datetime.morning_start_time
+        data:
+          time: "09:30:00"
+  send_off_guest:
+    alias: Send off Guest
+    icon: mdi:airplane-alert
+    mode: single
+    sequence:
+      - service: homeassistant.turn_on
+        target:
+          entity_id:
+            - automation.set_morning_start_time_to_sunrise
+            - automation.turn_off_idle_bathroom_lights

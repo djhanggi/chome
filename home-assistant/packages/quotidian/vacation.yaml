@@ -6,7 +6,6 @@ script:
     mode: single
     sequence:
       - service: homeassistant.turn_off
-        data: {}
         target:
           entity_id:
             - automation.away
@@ -28,7 +27,6 @@ script:
     mode: single
     sequence:
       - service: homeassistant.turn_on
-        data: {}
         target:
           entity_id:
             - automation.away

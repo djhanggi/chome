@@ -7,6 +7,8 @@ homeassistant:
       icon: mdi:weather-sunny
     automation.evening:
       icon: mdi:weather-sunset
+    automation.set_morning_start_time_to_sunrise:
+      icon: mdi:weather-sunset-up
 
 input_boolean:
   open_blinds_in_morning:
