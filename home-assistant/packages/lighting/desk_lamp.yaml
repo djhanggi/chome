@@ -1,0 +1,20 @@
+---
+homeassistant:
+  customize:
+    automation.shut_off_desk_lamp:
+      icon: mdi:timer
+
+automation: 
+  - id: shut_off_desk_lamp
+    alias: Shut Off Desk Lamp
+    mode: single
+    trigger:
+      - entity_id: switch.desk_lamp
+        platform: state
+        to: "on"
+        for:
+          minutes: 30
+    action:
+      - service: switch.turn_off
+        target:
+          entity_id: switch.desk_lamp

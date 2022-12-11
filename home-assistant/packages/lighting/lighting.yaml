@@ -1,0 +1,58 @@
+---
+homeassistant:
+  customize:
+    switch.kitchen_lights:
+      icon: mdi:light-switch
+    switch.sunlight_lamp:
+      icon: mdi:weather-sunny
+
+logbook:
+  exclude:
+    entities:
+      - group.lighting
+      - light.all_light_bulbs
+      - light.ceiling_lights
+      - light.hallway_lights
+      - light.bathroom_lights
+
+group:
+  lighting:
+    name: Lighting
+    entities:
+      - light.all_light_bulbs
+      - switch.kitchen_lights
+      - switch.sunlight_lamp
+
+light:
+  - platform: group
+    name: All Light Bulbs
+    unique_id: all_light_bulbs
+    entities:
+      - light.ceiling_e
+      - light.ceiling_w
+      - light.living_room_lamp
+      - light.bookshelf
+      - light.hallway_e
+      - light.hallway_w
+      - light.bathroom_e
+      - light.bathroom_w
+      - light.bedroom_lamp
+      - light.bed
+  - platform: group
+    name: Ceiling Lights
+    unique_id: ceiling_lights
+    entities:
+      - light.ceiling_e
+      - light.ceiling_w
+  - platform: group
+    name: Hallway Lights
+    unique_id: hallway_lights
+    entities:
+      - light.hallway_e
+      - light.hallway_w
+  - platform: group
+    name: Bathroom Lights
+    unique_id: bathroom_lights
+    entities:
+      - light.bathroom_e
+      - light.bathroom_w

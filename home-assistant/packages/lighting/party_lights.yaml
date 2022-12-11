@@ -14,10 +14,12 @@ logbook:
     entities:
       - input_boolean.party_lights_on
       - script.party_lights_animation
+      - script.apply_party_lights_scene
+      - automation.reset_scene_before_party_lights
 
 input_boolean:
   party_lights_on:
-    name: "Party Lights - On"
+    name: Party Lights - On
     initial: off
     icon: mdi:party-popper
 
@@ -85,7 +87,7 @@ script:
     icon: mdi:party-popper
 
 automation:
-  - id: reset_scene_before_party_lights_2
+  - id: reset_scene_before_party_lights
     alias: Reset scene.before_party_lights
     mode: single
     trigger:
