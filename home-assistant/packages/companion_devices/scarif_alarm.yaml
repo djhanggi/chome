@@ -1,51 +1,50 @@
 ---
 homeassistant:
   customize:
-    automation.set_morning_start_time_to_sunrise:
-      icon: mdi:weather-sunset-up
     automation.sync_next_alarm_time_from_scarif:
       icon: mdi:phone-clock
 
 input_datetime:
   next_alarm_time:
     name: Next Alarm Time
-    has_time: true
     icon: mdi:alarm-check
+    has_time: true
 
 script:
   set_alarm_on_scarif:
     alias: Set Alarm On Scarif
+    icon: mdi:alarm-bell
     sequence:
       - service: notify.mobile_app_scarif
         data:
-          message: command_activity
           data:
             channel: Set Alarm
-            timeout: 1
             intent_action: android.intent.action.SET_ALARM
-            intent_extras: >
-              {% set times = states('input_datetime.next_alarm_time').split(':')
-              %}  {% set hours = times[0] %}  {% set minutes = times[1] %}
-              android.intent.extra.alarm.HOUR:{{ hours
-              }},android.intent.extra.alarm.MINUTES:{{ minutes
-              }},android.intent.extra.alarm.SKIP_UI:true
-    icon: mdi:alarm-bell
+            intent_extras: |
+              {% set times = states('input_datetime.next_alarm_time').split(':') %} 
+              {% set hours = times[0] %}  
+              {% set minutes = times[1] %}  
+              android.intent.extra.alarm.HOUR:{{ hours }},
+              android.intent.extra.alarm.MINUTES:{{ minutes }},
+              android.intent.extra.alarm.SKIP_UI:true
+            timeout: 1
+          message: command_activity
 
 automation:
   - id: sync_next_alarm_time_from_scarif
     alias: Sync Next Alarm Time from Scarif
+    mode: restart
     trigger:
-      - platform: state
-        entity_id: sensor.scarif_next_alarm
+      - entity_id: sensor.scarif_next_alarm
+        platform: state
     action:
       - service: input_datetime.set_datetime
-        target:
-          entity_id: input_datetime.next_alarm_time
         data:
-          time: >
+          time: |
             {{
               as_timestamp(states.sensor.scarif_next_alarm.state)
               | timestamp_custom("%H:%M:%S")
               | default("00:00:00", True)
             }}
-    mode: restart
+        target:
+          entity_id: input_datetime.next_alarm_time

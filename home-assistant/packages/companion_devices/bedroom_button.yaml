@@ -29,7 +29,16 @@ automation:
             {% if press_type == "single_press" %}
               script.go_to_sleep
             {% elif press_type == "double_press" %}
-              scene.closed_blinds
+              {% 
+                set curtain_position = 
+                  state_attr("cover.smart_roller_shade_curtain", 
+                    "current_position")
+              %}
+              {% if curtain_position != 0 %}
+                scene.closed_blinds
+              {% else %}
+                scene.open_blinds
+              {% endif %}
             {% elif press_type == "long_press" %}
               script.snooze_morning_start_time
             {% endif %}

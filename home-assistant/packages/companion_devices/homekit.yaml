@@ -15,6 +15,7 @@ homekit:
         - switch.living_room_plant_light
         - switch.bedroom_plant_light
         - switch.sunlight_lamp
+        - switch.desk_lamp
         - cover.smart_roller_shade_curtain
         - climate.living_room_ac
         - climate.bedroom_ac
@@ -30,6 +31,8 @@ homekit:
       switch.bedroom_plant_light:
         type: outlet
       switch.sunlight_lamp:
+        type: outlet
+      switch.desk_lamp:
         type: outlet
       cover.smart_roller_shade_curtain:
         name: Bedroom Blinds

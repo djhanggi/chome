@@ -28,7 +28,7 @@ automation:
     action:
       - service: script.snooze_morning_start_time
   - id: ios_meditate
-    alias: ios_meditate
+    alias: iOS - Meditate
     trigger:
       platform: event
       event_data:
