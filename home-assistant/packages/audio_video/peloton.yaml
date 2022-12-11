@@ -97,7 +97,7 @@ automation:
       - entity_id: person.djhanggi
         condition: state
         state: home
-      - entity_id: binary_sensor.daniel_hanggi_braze_com
+      - entity_id: calendar.daniel_hanggi_braze_com
         condition: state
         state: "off"
       - condition: template

@@ -52,29 +52,25 @@ template:
           {{ SOUNDS[state] }}
 
 script:
-  play_random_relaxation_sound:
-    alias: Play Random Relaxation Sound
-    icon: mdi:meditation
-    fields:
-      media_player_id:
-        description: The entity_id of the media_player
-    sequence:
-      - service: input_select.select_option
-        data:
-          option: |
-            {{ state_attr("input_select.relaxation_sound", "options") | random }}
-        target:
-          entity_id: input_select.relaxation_sound
-      - service: script.play_relaxation_sound
-        data:
-          media_player_id: "{{ media_player_id }}"
   play_relaxation_sound:
     alias: Play Relaxation Sound
     icon: mdi:meditation
     fields:
       media_player_id:
         description: The entity_id of the media_player
+      randomize:
+        description: Whether to randomize input_select.relaxation_sound
+        default: false
     sequence:
+      - if:
+          - '{{ randomize | default(false) }}'
+        then:
+          - service: input_select.select_option
+            data:
+              option: |
+                {{ state_attr("input_select.relaxation_sound", "options") | random }}
+            target:
+              entity_id: input_select.relaxation_sound
       - service: media_player.play_media
         data:
           media_content_id: |

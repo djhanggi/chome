@@ -1,7 +1,7 @@
 ---
 script:
   tv_turn_on:
-    alias: TV - Turn On
+    alias: TV - Turn nn
     icon: mdi:power-on
     sequence:
       - service: remote.send_command
@@ -14,7 +14,7 @@ script:
         target:
           entity_id: remote.harmony
   tv_turn_off:
-    alias: TV - Turn Off
+    alias: TV - Turn off
     icon: mdi:power-off
     sequence:
       - service: remote.send_command
@@ -26,8 +26,8 @@ script:
       - service: remote.turn_off
         target:
           entity_id: remote.harmony
-  tv_volume_change:
-    alias: TV Volume Change
+  tv_change_volume:
+    alias: TV - Change Volume
     icon: mdi:volume-minus
     mode: queued
     fields:
