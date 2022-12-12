@@ -1,10 +1,8 @@
 ---
 homeassistant:
   customize:
-    automation.living_room_ac_set_temperature:
+    automation.living_room_ac_set_temperature_and_mode:
       icon: mdi:thermometer
-    automation.living_room_ac_set_mode:
-      icon: mdi:air-conditioner
     switch.living_room_ac:
       icon: mdi:air-conditioner
       friendly_name: Living Room AC - Switch
@@ -16,8 +14,7 @@ logbook:
       - input_number.living_room_ac_temperature
       - script.living_room_ac_send_command
       - script.living_room_ac_toggle_power
-      - automation.living_room_ac_toggle_temperature
-      - automation.living_room_ac_set_mode
+      - automation.living_room_ac_set_temperature_and_mode
       - switch.living_room_ac
 
 input_boolean:
@@ -126,10 +123,11 @@ script:
     icon: mdi:thermometer
 
 automation:
-  - id: living_room_ac_set_temperature
-    alias: Living Room AC - Set Temperature
+  - id: living_room_ac_set_temperature_and_mode
+    alias: Living Room AC - Set Temperature and Mode
     description: >
-      Sets the AC temperature to the set point of climate.living_room_ac.
+      Sets the AC temperature to the set point of climate.living_room_ac, and
+      the mode to input_select.living_room_ac_mode.
     trigger:
       - platform: state
         entity_id: climate.living_room_ac
@@ -137,6 +135,8 @@ automation:
       - platform: state
         entity_id: input_boolean.living_room_ac_power
         to: "on"
+      - platform: state
+        entity_id: input_select.living_room_ac_mode
     mode: single
     action:
       - repeat:
@@ -150,27 +150,18 @@ automation:
                 increase_temperature: >
                   {{ states("input_number.living_room_ac_temperature") | int <
                   state_attr("climate.living_room_ac", "temperature") | int }}
-  - id: living_room_ac_set_mode
-    alias: Living Room AC - Set Mode
-    description: >
-      Sets the AC mode to the mode specified by input_select.living_room_ac_mode
-    trigger:
-      - platform: state
-        entity_id: input_select.living_room_ac_mode
-    mode: single
-    action:
       - service: script.living_room_ac_send_command
         data:
           command: |
-            {% set MODES = {
-              "Cool": "CoolMode",
-              "Money Saver": "MoneySaverMode",
-              "Fan Only": "FanMode",
-            } %} 
-            {% set mode_command =
-              MODES[states("input_select.living_room_ac_mode")] |
-              default("Cool") %}
-            {{ mode_command }}
+            {% 
+              set MODES = {
+                "Cool": "CoolMode",
+                "Money Saver": "MoneySaverMode",
+                "Fan Only": "FanMode",
+              } 
+            %}
+            {{ MODES[states("input_select.living_room_ac_mode")] | default("Cool") }}
+
 switch:
   - platform: template
     switches:
