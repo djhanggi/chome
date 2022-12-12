@@ -12,7 +12,7 @@ input_datetime:
 
 script:
   set_alarm_on_scarif:
-    alias: Set Alarm On Scarif
+    alias: Set Alarm on Scarif
     icon: mdi:alarm-bell
     sequence:
       - service: notify.mobile_app_scarif

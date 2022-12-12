@@ -12,8 +12,8 @@ logbook:
       - sensor.last_desk_lamp_timestamp
 
 automation:
-  - id: shut_off_desk_lamp
-    alias: Shut Off Desk Lamp
+  - id: turn_off_desk_lamp
+    alias: Turn off Desk Lamp
     mode: single
     trigger:
       - entity_id: switch.desk_lamp

@@ -5,8 +5,6 @@ homeassistant:
       icon: mdi:location-exit
     automation.return:
       icon: mdi:location-enter
-    automation.reset_scene_return:
-      icon: mdi:cancel
     scene.away_return_scene:
       friendly_name: Away - Return Scene
       icon: mdi:location-enter
@@ -22,7 +20,7 @@ automation:
         from: home
         to: not_home
     variables:
-      light_entities: '{{ states("sensor.turned_on_lights") | from_json }}'
+      light_entities: '{{ states("sensor.active_lights") | from_json }}'
       non_light_entities:
         - switch.living_room_cam
         - remote.harmony

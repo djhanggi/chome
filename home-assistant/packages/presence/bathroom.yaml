@@ -1,7 +1,7 @@
 ---
 homeassistant:
   customize:
-    automation.presence_aware_bathroom_lights:
+    automation.presence_bathroom_lights:
       icon: mdi:lightbulb-auto
     
 automation:

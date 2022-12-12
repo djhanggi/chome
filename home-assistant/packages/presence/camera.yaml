@@ -1,24 +1,24 @@
 ---
 homeassistant:
   customize:
-    automation.presence_camera:
+    automation.presence_cameras:
       icon: mdi:camera-marker
 
 logbook:
   exclude:
     entities:
       - camera.living_room
-      - automation.presence_camera
+      - automation.presence_cameras
 
 automation:
-  - id: presence_camera
-    alias: Presence - Camera
+  - id: presence_cameras
+    alias: Presence - Cameras
     mode: single
     trigger:
       - id: away
         entity_id: person.djhanggi
         platform: state
-        to: away
+        to: not_home
       - id: home
         entity_id: person.djhanggi
         platform: state

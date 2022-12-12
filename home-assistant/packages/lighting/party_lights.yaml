@@ -10,13 +10,13 @@ homeassistant:
 logbook:
   exclude:
     entities:
-      - input_boolean.party_lights_on
+      - input_boolean.party_lights_active
       - script.party_lights_animate
       - script.party_lights_apply_scene
 
 input_boolean:
-  party_lights_on:
-    name: Party Lights - On
+  party_lights_active:
+    name: Party Lights - Active
     initial: off
     icon: mdi:party-popper
 
@@ -40,7 +40,7 @@ script:
       - repeat:
           while:
             - condition: state
-              entity_id: input_boolean.party_lights_on
+              entity_id: input_boolean.party_lights_active
               state: "on"
           sequence:
             - service: script.apply_party_lights_scene
@@ -88,11 +88,11 @@ switch:
     switches:
       party_lights:
         value_template: >
-          {{ states("input_boolean.party_lights_on") }}
+          {{ states("input_boolean.party_lights_active") }}
         friendly_name: Party Lights
         turn_on:
           - service: input_boolean.turn_on
-            entity_id: input_boolean.party_lights_on
+            entity_id: input_boolean.party_lights_active
           - service: scene.create
             data:
               scene_id: party_lights_return_scene
@@ -113,7 +113,7 @@ switch:
               entity_id: script.party_lights_animate
         turn_off:
           - service: input_boolean.turn_off
-            entity_id: input_boolean.party_lights_on
+            entity_id: input_boolean.party_lights_active
           - service: script.turn_off
             target:
               entity_id: script.party_lights_animate

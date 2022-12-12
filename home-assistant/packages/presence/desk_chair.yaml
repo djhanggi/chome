@@ -1,7 +1,7 @@
 ---
 homeassistant:
   customize:
-    automation.using_desk_chair:
+    automation.presence_desk_chair:
       icon: mdi:chair-rolling
 
 automation:

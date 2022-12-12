@@ -14,7 +14,7 @@ logbook:
       - light.ceiling_lights
       - light.hallway_lights
       - light.bathroom_lights
-      - sensor.turned_on_lights
+      - sensor.active_lights
 
 group:
   lighting:
@@ -61,8 +61,8 @@ light:
 
 template:
   - sensor:
-      - unique_id: turned_on_lights
-        name: Turned On Lights
+      - unique_id: active_lights
+        name: Active Lights
         state: >
           {% set light_bulbs_on = expand('light.all_light_bulbs') | selectattr('state', 'eq', 'on') %}
           {{ light_bulbs_on | map(attribute='entity_id') | list | to_json }}

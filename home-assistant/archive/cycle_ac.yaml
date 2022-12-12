@@ -17,7 +17,7 @@ homeassistant:
 
 input_number:
   cycle_ac_shutoff_timer_duration:
-    name: Cycle AC - Shut-Off Timer Duration
+    name: Cycle AC - Shut-off Timer Duration
     step: 1
     min: 1
     max: 720
@@ -35,7 +35,7 @@ input_number:
 
 timer:
   cycle_ac_shutoff_timer:
-    name: Cycle AC - Shut-Off Timer
+    name: Cycle AC - Shut-off Timer
     duration: "00:30:00"
     icon: mdi:air-conditioner
   cycle_ac_restart_timer:
@@ -65,7 +65,7 @@ automation:
         target:
           entity_id: timer.cycle_ac_restart_timer
   - id: cycle_ac_shutoff
-    alias: Cycle AC - Shut-Off
+    alias: Cycle AC - Shut-off
     trigger:
       - platform: event
         event_type: timer.finished

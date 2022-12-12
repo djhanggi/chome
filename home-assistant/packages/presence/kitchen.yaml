@@ -1,8 +1,10 @@
 ---
 homeassistant:
   customize:
-    automation.presence_aware_kitchen_lights:
+    automation.presence_kitchen_lights:
       icon: mdi:lightbulb-auto
+    sensor.kitchen_temperature_derivative:
+      icon: mdi:thermometer
 
 sensor:
   - name: Kitchen Temperature Derivative
