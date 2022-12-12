@@ -1,6 +1,7 @@
 ---
 homeassistant:
   name: !secret homeassistant_name
+  country: !secret homeassistant_country
   latitude: !secret homeassistant_latitude
   longitude: !secret homeassistant_longitude
   elevation: !secret homeassistant_elevation

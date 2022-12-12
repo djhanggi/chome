@@ -90,8 +90,10 @@ automation:
         platform: time
         at: "12:00:30"
       - id: evening
-        platform: time
-        at: input_datetime.evening_start_time
+        platform: state
+        entity_id: sensor.phase_of_day
+        from: Daytime
+        to: Evening
     condition:
       - entity_id: person.djhanggi
         condition: state

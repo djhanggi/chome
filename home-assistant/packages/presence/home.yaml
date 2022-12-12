@@ -1,0 +1,67 @@
+---
+homeassistant:
+  customize:
+    automation.away:
+      icon: mdi:location-exit
+    automation.return:
+      icon: mdi:location-enter
+    scene.away_return_scene:
+      friendly_name: Away - Return Scene
+      icon: mdi:location-enter
+
+automation:
+  - id: away
+    alias: Away
+    mode: single
+    trigger:
+      - id: presence
+        platform: state
+        entity_id: person.djhanggi
+        from: home
+        to: not_home
+    variables:
+      light_entities: '{{ states("sensor.active_lights") | from_json }}'
+      non_light_entities:
+        - switch.desk_lamp
+        - switch.sunlight_lamp
+        - switch.kitchen_lights
+        - switch.living_room_cam
+        - remote.harmony
+    action:
+      - if:
+          - '{{ trigger.id == "presence" }}'
+        then:
+          - service: scene.create
+            data:
+              scene_id: away_return_scene
+              snapshot_entities: "{{ light_entities + non_light_entities }}"
+      - service: scene.apply
+        data:
+          entities: |
+            {
+              {% for entity_id in (light_entities + non_light_entities) %}
+                "{{ entity_id }}": { 
+                  "state": "off",
+                },
+              {% endfor %}
+            }
+  - id: return
+    alias: Return
+    mode: single
+    trigger:
+      - platform: state
+        entity_id: person.djhanggi
+        from: not_home
+        to: home
+    action:
+      - scene: scene.away_return_scene
+      - if:
+          - '{{ is_state("sensor.phase_of_day", "Evening") }}'
+        then:
+          - scene: scene.evening
+      - service: scene.create
+        data:
+          scene_id: away_return_scene
+          entities:
+            automation.return:
+              state: "on"

@@ -3,35 +3,39 @@ homeassistant:
   customize:
     automation.plant_care:
       icon: mdi:flower
-    switch.living_room_plant_light:
-      device_class: light
-      icon: mdi:flower
     switch.bedroom_plant_light:
-      device_class: light
       icon: mdi:flower
+      device_class: light
+    switch.living_room_plant_light:
+      icon: mdi:flower
+      device_class: light
 
 automation:
   - id: plant_care
     alias: Plant Care
     description: Turns on/off plant care entities (lights, etc.).
+    mode: queued
     trigger:
-      - platform: time
-        id: plant_sunrise_trigger
-        at: input_datetime.morning_start_time
-      - platform: time
-        id: plant_sunset_trigger
-        at: input_datetime.evening_start_time
+      - id: plant_sunrise
+        entity_id: sensor.phase_of_day
+        platform: state
+        from: Sleeping
+        to: Morning
+      - id: plant_sunset
+        entity_id: sensor.phase_of_day
+        platform: state
+        from: Daytime
+        to: Evening
     action:
-      - service: >
-          {% if trigger.id == "plant_sunrise_trigger" %}
+      - service: |
+          {% if trigger.id == "plant_sunrise" %}
             switch.turn_on
-          {% elif trigger.id == "plant_sunset_trigger" %}
+          {% elif trigger.id == "plant_sunset" %}
             switch.turn_off
           {% else %}
             switch.toggle
           {% endif %}
         target:
           entity_id:
-            - switch.living_room_plant_light
             - switch.bedroom_plant_light
-    mode: queued
+            - switch.living_room_plant_light

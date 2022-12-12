@@ -1,25 +1,22 @@
 ---
 homeassistant:
   customize:
-    automation.reset_scene_before_party_lights:
-      icon: mdi:cancel
     switch.party_lights:
       icon: mdi:party-popper
-    scene.before_party_lights:
+    scene.party_lights_return_scene:
       friendly_name: Party Lights - Return Scene
       icon: mdi:party-popper
 
 logbook:
   exclude:
     entities:
-      - input_boolean.party_lights_on
-      - script.party_lights_animation
-      - script.apply_party_lights_scene
-      - automation.reset_scene_before_party_lights
+      - input_boolean.party_lights_active
+      - script.party_lights_animate
+      - script.party_lights_apply_scene
 
 input_boolean:
-  party_lights_on:
-    name: Party Lights - On
+  party_lights_active:
+    name: Party Lights - Active
     initial: off
     icon: mdi:party-popper
 
@@ -34,8 +31,8 @@ input_number:
     icon: mdi:speedometer
 
 script:
-  party_lights_animation:
-    alias: Party Lights Animation
+  party_lights_animate:
+    alias: Party Lights - Animate
     sequence:
       - service: switch.turn_off
         target:
@@ -43,15 +40,15 @@ script:
       - repeat:
           while:
             - condition: state
-              entity_id: input_boolean.party_lights_on
+              entity_id: input_boolean.party_lights_active
               state: "on"
           sequence:
-            - service: script.apply_party_lights_scene
+            - service: script.party_lights_apply_scene
             - delay: >
                 {{ states("input_number.party_lights_speed") }}
     icon: mdi:party-popper
-  apply_party_lights_scene:
-    alias: Apply Party Lights Scene
+  party_lights_apply_scene:
+    alias: Party Lights - Apply Scene
     sequence:
       - service: light.turn_on
         data:
@@ -86,34 +83,19 @@ script:
           transition: 0.1
     icon: mdi:party-popper
 
-automation:
-  - id: reset_scene_before_party_lights
-    alias: Reset scene.before_party_lights
-    mode: single
-    trigger:
-      - platform: homeassistant
-        event: start
-    action:
-      - service: scene.create
-        data:
-          scene_id: before_party_lights
-          entities:
-            automation.reset_scene_before_party_lights:
-              state: "on"
-
 switch:
   - platform: template
     switches:
       party_lights:
         value_template: >
-          {{ states("input_boolean.party_lights_on") }}
+          {{ states("input_boolean.party_lights_active") }}
         friendly_name: Party Lights
         turn_on:
           - service: input_boolean.turn_on
-            entity_id: input_boolean.party_lights_on
+            entity_id: input_boolean.party_lights_active
           - service: scene.create
             data:
-              scene_id: before_party_lights
+              scene_id: party_lights_return_scene
               snapshot_entities:
                 - switch.adaptive_lighting_all_light_bulbs
                 - light.ceiling_e
@@ -128,16 +110,17 @@ switch:
                 - light.bed
           - service: script.turn_on
             target:
-              entity_id: script.party_lights_animation
+              entity_id: script.party_lights_animate
         turn_off:
           - service: input_boolean.turn_off
-            entity_id: input_boolean.party_lights_on
+            entity_id: input_boolean.party_lights_active
           - service: script.turn_off
             target:
-              entity_id: script.party_lights_animation
-          - service: scene.turn_on
-            target:
-              entity_id: scene.before_party_lights
-          - service: automation.trigger
-            target:
-              entity_id: automation.reset_scene_before_party_lights
+              entity_id: script.party_lights_animate
+          - scene: scene.party_lights_return_scene
+          - service: scene.create
+            data:
+              scene_id: party_lights_return_scene
+              entities:
+                switch.party_lights:
+                  state: "off"

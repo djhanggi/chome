@@ -1,0 +1,71 @@
+---
+homeassistant:
+  customize:
+    automation.set_morning_start_time_to_sunrise:
+      icon: mdi:weather-sunny
+
+input_boolean:
+  is_sleeping:
+    name: Sleeping
+    icon: mdi:sleep
+
+input_datetime:
+  morning_start_time:
+    name: Morning Start Time
+    icon: mdi:weather-sunset-up
+    has_time: true
+  evening_start_time:
+    name: Evening Start Time
+    icon: mdi:weather-night
+    has_time: true
+
+template:
+  - sensor:
+      - unique_id: phase_of_day
+        name: Phase of Day
+        state: |
+          {% set this_morning = today_at(states('input_datetime.morning_start_time')) %} 
+          {% set this_evening = today_at(states('input_datetime.evening_start_time')) %}  
+          {% set is_sleeping = is_state("input_boolean.is_sleeping", "on") %}
+          {% if now() > this_morning and now() < this_evening %}
+            {% if is_sleeping %}
+              Morning
+            {% else %}
+              Daytime
+            {% endif %}
+          {% else %}
+            {% if not is_sleeping %}
+              Evening
+            {% else %}
+              Sleeping
+            {% endif %}
+          {% endif %}
+
+script:
+  snooze_morning_start_time:
+    alias: Snooze Morning Start Time
+    icon: mdi:alarm-snooze
+    sequence:
+      - service: input_datetime.set_datetime
+        data:
+          time: |
+            {% set minutes = minutes if minutes is defined else 30 %}
+            {% set snoozed_time = today_at(states('input_datetime.morning_start_time')) + timedelta(minutes=minutes) %}
+            {{ snoozed_time.strftime('%H:%M:%S') }}
+        target:
+          entity_id: input_datetime.morning_start_time
+
+automation:
+  - id: set_morning_start_time_to_sunrise
+    alias: Set Morning Start Time to Sunrise
+    mode: single
+    trigger:
+      - platform: time
+        at: input_datetime.evening_start_time
+    action:
+      - service: input_datetime.set_datetime
+        data:
+          time: |
+            {{ state_attr("sun.sun", "next_rising") | as_timestamp | timestamp_custom("%H:%M") }}
+        target:
+          entity_id: input_datetime.morning_start_time

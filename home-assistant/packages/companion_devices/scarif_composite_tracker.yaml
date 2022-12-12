@@ -1,0 +1,41 @@
+---
+homeassistant:
+  customize:
+    automation.update_scarif_composite_tracker:
+      icon: mdi:home-map-marker
+
+logbook:
+  exclude:
+    entities:
+      - automation.update_scarif_composite_tracker
+
+automation:
+  - id: update_scarif_composite_tracker
+    alias: Update Scarif Composite Tracker
+    mode: single
+    trigger:
+      - platform: homeassistant
+        event: start
+      - platform: state
+        entity_id:
+          - device_tracker.scarif
+          - sensor.scarif_wifi_connection
+    action:
+      - if:
+          - '{{ states("sensor.scarif_wifi_connection").startswith("CHOME") }}'
+        then:
+          - service: device_tracker.see
+            data:
+              dev_id: scarif_composite
+              location_name: home
+        else:
+          - service: device_tracker.see
+            data:
+              dev_id: scarif_composite
+              location_name: '{{ states("device_tracker.scarif") }}'
+              gps: |
+                {% set latitude = state_attr("device_tracker.scarif", "latitude") %}
+                {% set longitude = state_attr("device_tracker.scarif", "longitude") %}
+                {{ [latitude, longitude] }}
+              gps_accuracy:
+                '{{ state_attr("device_tracker.scarif", "gps_accuracy") }}'

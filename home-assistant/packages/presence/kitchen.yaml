@@ -1,8 +1,10 @@
 ---
 homeassistant:
   customize:
-    automation.presence_aware_kitchen_lights:
+    automation.presence_kitchen_lights:
       icon: mdi:lightbulb-auto
+    sensor.kitchen_temperature_derivative:
+      icon: mdi:thermometer
 
 sensor:
   - name: Kitchen Temperature Derivative
@@ -12,8 +14,8 @@ sensor:
     unit_time: min
 
 automation:
-  - id: presence_aware_kitchen_lights
-    alias: Presence-Aware Kitchen Lights
+  - id: presence_kitchen_lights
+    alias: Presence - Kitchen Lights
     mode: single
     trigger:
       - id: enter
@@ -26,15 +28,13 @@ automation:
         for:
           minutes: 5
         from: "on"
-    condition:
-      - condition: template
-        value_template: |
-          {{ states("sensor.daytime_hours") or trigger.id != "enter" }}
     action:
       - service: |
-          {% if trigger.id == "enter" %}
+          {% set is_evening = is_state("sensor.phase_of_day", "Evening") %}
+          {% set is_sleeping = is_state("sensor.phase_of_day", "Sleeping") %}
+          {% if trigger.id == "enter" and not (is_evening or is_sleeping) %}
             homeassistant.turn_on
-          {% elif trigger.id == "exit" %}
+          {% else %}
             homeassistant.turn_off
           {% endif %}
         target:

@@ -1,12 +1,19 @@
 ---
 homeassistant:
   customize:
-    automation.shut_off_desk_lamp:
+    automation.turn_off_desk_lamp:
       icon: mdi:timer
+    sensor.last_desk_lamp_timestamp:
+      icon: mdi:sun-clock
 
-automation: 
-  - id: shut_off_desk_lamp
-    alias: Shut Off Desk Lamp
+logbook:
+  exclude:
+    entities:
+      - sensor.last_desk_lamp_timestamp
+
+automation:
+  - id: turn_off_desk_lamp
+    alias: Turn off Desk Lamp
     mode: single
     trigger:
       - entity_id: switch.desk_lamp
@@ -18,3 +25,13 @@ automation:
       - service: switch.turn_off
         target:
           entity_id: switch.desk_lamp
+
+template:
+  - trigger:
+      - platform: state
+        entity_id: switch.desk_lamp
+        to: "on"
+    sensor:
+      - unique_id: last_desk_lamp_timestamp
+        name: Last Desk Lamp Timestamp
+        state: "{{ now() | as_timestamp }}"

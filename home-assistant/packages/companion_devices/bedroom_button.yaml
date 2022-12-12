@@ -1,12 +1,12 @@
 ---
 homeassistant:
   customize:
-    automation.bedroom_button_press:
+    automation.bedroom_button:
       icon: mdi:bed-single
 
 automation:
-  - id: bedroom_button_press
-    alias: Bedroom Button Press
+  - id: bedroom_button
+    alias: Bedroom Button
     mode: single
     trigger:
       - platform: event

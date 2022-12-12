@@ -1,10 +1,8 @@
 ---
 homeassistant:
   customize:
-    automation.bedroom_ac_set_temperature:
+    automation.bedroom_ac_toggle_temperature_and_mode:
       icon: mdi:thermometer
-    automation.bedroom_ac_set_mode:
-      icon: mdi:air-conditioner
     switch.bedroom_ac:
       icon: mdi:air-conditioner
       friendly_name: Bedroom AC - Switch
@@ -16,8 +14,7 @@ logbook:
       - input_number.bedroom_ac_temperature
       - script.bedroom_ac_send_command
       - script.bedroom_ac_toggle_power
-      - automation.bedroom_ac_toggle_temperature
-      - automation.bedroom_ac_set_mode
+      - automation.bedroom_ac_toggle_temperature_and_mode
       - switch.bedroom_ac
 
 input_boolean:
@@ -126,10 +123,11 @@ script:
     icon: mdi:thermometer
 
 automation:
-  - id: bedroom_ac_set_temperature
-    alias: Bedroom AC - Set Temperature
+  - id: bedroom_ac_set_temperature_and_mode
+    alias: Bedroom AC - Set Temperature and Mode
     description: >
-      Sets the AC temperature to the set point of climate.bedroom_ac.
+      Sets the AC temperature to the set point of climate.bedroom_ac, and the
+      mode to input_select.bedroom_ac_mode.
     trigger:
       - platform: state
         entity_id: climate.bedroom_ac
@@ -137,6 +135,8 @@ automation:
       - platform: state
         entity_id: input_boolean.bedroom_ac_power
         to: "on"
+      - platform: state
+        entity_id: input_select.bedroom_ac_mode
     mode: single
     action:
       - repeat:
@@ -150,26 +150,15 @@ automation:
                 increase_temperature: >
                   {{ states("input_number.bedroom_ac_temperature") | int <
                   state_attr("climate.bedroom_ac", "temperature") | int }}
-  - id: bedroom_ac_set_mode
-    alias: Bedroom AC - Set Mode
-    description: >
-      Sets the AC mode to the mode specified by input_select.bedroom_ac_mode
-    trigger:
-      - platform: state
-        entity_id: input_select.bedroom_ac_mode
-    mode: single
-    action:
       - service: script.bedroom_ac_send_command
         data:
-          command: >
+          command: |
             {% set MODES = {
               "Cool": "set_cool_mode",
               "Money Saver": "set_money_saver_mode",
               "Fan Only": "set_fan_only_mode",
-            } %} {% set mode_command =
-              MODES[states("input_select.bedroom_ac_mode")] |
-              default("Cool") %}
-            {{ mode_command }}
+            } %}
+            {{ MODES[states("input_select.bedroom_ac_mode")] | default("Cool")  }}
 
 switch:
   - platform: template

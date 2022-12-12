@@ -39,8 +39,8 @@ automation:
           - if:
               - condition: template
                 value_template: >
-                  {{ is_state("sensor.scarif_do_not_disturb_sensor", "off")
-                  and is_state("sensor.scarif_ringer_mode", "vibrate") }}
+                  {{ is_state("sensor.scarif_do_not_disturb_sensor", "off") and
+                  is_state("sensor.scarif_ringer_mode", "vibrate") }}
             then:
               - service: notify.mobile_app_scarif
                 data:
