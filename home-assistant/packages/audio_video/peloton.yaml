@@ -92,6 +92,7 @@ automation:
       - id: evening
         platform: state
         entity_id: sensor.phase_of_day
+        from: Daytime
         to: Evening
     condition:
       - entity_id: person.djhanggi

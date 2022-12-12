@@ -19,10 +19,12 @@ automation:
       - id: plant_sunrise
         entity_id: sensor.phase_of_day
         platform: state
+        from: Sleeping
         to: Morning
       - id: plant_sunset
         entity_id: sensor.phase_of_day
         platform: state
+        from: Daytime
         to: Evening
     action:
       - service: |

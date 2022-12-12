@@ -27,10 +27,10 @@ automation:
         entity_id: input_boolean.is_sleeping
         platform: state
         to: "on"
-      - id: daytime
-        entity_id: sensor.phase_of_day
+      - id: awake
+        entity_id: input_boolean.is_sleeping
         platform: state
-        to: Daytime
+        to: "off"
     action:
       - service: |
           {% if trigger.id == "away" or trigger.id == "sleeping" %}

@@ -1,7 +1,7 @@
 ---
 homeassistant:
   customize:
-    automation.shut_off_desk_lamp:
+    automation.turn_off_desk_lamp:
       icon: mdi:timer
     sensor.last_desk_lamp_timestamp:
       icon: mdi:sun-clock

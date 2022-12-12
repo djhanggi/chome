@@ -20,6 +20,7 @@ automation:
     trigger:
       - platform: state
         entity_id: sensor.phase_of_day
+        from: Sleeping
         to: Morning
     condition:
       - entity_id: person.djhanggi
@@ -40,6 +41,7 @@ automation:
     trigger:
       - platform: state
         entity_id: sensor.phase_of_day
+        from: Morning
         to: Daytime
     condition:
       - entity_id: person.djhanggi
@@ -53,6 +55,7 @@ automation:
     trigger:
       - platform: state
         entity_id: sensor.phase_of_day
+        from: Daytime
         to: Evening
     condition:
       - entity_id: person.djhanggi
@@ -93,6 +96,8 @@ scene:
     name: Daytime
     icon: mdi:weather-sunny
     entities:
+      input_boolean.is_asleep:
+        state: "off"
       fan.dyson_fan:
         state: "on"
         oscillating: true
