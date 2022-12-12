@@ -3,7 +3,7 @@ homeassistant:
   customize:
     automation.presence_bathroom_lights:
       icon: mdi:lightbulb-auto
-    
+
 automation:
   - id: presence_bathroom_lights
     alias: Presence - Bathroom Lights

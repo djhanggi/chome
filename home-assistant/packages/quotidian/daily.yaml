@@ -7,7 +7,7 @@ homeassistant:
       icon: mdi:weather-sunny
     automation.evening:
       icon: mdi:weather-sunset
-    
+
 input_boolean:
   open_blinds_in_morning:
     name: Open Blinds in Morning
