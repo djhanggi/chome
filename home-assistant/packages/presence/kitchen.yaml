@@ -3,15 +3,6 @@ homeassistant:
   customize:
     automation.presence_kitchen_lights:
       icon: mdi:lightbulb-auto
-    sensor.kitchen_temperature_derivative:
-      icon: mdi:thermometer
-
-sensor:
-  - name: Kitchen Temperature Derivative
-    platform: derivative
-    source: sensor.aqara_temperature_kitchen_temperature
-    time_window: "00:05:00"
-    unit_time: min
 
 automation:
   - id: presence_kitchen_lights
