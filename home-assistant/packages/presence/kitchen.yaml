@@ -22,7 +22,7 @@ automation:
         entity_id: binary_sensor.aqara_motion_kitchen
         platform: state
         to: "on"
-      - id: exit
+      - id: clear
         entity_id: binary_sensor.aqara_motion_kitchen
         platform: state
         for:
@@ -32,9 +32,11 @@ automation:
       - service: |
           {% set is_evening = is_state("sensor.phase_of_day", "Evening") %}
           {% set is_sleeping = is_state("sensor.phase_of_day", "Sleeping") %}
-          {% if trigger.id == "enter" and not (is_evening or is_sleeping) %}
-            homeassistant.turn_on
-          {% else %}
+          {% if trigger.id == "enter" %}
+            {% if not (is_evening or is_sleeping) %}
+              homeassistant.turn_on
+            {% endif %}
+          {% elif trigger.id == "clear" %}
             homeassistant.turn_off
           {% endif %}
         target:
