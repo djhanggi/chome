@@ -21,6 +21,7 @@ automation:
             target:
               entity_id: switch.living_room_cam
       - if:
+          - '{{ is_state("sensor.phase_of_day", "Morning") or is_state("sensor.phase_of_day", "Daytime") }}'
           - condition: template
             value_template: |
               {% set last_desk_lamp_time = states("sensor.last_desk_lamp_timestamp") %}
