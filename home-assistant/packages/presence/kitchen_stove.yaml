@@ -26,29 +26,27 @@ automation:
     alias: Presence - Kitchen Stove
     mode: single
     trigger:
-      - id: clear
-        entity_id: binary_sensor.aqara_motion_kitchen
+      - id: temperature_change
         platform: state
-        for:
-          minutes: 2
-        from: "on"
-        to: "off"
+        entity_id: sensor.kitchen_temperature_derivative
     condition:
       - '{{ states("sensor.kitchen_temperature_derivative") >
         states("input_number.kitchen_temperature_derivative_threshold") }}'
     action:
       - repeat:
           sequence:
-            - service: notify.notify
-              data:
-                data:
-                  tag: automation.presence_kitchen_stove
-                message: Stove may be running!
+            - if:
+                - '{{ is_state("binary_sensor.aqara_motion_kitchen", "off") }}'
+              then:
+                - service: notify.notify
+                  data:
+                    data:
+                      tag: automation.presence_kitchen_stove
+                    message: Stove may be running!
             - delay:
                 minutes: 2
           until:
-            - '{{ is_state("binary_sensor.aqara_motion_kitchen", "on") }}'
-            - '{{ states("sensor.kitchen_temperature_derivative") < 0 }}'
+            - '{{ states("sensor.kitchen_temperature_derivative") | float <= 0 }}'
       - service: notify.notify
         data:
           data:
