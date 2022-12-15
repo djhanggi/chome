@@ -101,6 +101,11 @@ automation:
       - entity_id: calendar.daniel_hanggi_braze_com
         condition: state
         state: "off"
+      - condition: state
+        entity_id: sensor.phase_of_day
+        state:
+          - Daytime
+          - Evening
       - condition: template
         value_template: |
           {% set last_midnight = now().replace(hour=0, minute=0, second=0) | as_timestamp %}
