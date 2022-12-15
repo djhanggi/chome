@@ -41,7 +41,7 @@ script:
             - remote.harmony
   return_from_vacation:
     alias: Return from Vacation
-    icon: mdi:airplane-alert
+    icon: mdi:airplane-off
     mode: single
     sequence:
       - service: script.setup_vacation
