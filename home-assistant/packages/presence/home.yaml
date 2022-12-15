@@ -21,12 +21,12 @@ automation:
         to: not_home
     variables:
       light_entities: '{{ states("sensor.active_lights") | from_json }}'
-      non_light_entities:
+      other_snapshot_entities:
+        - remote.harmony
+      non_snapshot_entities:
         - switch.desk_lamp
         - switch.sunlight_lamp
         - switch.kitchen_lights
-        - switch.living_room_cam
-        - remote.harmony
     action:
       - if:
           - '{{ trigger.id == "presence" }}'
@@ -34,12 +34,12 @@ automation:
           - service: scene.create
             data:
               scene_id: away_return_scene
-              snapshot_entities: "{{ light_entities + non_light_entities }}"
+              snapshot_entities: "{{ light_entities + other_snapshot_entities }}"
       - service: scene.apply
         data:
           entities: |
             {
-              {% for entity_id in (light_entities + non_light_entities) %}
+              {% for entity_id in (light_entities + other_snapshot_entities + non_snapshot_entties) %}
                 "{{ entity_id }}": { 
                   "state": "off",
                 },
