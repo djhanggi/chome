@@ -2,7 +2,7 @@
 script:
   setup_guest:
     alias: Setup Guest
-    icon: mdi:airplane-alert
+    icon: mdi:bag-suitcase
     mode: single
     fields:
       reset:
@@ -33,7 +33,7 @@ script:
           time: "09:30:00"
   send_off_guest:
     alias: Send off Guest
-    icon: mdi:airplane-alert
+    icon: mdi:bag-suitcase-off
     mode: single
     sequence:
       - service: script.setup_guest
