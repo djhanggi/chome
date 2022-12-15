@@ -39,12 +39,18 @@ automation:
         data:
           entities: |
             {
-              {% for entity_id in (light_entities + other_snapshot_entities + non_snapshot_entties) %}
+              {% for entity_id in (light_entities + other_snapshot_entities + non_snapshot_entities) %}
                 "{{ entity_id }}": { 
                   "state": "off",
                 },
               {% endfor %}
             }
+      - if:
+          - '{{ not is_state_attr("media_player.spotify_djhanggi", "source", "scarif") }}'
+        then:
+          - service: media_player.media_pause
+            target:
+              entity_id: media_player.spotify_djhanggi
   - id: return
     alias: Return
     mode: single
