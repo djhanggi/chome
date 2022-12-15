@@ -29,6 +29,8 @@ scene:
     entities:
       input_boolean.is_sleeping:
         state: "on"
+      fan.dyson_fan:
+        state: "off"
       fan.dyson_heater_fan:
         state: "on"
         oscillating: true
