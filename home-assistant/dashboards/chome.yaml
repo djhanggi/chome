@@ -5,168 +5,278 @@ views:
     icon: mdi:home-assistant
     badges: []
     cards:
-      - title: Lighting
-        type: entities
-        entities:
-          - entity: light.all_light_bulbs
-            hold_action:
-              action: more-info
-            tap_action:
-              action: navigate
-              navigation_path: /lovelace-chome/lighting/
-          - name: Adaptive Lighting
-            entity: switch.adaptive_lighting_all_light_bulbs
-          - entity: light.ceiling_lights
-          - entity: light.living_room_lamp
-          - entity: light.bookshelf
-          - entity: switch.kitchen_lights
-          - entity: light.hallway_lights
-          - entity: light.bathroom_lights
-          - entity: light.bedroom_lamp
-          - entity: light.bed
-          - entity: switch.sunlight_lamp
-        show_header_toggle: true
-      - type: entities
-        entities:
-          - entity: scene.morning
-            hold_action:
-              action: more-info
-            tap_action:
-              action: navigate
-              navigation_path: /lovelace-chome/sleep/
-          - entity: scene.daytime
-            hold_action:
-              action: more-info
-            tap_action:
-              action: navigate
-              navigation_path: /lovelace-chome/sleep/
-          - entity: scene.evening
-            hold_action:
-              action: more-info
-            tap_action:
-              action: navigate
-              navigation_path: /lovelace-chome/sleep/
-          - name: Sleep
-            entity: script.go_to_sleep
-            hold_action:
-              action: more-info
-            tap_action:
-              action: navigate
-              navigation_path: /lovelace-chome/sleep/
-          - entity: input_datetime.morning_start_time
-            hold_action:
-              action: more-info
-            tap_action:
-              action: navigate
-              navigation_path: /lovelace-chome/sleep/
-          - entity: script.snooze_morning_start_time
-            hold_action:
-              action: more-info
-            tap_action:
-              action: navigate
-              navigation_path: /lovelace-chome/sleep/
-      - type: entities
-        entities:
-          - name: Blinds
-            entity: cover.smart_roller_shade_curtain
-          - entity: scene.open_blinds
-          - entity: scene.ajar_blinds
-          - entity: scene.closed_blinds
-        show_header_toggle: false
-      - type: horizontal-stack
-        cards:
-          - type: button
-            entity: remote.harmony
-            show_icon: true
-            show_name: true
-            show_state: false
-            tap_action:
-              action: toggle
-          - name: Volume +25
-            type: button
-            icon: mdi:volume-plus
-            show_icon: true
-            show_name: true
-            tap_action:
-              action: call-service
-              service: script.tv_volume_change
-              data:
-                delta: 25
-          - name: Volume -25
-            type: button
-            icon: mdi:volume-minus
-            show_icon: true
-            show_name: true
-            tap_action:
-              action: call-service
-              service: script.tv_volume_change
-              data:
-                delta: -25
-          - name: Peloton
-            type: button
-            entity: script.play_peloton_class
-            show_icon: true
-            show_name: true
-            tap_action:
-              action: toggle
-      - type: vertical-stack
-        cards:
-          - type: horizontal-stack
-            cards:
-              - type: entity
-                entity: fan.dyson_fan
-              - type: entity
-                entity: fan.dyson_heater_fan
-          - type: horizontal-stack
-            cards:
-              - type: entities
-                entities:
-                  - entity: scene.fans_on
-                    hold_action:
-                      action: more-info
-                    tap_action:
-                      action: navigate
-                      navigation_path: /lovelace-chome/climate
-                  - entity: humidifier.levoit_humidifier
-                  - name: Bedroom Humidity
-                    entity: sensor.bedroom_broadlink_humidity
-                    hold_action:
-                      action: more-info
-                    tap_action:
-                      action: navigate
-                      navigation_path: /lovelace-chome/climate
-                show_header_toggle: false
-                state_color: false
-          - type: horizontal-stack
-            cards:
-              - type: thermostat
-                entity: climate.living_room_ac
-              - type: thermostat
-                entity: climate.bedroom_ac
       - type: vertical-stack
         cards:
           - type: entities
             entities:
-              - entity: person.djhanggi
-                hold_action:
-                  action: more-info
+              - type: custom:fold-entity-row
+                entities:
+                  - type: custom:fold-entity-row
+                    head:
+                      entity: light.ceiling_lights
+                  - entity: light.living_room_lamp
+                  - entity: light.bookshelf
+                  - type: custom:fold-entity-row
+                    head:
+                      entity: light.hallway_lights
+                  - type: custom:fold-entity-row
+                    head:
+                      entity: light.bathroom_lights
+                  - entity: light.bedroom_lamp
+                  - entity: light.bed
+                head:
+                  entity: light.all_light_bulbs
+                open: true
+            state_color: false
+          - type: entities
+            entities:
+              - switch.kitchen_lights
+              - type: custom:fold-entity-row
+                entities:
+                  - entity: switch.desk_lamp
+                  - entity: switch.sunlight_lamp
+                head:
+                  type: section
+                  label: Sunlight Lamps
+              - name: Plant Lights
+                type: custom:fold-entity-row
+                entities:
+                  - switch.living_room_plant_light
+                  - switch.bedroom_plant_light
+                head:
+                  type: section
+                  label: Plant Lights
+            show_header_toggle: false
+          - type: entities
+            entities:
+              - name: Adaptive Lighting
+                entity: switch.adaptive_lighting_all_light_bulbs
                 tap_action:
-                  action: navigate
-                  navigation_path: /lovelace-chome/presence/
-              - entity: scene.chome_off
-                hold_action:
                   action: more-info
-                tap_action:
-                  action: navigate
-                  navigation_path: /lovelace-chome/presence/
-              - name: Return
-                entity: scene.return
-                hold_action:
-                  action: more-info
-                tap_action:
-                  action: navigate
-                  navigation_path: /lovelace-chome/presence/
+          - title: Adaptive Lighting
+            type: custom:popup-card
+            card:
+              type: entities
+              entities:
+                - name: Sleep
+                  entity: switch.adaptive_lighting_sleep_mode_all_light_bulbs
+                - name: Brightness
+                  entity: switch.adaptive_lighting_adapt_brightness_all_light_bulbs
+                - name: Color
+                  entity: switch.adaptive_lighting_adapt_color_all_light_bulbs
+            dismissable: true
+            entity: switch.adaptive_lighting_all_light_bulbs
+      - type: custom:auto-entities
+        entities:
+          - person.djhanggi
+          - sensor.phase_of_day
+        card:
+          type: entities
+        filter:
+          template: |
+            {% if is_state("sensor.phase_of_day", "Sleeping") %}
+              scene.morning
+              scene.daytime
+              script.snooze_morning_start_time
+            {% elif is_state("sensor.phase_of_day", "Morning") %}
+              script.snooze_morning_start_time
+              script.go_to_sleep
+              scene.daytime
+            {% elif is_state("sensor.phase_of_day", "Daytime") %}
+              scene.daytime
+              scene.evening
+            {% elif is_state("sensor.phase_of_day", "Evening") %}
+              script.go_to_sleep
+            {% endif %}
+
+            {% if is_state("person.djhanggi", "not_home") %}
+              {% if states("scene.away_return_scene") != "unknown" %}
+                scene.away_return_scene
+              {% endif %}
+            {% endif %}
+
+            {% set last_midnight = now().replace(hour=0, minute=0, second=0) | as_timestamp %} {% set last_peloton = state_attr("script.play_peloton_class", "last_triggered") | as_timestamp %}  {% if last_peloton < last_midnight %}
+              script.play_peloton_class
+            {% endif %}
+          include:
+            - entity_id: input_datetime.morning_start_time
+      - type: entities
+        entities:
+          - name: Blinds
+            entity: cover.smart_roller_shade_curtain
+          - entity: scene.ajar_blinds
+        show_header_toggle: false
+      - type: vertical-stack
+        cards:
+          - type: entities
+            entities:
+              - entity: remote.harmony
+          - title: TV
+            type: custom:popup-card
+            card:
+              type: vertical-stack
+              cards:
+                - type: horizontal-stack
+                  cards:
+                    - name: Volume +25
+                      type: button
+                      icon: mdi:volume-plus
+                      show_icon: true
+                      show_name: true
+                      tap_action:
+                        action: call-service
+                        service: script.tv_change_volume
+                        data:
+                          delta: 25
+                    - name: Volume -25
+                      type: button
+                      icon: mdi:volume-minus
+                      show_icon: true
+                      show_name: true
+                      tap_action:
+                        action: call-service
+                        service: script.tv_change_volume
+                        data:
+                          delta: -25
+                - name: Hoth
+                  type: custom:tv-card
+                  back:
+                    service: androidtv.adb_command
+                    service_data:
+                      entity_id: media_player.android_tv_hoth
+                      command: BACK
+                  down:
+                    service: androidtv.adb_command
+                    service_data:
+                      entity_id: media_player.android_tv_hoth
+                      command: DOWN
+                  entity: media_player.android_tv_hoth
+                  home:
+                    service: androidtv.adb_command
+                    service_data:
+                      entity_id: media_player.android_tv_hoth
+                      command: HOME
+                  left:
+                    service: androidtv.adb_command
+                    service_data:
+                      entity_id: media_player.android_tv_hoth
+                      command: LEFT
+                  power:
+                    service: androidtv.adb_command
+                    service_data:
+                      entity_id: media_player.android_tv_hoth
+                      command: POWER
+                  right:
+                    service: androidtv.adb_command
+                    service_data:
+                      entity_id: media_player.android_tv_hoth
+                      command: RIGHT
+                  select:
+                    service: androidtv.adb_command
+                    service_data:
+                      entity_id: media_player.android_tv_hoth
+                      command: CENTER
+                  tv: true
+                  up:
+                    service: androidtv.adb_command
+                    service_data:
+                      entity_id: media_player.android_tv_hoth
+                      command: UP
+                  volume_down:
+                    service: androidtv.adb_command
+                    service_data:
+                      entity_id: media_player.android_tv_hoth
+                      command: VOLUME_DOWN
+                  volume_mute:
+                    service: androidtv.adb_command
+                    service_data:
+                      entity_id: media_player.android_tv_hoth
+                      command: MUTE
+                  volume_up:
+                    service: androidtv.adb_command
+                    service_data:
+                      entity_id: media_player.android_tv_hoth
+                      command: VOLUME_UP
+            dismissable: true
+            entity: remote.harmony
+            left_button_action: {}
+            right_button_action: {}
+      - type: vertical-stack
+        cards:
+          - name: Climate
+            type: button
+            entity: sensor.levoit_humidifier_current_humidity
+            show_icon: false
+            show_name: true
+            tap_action:
+              action: more-info
+          - type: entities
+            entities:
+              - entity: climate.living_room_ac
+              - entity: fan.dyson_fan
+              - entity: climate.bedroom_ac
+              - entity: fan.dyson_heater_fan
+              - entity: humidifier.levoit_humidifier
+          - title: Climate
+            type: custom:popup-card
+            card:
+              type: vertical-stack
+              cards:
+                - type: entities
+                  entities:
+                    - entity: sensor.sonoff_temperature_living_room_humidity
+                    - entity: sensor.bedroom_broadlink_humidity
+                    - entity: sensor.aqara_temperature_kitchen_temperature
+                    - entity: sensor.aqara_temperature_kitchen_humidity
+                - type: thermostat
+                  entity: climate.living_room_ac
+                - type: entities
+                  entities:
+                    - entity: input_select.living_room_ac_mode
+                      hold_action:
+                        action: call-service
+                        service: script.living_room_ac_set_mode
+                    - entity: script.living_room_ac_correct_power
+                - type: thermostat
+                  entity: climate.bedroom_ac
+                - type: entities
+                  entities:
+                    - entity: input_select.bedroom_ac_mode
+                      hold_action:
+                        action: call-service
+                        service: script.bedroom_ac_set_mode
+                    - entity: script.bedroom_ac_correct_power
+                - type: entities
+                  entities:
+                    - entity: script.dyson_fan_correct_power
+                    - entity: script.dyson_heater_fan_correct_power
+                - type: entities
+                  entities:
+                    - name: Humidifier out of Water
+                      entity: binary_sensor.levoit_humidifier_out_of_water
+                    - name: Humidifier Night Light
+                      entity: light.levoit_humidifier_night_light
+            dismissable: true
+            entity: sensor.levoit_humidifier_current_humidity
     path: main
+    theme: Backend-selected
+  - title: Media
+    icon: mdi:play
+    badges: []
+    cards:
+      - type: entities
+        entities:
+          - sensor.pocketcasts_unlistened_episodes
+      - type: entities
+        entities:
+          - entity: media_player.spotify_djhanggi
+          - entity: media_player.android_tv_hoth
+          - entity: media_player.cast_hoth
+          - entity: media_player.plex_hoth
+          - entity: media_player.living_room_speaker
+          - entity: media_player.bedroom_speaker
+    path: media
+    subview: false
     theme: Backend-selected
   - title: Other Devices
     type: sidebar
@@ -181,7 +291,8 @@ views:
             entity: sensor.scarif_do_not_disturb_sensor
           - name: Next Alarm
             entity: sensor.scarif_next_alarm
-          - entity: automation.notify_phone_at_home
+          - entity: input_datetime.next_alarm_time
+          - entity: script.set_alarm_on_scarif
       - type: entities
         entities:
           - name: cantonica
@@ -195,59 +306,54 @@ views:
         state_color: false
     path: overview
     theme: Backend-selected
-  - title: Lighting
-    type: sidebar
-    icon: mdi:home-lightbulb
+  - title: Automations
+    icon: mdi:home-automation
     badges: []
     cards:
       - type: entities
         entities:
-          - entity: light.ceiling_e
-          - entity: light.ceiling_w
-          - entity: light.hallway_e
-          - entity: light.hallway_w
-          - entity: light.bathroom_e
-          - entity: light.bathroom_w
-      - type: entities
-        entities:
-          - entity: switch.living_room_plant_light
-          - entity: switch.bedroom_plant_light
-      - type: entities
-        entities:
-          - name: Adaptive Lighting - Brightness
-            entity: switch.adaptive_lighting_adapt_brightness_all_light_bulbs
-          - name: Adaptive Lighting - Color
-            entity: switch.adaptive_lighting_adapt_color_all_light_bulbs
-          - name: Adaptive Lighting - Sleep Mode
-            entity: switch.adaptive_lighting_sleep_mode_all_light_bulbs
-      - title: Party Lights
-        type: entities
-        entities:
-          - entity: switch.party_lights
-          - entity: input_number.party_lights_speed
-          - entity: script.apply_party_lights_scene
-        show_header_toggle: false
-    path: lighting
-    subview: true
-    theme: Backend-selected
-  - title: Sleep
-    type: sidebar
-    icon: mdi:bed-clock
-    badges: []
-    cards:
-      - type: entities
-        entities:
-          - entity: input_datetime.morning_start_time
-          - entity: input_datetime.evening_start_time
           - entity: automation.set_morning_start_time_to_sunrise
-          - entity: automation.morning
+          - entity: input_datetime.morning_start_time
           - entity: input_boolean.open_blinds_in_morning
-          - entity: automation.evening
+          - entity: automation.morning
           - entity: automation.plant_care
-        show_header_toggle: false
-        state_color: false
-        view_layout:
-          position: main
+          - entity: automation.daytime
+          - entity: input_datetime.evening_start_time
+          - entity: automation.evening
+      - type: entities
+        entities:
+          - entity: automation.away
+          - entity: automation.return
+      - type: entities
+        entities:
+          - entity: automation.presence_bathroom_lights
+          - entity: automation.presence_kitchen_lights
+          - entity: automation.presence_cameras
+          - entity: automation.presence_desk_chair
+      - type: entities
+        entities:
+          - entity: automation.pagerduty_alert
+          - entity: automation.notify_phone_at_home
+          - entity: automation.presence_kitchen_stove
+      - type: entities
+        entities:
+          - entity: automation.turn_off_desk_lamp
+          - entity: automation.sync_next_alarm_time_from_scarif
+          - entity: automation.laptop_camera_in_use
+          - entity: automation.oscillate_fans_on_start
+          - entity: automation.play_peloton_class
+      - type: entities
+        entities:
+          - entity: script.setup_guest
+          - entity: script.send_off_guest
+          - entity: script.setup_vacation
+          - entity: script.return_from_vacation
+    path: automations
+    theme: Backend-selected
+  - title: Miscellaneous
+    icon: mdi:toolbox-outline
+    badges: []
+    cards:
       - type: entities
         entities:
           - entity: input_select.relaxation_sound
@@ -255,206 +361,29 @@ views:
               action: call-service
               service: script.play_relaxation_sound
               data:
-                target:
-                  entity_id: media_player.bedroom_speaker
+                media_player_id: media_player.bedroom_speaker
+          - entity: script.play_relaxation_sound
+            tap_action:
+              action: call-service
+              service: script.play_relaxation_sound
+              data:
+                media_player_id: media_player.bedroom_speaker
           - entity: script.spotify_meditate
+            tap_action:
+              action: call-service
+              service: script.play_relaxation_sound
+              data:
+                media_player_id: media_player.bedroom_speaker
       - type: entities
         entities:
-          - entity: input_datetime.next_alarm_time
-          - entity: script.set_alarm_on_scarif
-          - entity: automation.sync_next_alarm_time_from_scarif
+          - entity: input_boolean.is_sleeping
         show_header_toggle: false
         state_color: false
-    path: sleep
-    subview: true
-    theme: Backend-selected
-  - title: Climate
-    type: sidebar
-    icon: mdi:home-thermometer
-    badges: []
-    cards:
-      - type: horizontal-stack
-        cards:
-          - type: entities
-            entities:
-              - entity: script.living_room_ac_correct_power
-              - entity: input_select.living_room_ac_mode
-                hold_action:
-                  action: call-service
-                  service: script.living_room_ac_set_mode
-              - entity: script.dyson_fan_correct_power
-              - entity: script.bedroom_ac_correct_power
-              - entity: input_select.bedroom_ac_mode
-                hold_action:
-                  action: call-service
-                  service: script.bedroom_ac_set_mode
-              - entity: script.dyson_heater_fan_correct_power
+        view_layout:
+          position: main
       - type: entities
         entities:
-          - name: Humidifier Mist Level
-            entity: number.levoit_humidifier_mist_level
-          - name: Humidifier Night Light
-            entity: light.levoit_humidifier_night_light
-          - name: Humidifier out of Water
-            entity: binary_sensor.levoit_humidifier_out_of_water
-      - type: entities
-        entities:
-          - entity: automation.oscillate_fans_on_start
-    path: climate
-    subview: true
-    theme: Backend-selected
-  - title: Media
-    type: sidebar
-    icon: mdi:play
-    badges: []
-    cards:
-      - type: entities
-        entities:
-          - sensor.pocketcasts_unlistened_episodes
-      - type: media-control
-        entity: media_player.spotify_djhanggi
-      - type: vertical-stack
-        cards:
-          - type: entities
-            entities:
-              - entity: sensor.plex_chome
-          - type: media-control
-            entity: media_player.plex_hoth
-      - type: vertical-stack
-        cards:
-          - type: media-control
-            entity: media_player.cast_hoth
-          - type: media-control
-            entity: media_player.android_tv_hoth
-      - type: grid
-        cards:
-          - type: media-control
-            entity: media_player.living_room_speaker
-          - type: media-control
-            entity: media_player.bedroom_speaker
-        columns: 1
-        square: false
-      - name: Hoth
-        type: custom:tv-card
-        back:
-          service: androidtv.adb_command
-          service_data:
-            entity_id: media_player.android_tv_hoth
-            command:
-              sendevent /dev/input/event5 4 4 786979 && sendevent
-              /dev/input/event5 1 172 1 && sendevent /dev/input/event5 0 0 0 &&
-              sendevent /dev/input/event5 4 4 786979 && sendevent
-              /dev/input/event5 1 172 0 && sendevent /dev/input/event5 0 0 0
-        down:
-          service: androidtv.adb_command
-          service_data:
-            entity_id: media_player.android_tv_hoth
-            command:
-              sendevent /dev/input/event6 4 4 786499 && sendevent
-              /dev/input/event6 1 108 1 && sendevent /dev/input/event6 0 0 0 &&
-              sendevent /dev/input/event6 4 4 786499 && sendevent
-              /dev/input/event6 1 108 0 && sendevent /dev/input/event6 0 0 0
-        entity: media_player.android_tv_hoth
-        home:
-          service: androidtv.adb_command
-          service_data:
-            entity_id: media_player.android_tv_hoth
-            command:
-              sendevent /dev/input/event6 4 4 786979 && sendevent
-              /dev/input/event6 1 172 1 && sendevent /dev/input/event6 0 0 0 &&
-              sendevent /dev/input/event6 4 4 786979 && sendevent
-              /dev/input/event6 1 172 0 && sendevent /dev/input/event6 0 0 0
-        left:
-          service: androidtv.adb_command
-          service_data:
-            entity_id: media_player.android_tv_hoth
-            command:
-              sendevent /dev/input/event6 4 4 786500 && sendevent
-              /dev/input/event6 1 105 1 && sendevent /dev/input/event6 0 0 0 &&
-              sendevent /dev/input/event6 4 4 786500 && sendevent
-              /dev/input/event6 1 105 0 && sendevent /dev/input/event6 0 0 0
-        power:
-          service: androidtv.adb_command
-          service_data:
-            entity_id: media_player.android_tv_hoth
-            command: POWER
-        right:
-          service: androidtv.adb_command
-          service_data:
-            entity_id: media_player.android_tv_hoth
-            command:
-              sendevent /dev/input/event6 4 4 786501 && sendevent
-              /dev/input/event6 1 106 1 && sendevent /dev/input/event6 0 0 0 &&
-              sendevent /dev/input/event6 4 4 786501 && sendevent
-              /dev/input/event6 1 106 0 && sendevent /dev/input/event6 0 0 0 &&
-              sendevent /dev/input/event6 4 4 786501 && sendevent
-              /dev/input/event6 1 106 1 && sendevent /dev/input/event6 0 0 0 &&
-              sendevent /dev/input/event6 4 4 786501 && sendevent
-              /dev/input/event6 1 106 0 && sendevent /dev/input/event6 0 0 0
-        select:
-          service: androidtv.adb_command
-          service_data:
-            entity_id: media_player.android_tv_hoth
-            command:
-              sendevent /dev/input/event6 4 4 786497 && sendevent
-              /dev/input/event6 1 353 1 && sendevent /dev/input/event6 0 0 0 &&
-              sendevent /dev/input/event6 4 4 786497 && sendevent
-              /dev/input/event6 1 353 0 && sendevent /dev/input/event6 0 0 0
-        tv: true
-        up:
-          service: androidtv.adb_command
-          service_data:
-            entity_id: media_player.android_tv_hoth
-            command:
-              sendevent /dev/input/event6 4 4 786498 && sendevent
-              /dev/input/event6 1 103 1 && sendevent /dev/input/event6 0 0 0 &&
-              sendevent /dev/input/event6 4 4 786498 && sendevent
-              /dev/input/event6 1 103 0 && sendevent /dev/input/event6 0 0 0 &&
-              sendevent /dev/input/event6 4 4 786498 && sendevent
-              /dev/input/event6 1 103 1 && sendevent /dev/input/event6 0 0 0 &&
-              sendevent /dev/input/event6 4 4 786498 && sendevent
-              /dev/input/event6 1 103 0 && sendevent /dev/input/event6 0 0 0
-        volume_down:
-          service: androidtv.adb_command
-          service_data:
-            entity_id: media_player.android_tv_hoth
-            command:
-              sendevent /dev/input/event6 4 4 786666 && sendevent
-              /dev/input/event6 1 114 1 && sendevent /dev/input/event6 0 0 0 &&
-              sendevent /dev/input/event6 4 4 786666 && sendevent
-              /dev/input/event6 1 114 0 && sendevent /dev/input/event6 0 0 0
-        volume_mute:
-          service: androidtv.adb_command
-          service_data:
-            entity_id: media_player.android_tv_hoth
-            command:
-              sendevent /dev/input/event6 4 4 786658 && sendevent
-              /dev/input/event6 1 113 1 && sendevent /dev/input/event6 0 0 0 &&
-              sendevent /dev/input/event6 4 4 786658 && sendevent
-              /dev/input/event6 1 113 0 && sendevent /dev/input/event6 0 0 0
-        volume_up:
-          service: androidtv.adb_command
-          service_data:
-            entity_id: media_player.android_tv_hoth
-            command:
-              sendevent /dev/input/event6 4 4 786499 && sendevent
-              /dev/input/event6 1 108 0 && sendevent /dev/input/event6 0 0 0 &&
-              sendevent /dev/input/event6 4 4 786665 && sendevent
-              /dev/input/event6 1 115 1 && sendevent /dev/input/event6 0 0 0 &&
-              sendevent /dev/input/event6 4 4 786665 && sendevent
-              /dev/input/event6 1 115 0 && sendevent /dev/input/event6 0 0 0
-    path: media
-    subview: false
-    theme: Backend-selected
-  - title: Presence
-    type: sidebar
-    icon: mdi:map-marker-radius
-    badges: []
-    cards:
-      - type: entities
-        entities:
-          - entity: automation.away
-          - entity: automation.return
-    path: presence
-    subview: true
+          - entity: switch.party_lights
+          - entity: input_number.party_lights_speed
+    path: miscellaneous
     theme: Backend-selected
