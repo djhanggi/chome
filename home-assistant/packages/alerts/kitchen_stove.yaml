@@ -2,17 +2,9 @@
 homeassistant:
   customize:
     automation.presence_kitchen_stove:
-      icon: mdi:thermometer
+      icon: mdi:stove
     sensor.kitchen_temperature_derivative:
       icon: mdi:thermometer
-
-input_number:
-  kitchen_temperature_derivative_threshold:
-    name: Kitchen Temperature Derivative Threshold
-    icon: mdi:thermometer
-    min: 0
-    max: 2
-    initial: 0.01
 
 sensor:
   - name: Kitchen Temperature Derivative
@@ -30,24 +22,32 @@ automation:
         platform: state
         entity_id: sensor.kitchen_temperature_derivative
     condition:
-      - '{{ states("sensor.kitchen_temperature_derivative") >
-        states("input_number.kitchen_temperature_derivative_threshold") }}'
+      - condition: numeric_state
+        entity_id: sensor.kitchen_temperature_derivative
+        above: 0.02
     action:
       - repeat:
           sequence:
             - if:
                 - '{{ is_state("binary_sensor.aqara_motion_kitchen", "off") }}'
               then:
-                - service: notify.notify
+                - service: notify.mobile_app_cantonica
                   data:
                     data:
                       tag: automation.presence_kitchen_stove
                     message: Stove may be running!
+                - repeat:
+                    sequence:
+                      - service: switch.toggle
+                        target:
+                          entity_id: switch.kitchen_lights
+                    count: 2
             - delay:
                 minutes: 2
           until:
-            - '{{ states("sensor.kitchen_temperature_derivative") | float <= 0 }}'
-      - service: notify.notify
+            - '{{ states("sensor.kitchen_temperature_derivative") | float <= 0
+              }}'
+      - service: notify.mobile_app_cantonica
         data:
           data:
             tag: automation.presence_kitchen_stove
