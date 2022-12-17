@@ -120,13 +120,11 @@ script:
               - entity_id: input_boolean.dyson_heater_fan_power
                 condition: state
                 state: "on"
+              - variables:
+                  is_oscillating: '{{ is_state("input_boolean.dyson_heater_fan_oscillating", "on") }}'
               - service: script.dyson_heater_fan_send_command
                 data:
-                  command: |
-                    {{ states("input_select.dyson_heater_fan_next_oscillate_command") }}
-              - service: input_select.select_next
-                target:
-                  entity_id: input_select.dyson_heater_fan_next_oscillate_command
+                  command: '{{ "oscillate_off" if is_oscillating else "oscillate_on" }}'
               - service: input_boolean.toggle
                 target:
                   entity_id: input_boolean.dyson_heater_fan_oscillating
