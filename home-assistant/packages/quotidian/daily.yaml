@@ -121,6 +121,8 @@ scene:
         state: "on"
       switch.sunlight_lamp:
         state: "off"
+      humidifier.levoit_humidifier:
+        state: "off"
   - id: evening
     name: Evening
     icon: mdi:weather-sunset
