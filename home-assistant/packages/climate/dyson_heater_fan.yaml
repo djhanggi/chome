@@ -75,6 +75,9 @@ script:
           device: dyson_heater_fan
         target:
           entity_id: remote.bedroom_broadlink_remote
+      - delay:
+          # The Dyson Heater Fan requires a break between commands
+          milliseconds: 500
   dyson_heater_fan_toggle_state:
     alias: Dyson Heater Fan - Toggle State
     icon: mdi:fan
