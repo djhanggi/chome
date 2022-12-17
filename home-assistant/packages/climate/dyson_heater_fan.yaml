@@ -33,7 +33,7 @@ input_number:
     step: 1
 
 input_select:
-  dyson_heater_fan_next_oscillate:
+  dyson_heater_fan_next_oscillate_command:
     name: Dyson Heater Fan - Next Power Command
     icon: mdi:power
     options:
