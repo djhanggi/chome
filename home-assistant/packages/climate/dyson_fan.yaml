@@ -4,16 +4,16 @@ homeassistant:
     automation.dyson_fan_set_speed:
       icon: mdi:speedometer
 
-logbook:
-  exclude:
-    entities:
-      - input_boolean.dyson_fan_power
-      - input_boolean.dyson_fan_oscillating
-      - input_number.dyson_fan_speed
-      - input_number.dyson_fan_target_speed
-      - script.dyson_fan_send_command
-      - script.dyson_fan_toggle_state
-      - automation.dyson_fan_set_speed
+# logbook:
+#   exclude:
+#     entities:
+#       - input_boolean.dyson_fan_power
+#       - input_boolean.dyson_fan_oscillating
+#       - input_number.dyson_fan_speed
+#       - input_number.dyson_fan_target_speed
+#       - script.dyson_fan_send_command
+#       - script.dyson_fan_toggle_state
+#       - automation.dyson_fan_set_speed
 
 input_boolean:
   dyson_fan_power:
@@ -108,16 +108,16 @@ script:
                 state: "on"
               - service: script.dyson_fan_send_command
                 data:
-                  command: >
-                    {% if increase_speed is defined %}
+                  command: |
+                    {% if command == "increase_speed" %}
                       FanModeUp
-                    {% elif decrease_speed is defined %}
+                    {% else %}
                       FanModeDown
                     {% endif %}
-              - service: >
-                  {% if increase_speed is defined %}
+              - service: |
+                  {% if command == "increase_speed" %}
                     input_number.increment
-                  {% elif decrease_speed is defined %}
+                  {% else %}
                     input_number.decrement
                   {% endif %}
                 target:
@@ -143,8 +143,8 @@ automation:
       - repeat:
           while: >
             {{ is_state("input_boolean.dyson_fan_power", "on") and
-              states("input_number.dyson_fan_target_speed") | int !=
-              states("input_number.dyson_fan_speed") | int }}
+            states("input_number.dyson_fan_target_speed") | int !=
+            states("input_number.dyson_fan_speed") | int }}
           sequence:
             - service: script.dyson_fan_toggle_state
               data:
