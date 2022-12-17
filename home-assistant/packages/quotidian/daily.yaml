@@ -96,7 +96,7 @@ scene:
     name: Daytime
     icon: mdi:weather-sunny
     entities:
-      input_boolean.is_asleep:
+      input_boolean.is_sleeping:
         state: "off"
       fan.dyson_fan:
         state: "on"
@@ -120,6 +120,8 @@ scene:
       switch.monitor:
         state: "on"
       switch.sunlight_lamp:
+        state: "off"
+      humidifier.levoit_humidifier:
         state: "off"
   - id: evening
     name: Evening
