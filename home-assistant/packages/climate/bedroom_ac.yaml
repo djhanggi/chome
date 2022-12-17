@@ -1,11 +1,11 @@
 ---
 homeassistant:
   customize:
-    automation.bedroom_ac_toggle_temperature_and_mode:
-      icon: mdi:thermometer
-    switch.bedroom_ac:
+    automation.bedroom_ac_sync_state:
       icon: mdi:air-conditioner
+    switch.bedroom_ac:
       friendly_name: Bedroom AC - Switch
+      icon: mdi:air-conditioner
 
 logbook:
   exclude:
@@ -13,8 +13,7 @@ logbook:
       - input_boolean.bedroom_ac_power
       - input_number.bedroom_ac_temperature
       - script.bedroom_ac_send_command
-      - script.bedroom_ac_toggle_power
-      - automation.bedroom_ac_toggle_temperature_and_mode
+      - script.bedroom_ac_toggle_state
       - switch.bedroom_ac
 
 input_boolean:
@@ -25,21 +24,30 @@ input_boolean:
 input_number:
   bedroom_ac_temperature:
     name: Bedroom AC - Temperature
-    min: 60.0
-    max: 90.0
-    step: 1.0
     icon: mdi:thermometer
+    min: 60
+    max: 90
+    step: 1
 
 input_select:
   bedroom_ac_mode:
     name: Bedroom AC - Mode
+    icon: mdi:air-conditioner
     options:
       - Cool
       - Money Saver
       - Fan Only
-    icon: mdi:air-conditioner
 
 script:
+  bedroom_ac_correct_power:
+    alias: Bedroom AC - Correct Power
+    icon: mdi:power
+    mode: single
+    sequence:
+      - wait_template: '{{ is_state("script.bedroom_ac_send_command", "off") }}'
+      - service: script.bedroom_ac_send_command
+        data:
+          command: toggle_power
   bedroom_ac_send_command:
     alias: Bedroom AC - Send Commmand
     description: |
@@ -52,143 +60,167 @@ script:
         * set_money_saver_mode
         * set_fan_only_mode
         * toggle_fan_speed
+    icon: mdi:air-conditioner
+    mode: single
     sequence:
       - service: remote.send_command
+        data:
+          command: "{{ command }}"
+          device: friedrich_ac
         target:
           entity_id: remote.bedroom_broadlink_remote
-        data:
-          device: friedrich_ac
-          command: "{{ command }}"
-    mode: single
-    icon: mdi:air-conditioner
-  bedroom_ac_correct_power:
-    alias: Bedroom AC - Correct Power
-    sequence:
-      - service: script.bedroom_ac_send_command
-        data:
-          command: toggle_power
-      - service: automation.trigger
-        target:
-          entity_id: automation.bedroom_ac_set_mode
-    mode: single
-    icon: mdi:power
-  bedroom_ac_toggle_power:
-    alias: Bedroom AC - Toggle Power
-    sequence:
-      # Ensure that setting temperature is not currently running to guarantee
-      # atomicity with that script.
-      - wait_template: >
-          {{ is_state("script.bedroom_ac_toggle_temperature", "off") }}
-      - service: script.bedroom_ac_send_command
-        data:
-          command: toggle_power
-      - service: input_boolean.toggle
-        target:
-          entity_id: input_boolean.bedroom_ac_power
       # Delay to allow time for the AC to process the command.
       - delay:
           milliseconds: 750
-    mode: queued
+  bedroom_ac_toggle_state:
+    alias: Bedroom AC - Toggle State
     icon: mdi:air-conditioner
-  bedroom_ac_toggle_temperature:
-    alias: Bedroom AC - Toggle Temperature
+    mode: queued
+    fields:
+      command:
+        description: |
+          One of:
+            - toggle_power
+            - sync_temperature
+            - sync_mode
     sequence:
-      # Delay to allow time for any existing AC scripts to run and finish.
-      - delay:
-          milliseconds: 750
-      # Fail if another AC command is running to guarantee atomicity.
-      - condition: state
-        entity_id: script.bedroom_ac_send_command
-        state: "off"
-      - condition: state
-        entity_id: input_boolean.bedroom_ac_power
-        state: "on"
-      - service: script.bedroom_ac_send_command
-        data:
-          command: >
-            {% if increase_temperature %}
-              increase_temperature
-            {% else %}
-              decrease_temperature
-            {% endif %}
-      - service: >
-          {% if increase_temperature %}
-            input_number.increment
-          {% else %}
-            input_number.decrement
-          {% endif %}
-        target:
-          entity_id: input_number.bedroom_ac_temperature
-    mode: single
-    icon: mdi:thermometer
+      - if:
+          - "{{ command is undefined }}"
+        then:
+          - stop: command was not specified
+      - wait_template: '{{ is_state("script.bedroom_ac_send_command", "off") }}'
+      - wait_template:
+          '{{ is_state("script.bedroom_ac_correct_power", "off") }}'
+      - variables:
+          current_temperature:
+            '{{ states("input_number.bedroom_ac_temperature") | int }}'
+          target_temperature:
+            '{{ state_attr("climate.bedroom_ac", "temperature") | int }}'
+      - choose:
+          - conditions: "{{ command == 'toggle_power' }}"
+            sequence:
+              - service: script.bedroom_ac_send_command
+                data:
+                  command: toggle_power
+              - service: input_boolean.toggle
+                target:
+                  entity_id: input_boolean.bedroom_ac_power
+          - conditions: '{{ command == "sync_temperature" }}'
+            sequence:
+              - entity_id: input_boolean.bedroom_ac_power
+                condition: state
+                state: "on"
+              - entity_id: input_select.bedroom_ac_mode
+                condition: state
+                state: 
+                  - Cool
+                  - Money Saver
+              - variables:
+                  increase_temperature:
+                    "{{ target_temperature > current_temperature }}"
+              - condition: "{{ target_temperature != current_temperature }}"
+              - service: script.bedroom_ac_send_command
+                data:
+                  command:
+                    '{{ "increase_temperature" if increase_temperature else
+                    "decrease_temperature" }}'
+              - service:
+                  '{{ "input_number.increment" if increase_temperature else
+                  "input_number.decrement" }}'
+                target:
+                  entity_id: input_number.bedroom_ac_temperature
+      - if: '{{ command == "toggle_power" or command == "sync_mode" }}'
+        then:
+          - entity_id: input_boolean.bedroom_ac_power
+            condition: state
+            state: "on"
+          - service: script.bedroom_ac_send_command
+            data:
+              command: |
+                {% set MODES = {
+                  "Cool": "set_cool_mode",
+                  "Money Saver": "set_money_saver_mode",
+                  "Fan Only": "set_fan_only_mode",
+                } %}
+                {{ MODES[states("input_select.bedroom_ac_mode")] | default("Cool")  }}
+      - if: 
+          - "{{ target_temperature != current_temperature }}"
+          - condition: state
+            entity_id: input_boolean.bedroom_ac_power
+            state: "on"
+          - entity_id: input_select.bedroom_ac_mode
+            condition: state
+            state: 
+              - Cool
+              - Money Saver
+        then:
+          - service: script.turn_on
+            data:
+              variables:
+                command: sync_temperature
+            target:
+              entity_id: script.bedroom_ac_toggle_state
+    max: 5
 
 automation:
-  - id: bedroom_ac_set_temperature_and_mode
-    alias: Bedroom AC - Set Temperature and Mode
-    description: >
-      Sets the AC temperature to the set point of climate.bedroom_ac, and the
-      mode to input_select.bedroom_ac_mode.
+  - id: bedroom_ac_sync_state
+    alias: Bedroom AC - Sync State
+    mode: queued
     trigger:
-      - platform: state
+      - id: temperature
         entity_id: climate.bedroom_ac
+        platform: state
         attribute: temperature
-      - platform: state
-        entity_id: input_boolean.bedroom_ac_power
-        to: "on"
-      - platform: state
+      - id: mode
         entity_id: input_select.bedroom_ac_mode
-    mode: single
+        platform: state
+    condition:
+      - entity_id: climate.bedroom_ac
+        condition: state
+        state: cool
     action:
-      - repeat:
-          while: >
-            {{ is_state("input_boolean.bedroom_ac_power", "on") and
-              states("input_number.bedroom_ac_temperature") | int !=
-              state_attr("climate.bedroom_ac", "temperature") | int }}
-          sequence:
-            - service: script.bedroom_ac_toggle_temperature
-              data:
-                increase_temperature: >
-                  {{ states("input_number.bedroom_ac_temperature") | int <
-                  state_attr("climate.bedroom_ac", "temperature") | int }}
-      - service: script.bedroom_ac_send_command
+      - service: script.bedroom_ac_toggle_state
         data:
           command: |
-            {% set MODES = {
-              "Cool": "set_cool_mode",
-              "Money Saver": "set_money_saver_mode",
-              "Fan Only": "set_fan_only_mode",
-            } %}
-            {{ MODES[states("input_select.bedroom_ac_mode")] | default("Cool")  }}
+            {% if trigger.id == "temperature" %}
+              sync_temperature
+            {% elif trigger.id == "mode" %}
+              sync_mode
+            {% endif %}
 
 switch:
   - platform: template
     switches:
       bedroom_ac:
-        value_template: >
-          {{ is_state("input_boolean.bedroom_ac_power", "on") }}
-        turn_on:
-          - condition: state
-            entity_id: input_boolean.bedroom_ac_power
-            state: "off"
-          - service: script.bedroom_ac_toggle_power
         turn_off:
-          - condition: state
-            entity_id: input_boolean.bedroom_ac_power
+          - entity_id: input_boolean.bedroom_ac_power
+            condition: state
             state: "on"
-          - service: script.bedroom_ac_toggle_power
+          - service: script.bedroom_ac_toggle_state
+            data:
+              command: toggle_power
+        turn_on:
+          - entity_id: input_boolean.bedroom_ac_power
+            condition: state
+            state: "off"
+          - service: script.bedroom_ac_toggle_state
+            data:
+              command: toggle_power
+        value_template: |
+          {{ is_state("input_boolean.bedroom_ac_power", "on") }}
 
 climate:
-  - platform: generic_thermostat
-    unique_id: bedroom_ac
+  - unique_id: bedroom_ac
     name: Bedroom AC
-    heater: switch.bedroom_ac
-    target_sensor: sensor.bedroom_broadlink_temperature
-    min_temp: 60
-    max_temp: 90
+    platform: generic_thermostat
     ac_mode: true
-    cold_tolerance: 1.0
-    hot_tolerance: 1.0
+    cold_tolerance: 1
+    heater: switch.bedroom_ac
+    hot_tolerance: 1
+    initial_hvac_mode: "off"
+    max_temp: 90
     min_cycle_duration:
       minutes: 2
-    initial_hvac_mode: "off"
-    precision: 1.0
+    min_temp: 60
+    precision: 1
+    target_sensor: sensor.bedroom_broadlink_temperature
