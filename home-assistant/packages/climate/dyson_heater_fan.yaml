@@ -147,7 +147,14 @@ script:
                   "input_number.decrement" }}'
                 target:
                   entity_id: input_number.dyson_heater_fan_speed
-      - if: "{{ target_speed != current_speed }}"
+              - delay:
+                  # The Dyson Heater Fan requires a break between speed commands
+                  milliseconds: 500
+      - if: 
+          - "{{ target_speed != current_speed }}"
+          - condition: state
+            entity_id: input_boolean.dyson_heater_fan_power
+            state: "on"
         then:
           - service: script.turn_on
             data:
