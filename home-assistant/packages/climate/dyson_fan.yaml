@@ -122,9 +122,6 @@ script:
                   {% endif %}
                 target:
                   entity_id: input_number.dyson_fan_speed
-      # Delay to allow time for the AC to process the command.
-      - delay:
-          milliseconds: 100
     mode: queued
     max: 13
     icon: mdi:fan
