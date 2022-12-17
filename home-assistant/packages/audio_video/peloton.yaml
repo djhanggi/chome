@@ -4,6 +4,13 @@ homeassistant:
     automation.play_peloton_class:
       icon: mdi:yoga
 
+input_datetime:
+  peloton_time:
+    name: Peloton Time
+    icon: mdi:weather-sunset-up
+    has_time: true
+    initial: "12:00:30"
+
 script:
   play_peloton_class:
     alias: Play Peloton Class
@@ -86,33 +93,53 @@ automation:
     alias: Play Peloton Class
     mode: single
     trigger:
-      - id: noon
-        platform: time
-        at: "12:00:30"
-      - id: evening
-        platform: state
+      - id: reset_peloton_time
         entity_id: sensor.phase_of_day
+        platform: state
+        from: Sleeping
+        to:
+          - Morning
+          - Daytime
+      - id: peloton_time
+        platform: time
+        at: input_datetime.peloton_time
+      - id: evening
+        entity_id: sensor.phase_of_day
+        platform: state
         from: Daytime
         to: Evening
-    condition:
-      - entity_id: person.djhanggi
-        condition: state
-        state: home
-      - entity_id: calendar.daniel_hanggi_braze_com
-        condition: state
-        state: "off"
-      - condition: state
-        entity_id: sensor.phase_of_day
-        state:
-          - Daytime
-          - Evening
-      - condition: template
-        value_template: |
-          {% set last_midnight = now().replace(hour=0, minute=0, second=0) | as_timestamp %}
-          {% set last_peloton = state_attr("script.play_peloton_class",
-          "last_triggered") | as_timestamp %} 
-          {{ last_peloton < last_midnight }}
     action:
+      - choose:
+          - conditions: '{{ trigger.id == "reset_peloton_time" }}'
+            sequence:
+              - service: input_datetime.set_datetime
+                data:
+                  time: "12:00:30"
+                target:
+                  entity_id: input_datetime.peloton_time
+              - stop:
+          - conditions: '{{ trigger.id == "peloton_time" or trigger.id == "evening" }}'
+            sequence:
+              - condition: or
+                conditions:
+                  - entity_id: person.djhanggi
+                    condition: state
+                    state: not_home
+                  - entity_id: calendar.daniel_hanggi_braze_com
+                    condition: state
+                    state: "on"
+                  - entity_id: sensor.phase_of_day
+                    condition: state
+                    state:
+                      - Morning
+                      - Sleeping
+                  - condition: template
+                    value_template: |
+                      {% set last_midnight = now().replace(hour=0, minute=0, second=0) | as_timestamp %}
+                      {% set last_peloton = state_attr("script.play_peloton_class",
+                      "last_triggered") | as_timestamp %} 
+                      {{ last_midnight < last_peloton }}
+              - stop:
       - service: script.turn_on
         target:
           entity_id: script.play_peloton_class
