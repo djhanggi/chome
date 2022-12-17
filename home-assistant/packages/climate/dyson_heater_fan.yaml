@@ -125,6 +125,8 @@ script:
                 state: "on"
               - variables:
                   is_oscillating: '{{ is_state("input_boolean.dyson_heater_fan_oscillating", "on") }}'
+              - delay:
+                  milliseconds: 500
               - service: script.dyson_heater_fan_send_command
                 data:
                   command: '{{ "oscillate_off" if is_oscillating else "oscillate_on" }}'
