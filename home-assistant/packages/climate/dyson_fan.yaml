@@ -12,9 +12,7 @@ logbook:
       - input_number.dyson_fan_speed
       - input_number.dyson_fan_target_speed
       - script.dyson_fan_send_command
-      - script.dyson_fan_toggle_power
-      - script.dyson_fan_toggle_oscillate
-      - script.dyson_fan_toggle_speed
+      - script.dyson_fan_toggle_state
       - automation.dyson_fan_set_speed
 
 input_boolean:
@@ -56,88 +54,85 @@ script:
   dyson_fan_correct_power:
     alias: Dyson Fan - Correct Power
     sequence:
+      - wait_template: '{{ is_state("script.dyson_fan_send_command", "off") }}'
       - service: script.dyson_fan_send_command
         data:
           command: PowerToggle
     mode: single
     icon: mdi:fan-alert
-  dyson_fan_toggle_power:
-    alias: Dyson Fan - Toggle Power
+  dyson_fan_toggle_state:
+    alias: Dyson Fan - Toggle State
+    fields:
+      command:
+        description: |
+          One of:
+            - toggle_power
+            - toggle_oscillate
+            - increase_speed
+            - decrease_speed
     sequence:
-      # Ensure that setting temperature is not currently running to guarantee
-      # atomicity with that script.
-      - wait_template: >
-          {{ is_state("script.dyson_fan_toggle_speed", "off") }}
-      - service: script.dyson_fan_send_command
-        data:
-          command: PowerToggle
-      - service: input_boolean.toggle
-        target:
-          entity_id: input_boolean.dyson_fan_power
+      - if:
+          - "{{ command is undefined }}"
+        then:
+          - stop: command was not specified
+      - wait_template: '{{ is_state("script.dyson_fan_send_command", "off") }}'
+      - wait_template: '{{ is_state("script.dyson_fan_correct_power", "off") }}'
+      - choose:
+          - conditions:
+              - '{{ command == "toggle_power" }}'
+            sequence:
+              - service: script.dyson_fan_send_command
+                data:
+                  command: PowerToggle
+              - service: input_boolean.toggle
+                target:
+                  entity_id: input_boolean.dyson_fan_power
+          - conditions:
+              - '{{ command == "toggle_oscillate" }}'
+            sequence:
+              - condition: state
+                entity_id: input_boolean.dyson_fan_power
+                state: "on"
+              - service: script.dyson_fan_send_command
+                data:
+                  command: Oscillate
+              - service: input_boolean.toggle
+                target:
+                  entity_id: input_boolean.dyson_fan_oscillating
+          - conditions:
+              - '{{ command == "increase_speed" or command == "decrease_speed"
+                }}'
+            sequence:
+              - condition: state
+                entity_id: input_boolean.dyson_fan_power
+                state: "on"
+              - service: script.dyson_fan_send_command
+                data:
+                  command: >
+                    {% if increase_speed is defined %}
+                      FanModeUp
+                    {% elif decrease_speed is defined %}
+                      FanModeDown
+                    {% endif %}
+              - service: >
+                  {% if increase_speed is defined %}
+                    input_number.increment
+                  {% elif decrease_speed is defined %}
+                    input_number.decrement
+                  {% endif %}
+                target:
+                  entity_id: input_number.dyson_fan_speed
       # Delay to allow time for the AC to process the command.
       - delay:
           milliseconds: 100
     mode: queued
+    max: 13
     icon: mdi:fan
-  dyson_fan_toggle_oscillate:
-    alias: Dyson Fan - Toggle Oscillate
-    sequence:
-      # Ensure that setting temperature is not currently running to guarantee
-      # atomicity with that script.
-      - wait_template: >
-          {{ is_state("script.dyson_fan_toggle_speed", "off") }}
-      - condition: state
-        entity_id: input_boolean.dyson_fan_power
-        state: "on"
-      - service: script.dyson_fan_send_command
-        data:
-          command: Oscillate
-      - service: input_boolean.toggle
-        target:
-          entity_id: input_boolean.dyson_fan_oscillating
-      # Delay to allow time for the AC to process the command.
-      - delay:
-          milliseconds: 100
-    mode: single
-    icon: mdi:fan
-  dyson_fan_toggle_speed:
-    alias: Dyson Fan - Toggle Speed
-    sequence:
-      # Delay to allow time for any existing fan scripts to run and finish.
-      - delay:
-          milliseconds: 100
-      # Fail if another AC command is running to guarantee atomicity.
-      - condition: state
-        entity_id: script.dyson_fan_send_command
-        state: "off"
-      - condition: state
-        entity_id: input_boolean.dyson_fan_power
-        state: "on"
-      - service: script.dyson_fan_send_command
-        data:
-          command: >
-            {% if increase_speed %}
-              FanModeUp
-            {% else %}
-              FanModeDown
-            {% endif %}
-      - service: >
-          {% if increase_speed %}
-            input_number.increment
-          {% else %}
-            input_number.decrement
-          {% endif %}
-        target:
-          entity_id: input_number.dyson_fan_speed
-    mode: queued
-    icon: mdi:fan-plus
-    max: 9
 
 automation:
   - id: dyson_fan_set_speed
     alias: Dyson Fan - Set Speed
-    description: >
-      Sets the fan speed to the target speed.
+    description: Sets the fan speed to the target speed.
     trigger:
       - platform: state
         entity_id: input_boolean.dyson_fan_power
@@ -151,11 +146,16 @@ automation:
               states("input_number.dyson_fan_target_speed") | int !=
               states("input_number.dyson_fan_speed") | int }}
           sequence:
-            - service: script.dyson_fan_toggle_speed
+            - service: script.dyson_fan_toggle_state
               data:
-                increase_speed: >
-                  {{ states("input_number.dyson_fan_speed") | int <
-                  states("input_number.dyson_fan_target_speed") | int }}
+                command: |
+                  {% set target_speed = states("input_number.dyson_fan_target_speed") | int %}
+                  {% set current_speed = states("input_number.dyson_fan_speed") | int %}
+                  {% if target_speed > current_speed %}
+                    increase_speed
+                  {% else %}
+                    decrease_speed
+                  {% endif %}
     mode: restart
 
 fan:
@@ -174,23 +174,46 @@ fan:
           - condition: state
             entity_id: input_boolean.dyson_fan_power
             state: "off"
-          - service: script.dyson_fan_toggle_power
+          - service: script.dyson_fan_toggle_state
+            data:
+              command: toggle_power
         turn_off:
           - condition: state
             entity_id: input_boolean.dyson_fan_power
             state: "on"
-          - service: script.dyson_fan_toggle_power
+          - service: script.dyson_fan_toggle_state
+            data:
+              command: toggle_power
           - service: input_boolean.turn_off
             target:
               entity_id: input_boolean.dyson_fan_oscillating
         set_oscillating:
+          - if:
+              - "{{ oscillating is undefined }}"
+            then:
+              - stop: oscillating was not specified
           - condition: >
               {{ states("input_boolean.dyson_fan_oscillating") != oscillating }}
-          - service: script.dyson_fan_toggle_oscillate
+          - service: script.dyson_fan_toggle_state
+            data:
+              command: toggle_oscillate
         set_percentage:
+          - if:
+              - "{{ percentage is undefined }}"
+            then:
+              - stop: percentage was not specified
+          - variables:
+              target_speed: |
+                {% if percentage | int <= 0 %}
+                  1
+                {% elif percentage | int < 100 %}
+                  {{ percentage | int / 10 }}
+                {% elif percentage | int >= 100 %}
+                  10
+                {% endif %}
           - service: input_number.set_value
             target:
               entity_id: input_number.dyson_fan_target_speed
             data:
-              value: "{{ percentage | int / 10 }}"
+              value: "{{ target_speed | int }}"
         speed_count: 10
