@@ -15,7 +15,12 @@ running the compose files. Manual setup includes:
   - Google Calendar
   - HACS
     - Adaptive Lighting
+    - Auto Entities Card
+    - Browser Mod
+    - Fold Entity Row Card
     - Spotcast
+    - Sun Card
+    - TV Remote Card
     - VeSync
     - Wyze
   - PiHole
@@ -80,39 +85,16 @@ Keys should be sorted in the order specified in the .sort-order\*.yaml files.
 
 ### Home Assistant
 
-- Daily Helpers
-  - Next Alarm
-  - Morning
-  - Woken Up
-  - Daytime
-  - Evening
-  - Sleep
-  - Is Asleep
-  - Backup Time / "Server Time"
-  - Calendar in use
-  - Latest Midnight
-  - Recent script runs (sleep, peloton)
-  - #   - Backup Time / "Server Time"
-  - #   - Recent script runs (sleep, peloton)
-  - #   - Next Alarm -> Own package
-
-- Custom Jinja filter to convert seconds into time string
-- Reorganized daily package and add utilities for time
-- Dyson Heater Fan - Heat Mode
-- Bedroom Button
-  - Calculate how long long press is held to increase snooze time
-  - Toggle between open & closed blinds
-    - Only not while sleeping
-- Add sleep detection
 - UPS: Shut down Pi/Docker
-- Disable camera when not sleeping and home
-- Automate phone alarm and use as sunrise time
-  - Sync to Google Home
+- Alert - Kitchen Stove
+- Automated meditation
+- Sync Phone Alarms
+  - Morning Start Time, Google Home, iOS
+  - Offset lights from alarm
   - Disable morning blinds if earlier than sunrise
-  - Offset from lights
-- Add detection for when stove is on and unattended
+- Dyson Heater Fan - Heat Mode
+- Reduce phone use
 - Morse code service
-- Find my phone (unsilence phone and ring)
 
 ### Miscellaneous
 

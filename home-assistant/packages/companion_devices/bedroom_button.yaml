@@ -7,11 +7,12 @@ homeassistant:
 automation:
   - id: bedroom_button
     alias: Bedroom Button
-    mode: single
+    mode: queued
     trigger:
       - platform: event
         event_type: deconz_event
         variables:
+          event_time: "{{ trigger.event.time_fired | as_timestamp }}"
           press_type: |
             {% if trigger.event.data.event == 1002 %}
               single_press
@@ -19,26 +20,33 @@ automation:
               double_press
             {% elif trigger.event.data.event == 1001 %}
               long_press
-            {% elif trigger.event.data.event == 1003 %}
-              long_press_end
             {% endif %}
     action:
-      - service: homeassistant.turn_on
-        target:
-          entity_id: |
-            {% if press_type == "single_press" %}
-              script.go_to_sleep
-            {% elif press_type == "double_press" %}
-              {% 
-                set curtain_position = 
-                  state_attr("cover.smart_roller_shade_curtain", 
-                    "current_position")
-              %}
-              {% if curtain_position != 0 %}
-                scene.closed_blinds
-              {% else %}
-                scene.open_blinds
-              {% endif %}
-            {% elif press_type == "long_press" %}
-              script.snooze_morning_start_time
-            {% endif %}
+      - choose:
+          - conditions: '{{ press_type == "single_press" }}'
+            sequence:
+              - service: script.go_to_sleep
+          - conditions: '{{ press_type == "double_press" }}'
+            sequence:
+              - variables:
+                  curtain_position:
+                    '{{state_attr("cover.smart_roller_shade_curtain",  "current_position")
+                    }}'
+              - if: "{{ curtain_position != 0 }}"
+                then:
+                  - scene: scene.closed_blinds
+                else:
+                  - scene: scene.open_blinds
+          - conditions: '{{ press_type == "long_press" }}'
+            sequence:
+              - wait_for_trigger:
+                  - platform: event
+                    event_type: deconz_event
+              - variables:
+                  long_press_end_time:
+                    "{{ wait.trigger.event.time_fired | as_timestamp }}"
+              - service: script.snooze_morning_start_time
+                data:
+                  minutes: |
+                    {% set press_duration_seconds = (long_press_end_time - event_time) | int %} 
+                    {{ 15 * press_duration_seconds }}
