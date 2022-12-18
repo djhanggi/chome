@@ -1,0 +1,39 @@
+---
+script:
+  find_scarif:
+    alias: Find Scarif
+    icon: mdi:phone-alert
+    mode: restart
+    sequence:
+      - variables:
+          alarm_volume: '{{ states("sensor.scarif_volume_level_alarm") | int }}'
+      - service: notify.mobile_app_scarif
+        data:
+          data:
+            command: 7
+            media_stream: alarm_stream
+            tag: script.find_scarif
+          message: command_volume_level
+      - service: notify.mobile_app_scarif
+        data:
+          title: Finding Scarif
+          data:
+            channel: alarm_stream
+            priority: high
+            tag: script.find_scarif
+            ttl: 60
+          message: Home Assistant
+      - delay:
+          minutes: 1
+      - service: notify.mobile_app_scarif
+        data:
+          data:
+            command: "{{ alarm_volume }}"
+            media_stream: alarm_stream
+            tag: script.find_scarif
+          message: command_volume_level
+      - service: notify.notify
+        data:
+          data:
+            tag: script.find_scarif
+          message: clear_notification
