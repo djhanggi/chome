@@ -12,7 +12,10 @@ running the compose files. Manual setup includes:
   - Android TV
   - Broadlink
   - ConBee
+  - deCONZ
+  - Generic Camera
   - Google Calendar
+  - Google Cast
   - HACS
     - Adaptive Lighting
     - Auto Entities Card
@@ -23,6 +26,12 @@ running the compose files. Manual setup includes:
     - TV Remote Card
     - VeSync
     - Wyze
+  - IFTTT
+  - Local IP
+  - Logitech Harmony
+  - Met.no
+  - Moon
+  - NUT
   - PiHole
   - Plex
   - Spotify
@@ -70,6 +79,8 @@ Keys should be sorted in the order specified in the .sort-order\*.yaml files.
 - PiHole DNS-over-HTTPS
 - Manage networking/configuration/constants/secrets in separate repository
 - fail2ban
+  - Create allowlist for HA, Plex, Wireguard known devices
+  - Create blocklist for all ports with errors or spam
 - Restrict most access to behind VPN unless specifically required
   - HA behind VPN
 - Firefox Relay, Privacy Card, & VPN
