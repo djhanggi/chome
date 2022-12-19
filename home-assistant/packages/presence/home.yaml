@@ -64,7 +64,9 @@ automation:
       - if:
           - '{{ is_state("sensor.phase_of_day", "Evening") }}'
         then:
-          - scene: scene.evening
+          - service: automation.trigger
+            target:
+              entity_id: automation.evening
       - service: scene.create
         data:
           scene_id: away_return_scene
