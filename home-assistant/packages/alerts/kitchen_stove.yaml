@@ -1,0 +1,67 @@
+---
+homeassistant:
+  customize:
+    automation.alert_kitchen_stove:
+      icon: mdi:thermometer-alert
+    sensor.kitchen_temperature_derivative:
+      icon: mdi:thermometer
+    sensor.kitchen_presence_last_30_minutes:
+      icon: mdi:motion-sensor
+
+sensor:
+  - name: Kitchen Temperature Derivative
+    platform: derivative
+    source: sensor.aqara_temperature_kitchen_temperature
+    time_window: "00:05:00"
+    unit_time: min
+  - platform: history_stats
+    name: Kitchen Presence Last 30 Minutes
+    entity_id: binary_sensor.aqara_motion_kitchen
+    state: "on"
+    type: count
+    end: "{{ now() }}"
+    duration:
+      minutes: 30
+
+automation:
+  - id: alert_kitchen_stove
+    alias: Alert - Kitchen Stove
+    mode: single
+    trigger:
+      - id: temperature_change
+        platform: state
+        entity_id: sensor.kitchen_temperature_derivative
+    condition:
+      - condition: numeric_state
+        entity_id: sensor.kitchen_presence_last_30_minutes
+        above: 0
+      - condition: numeric_state
+        entity_id: sensor.kitchen_temperature_derivative
+        above: 0.1
+    action:
+      - repeat:
+          sequence:
+            - if: '{{ is_state("binary_sensor.aqara_motion_kitchen", "off") }}'
+              then:
+                - service: notify.mobile_app_cantonica
+                  data:
+                    data:
+                      tag: automation.alert_kitchen_stove
+                      ttl: 300
+                    message: Stove may be running!
+                - repeat:
+                    sequence:
+                      - service: switch.toggle
+                        target:
+                          entity_id: switch.kitchen_lights
+                    count: 2
+            - delay:
+                minutes: 5
+          until:
+            - '{{ states("sensor.kitchen_temperature_derivative") | float <= 0
+              }}'
+      - service: notify.mobile_app_cantonica
+        data:
+          data:
+            tag: automation.alert_kitchen_stove
+          message: clear_notification

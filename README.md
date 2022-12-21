@@ -97,7 +97,6 @@ Keys should be sorted in the order specified in the .sort-order\*.yaml files.
 ### Home Assistant
 
 - UPS: Shut down Pi/Docker
-- Alert - Kitchen Stove
 - Automated meditation
 - Sync Phone Alarms
   - Morning Start Time, Google Home, iOS
