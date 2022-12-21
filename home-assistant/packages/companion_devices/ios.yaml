@@ -1,14 +1,34 @@
 ---
 homeassistant:
   customize:
+    automation.ios_find_scarif:
+      icon: mdi:phone-alert
+    automation.ios_meditate:
+      icon: mdi:meditation
     automation.ios_sleep:
       icon: mdi:sleep
     automation.ios_snooze:
       icon: mdi:alarm-snooze
-    automation.ios_meditate:
-      icon: mdi:meditation
 
 automation:
+  - id: ios_find_scarif
+    alias: iOS - Find Scarif
+    trigger:
+      platform: event
+      event_data:
+        actionName: iOS Find Scarif
+      event_type: ios.action_fired
+    action:
+      - service: script.find_scarif
+  - id: ios_meditate
+    alias: iOS - Meditate
+    trigger:
+      platform: event
+      event_data:
+        actionName: iOS Meditate
+      event_type: ios.action_fired
+    action:
+      - service: script.spotify_meditate
   - id: ios_sleep
     alias: iOS - Sleep
     trigger:
@@ -27,18 +47,25 @@ automation:
       event_type: ios.action_fired
     action:
       - service: script.snooze_morning_start_time
-  - id: ios_meditate
-    alias: iOS - Meditate
-    trigger:
-      platform: event
-      event_data:
-        actionName: iOS Meditate
-      event_type: ios.action_fired
-    action:
-      - service: script.spotify_meditate
 
 ios:
   actions:
+    - name: iOS Find Scarif
+      icon:
+        icon: mdi:phone-alert
+        color: "#000000"
+      background_color: "#ffffff"
+      label:
+        color: "#000000"
+        text: Find Scarif
+    - name: iOS Meditate
+      icon:
+        icon: mdi:meditation
+        color: "#000000"
+      background_color: "#ffffff"
+      label:
+        color: "#000000"
+        text: Meditate
     - name: iOS Sleep
       icon:
         icon: mdi:sleep
@@ -55,11 +82,3 @@ ios:
       label:
         color: "#000000"
         text: Snooze
-    - name: iOS Meditate
-      icon:
-        icon: mdi:meditation
-        color: "#000000"
-      background_color: "#ffffff"
-      label:
-        color: "#000000"
-        text: Meditate
