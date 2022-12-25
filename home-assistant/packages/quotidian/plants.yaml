@@ -19,8 +19,9 @@ automation:
       - id: plant_sunrise
         entity_id: sensor.phase_of_day
         platform: state
-        from: Sleeping
-        to: Morning
+        to:
+          - Morning
+          - Daytime
       - id: plant_sunset
         entity_id: sensor.phase_of_day
         platform: state
