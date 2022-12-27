@@ -1,4 +1,9 @@
 ---
+homeassistant:
+  customize:
+    automation.dyson_heater_fan_sync_temperature:
+      icon: mdi:heat-wave
+
 logbook:
   exclude:
     entities:
@@ -9,6 +14,7 @@ logbook:
       - input_select.dyson_heater_fan_next_power_command
       - script.dyson_heater_fan_send_command
       - script.dyson_heater_fan_toggle_state
+      - automation.dyson_heater_fan_sync_temperature
 
 input_boolean:
   dyson_heater_fan_oscillating:
@@ -30,6 +36,18 @@ input_number:
     icon: mdi:fan
     min: 1
     max: 10
+    step: 1
+  dyson_heater_fan_temperature:
+    name: Dyson Heater Fan - Temperature
+    icon: mdi:thermometer
+    min: 32
+    max: 90
+    step: 1
+  dyson_heater_fan_target_temperature:
+    name: Dyson Heater Fan - Target Temperature
+    icon: mdi:thermometer
+    min: 32
+    max: 90
     step: 1
 
 input_select:
@@ -89,6 +107,7 @@ script:
             - toggle_power
             - toggle_oscillate
             - sync_speed
+            - sync_temperature
     sequence:
       - if:
           - "{{ command is undefined }}"
@@ -103,6 +122,11 @@ script:
             '{{ states("input_number.dyson_heater_fan_speed") | int }}'
           target_speed:
             '{{ states("input_number.dyson_heater_fan_target_speed") | int }}'
+          current_temperature:
+            '{{ states("input_number.dyson_heater_fan_temperature") | int }}'
+          target_temperature:
+            '{{ states("input_number.dyson_heater_fan_target_temperature") | int
+            }}'
       - choose:
           - conditions:
               - '{{ command == "toggle_power" }}'
@@ -124,12 +148,15 @@ script:
                 condition: state
                 state: "on"
               - variables:
-                  is_oscillating: '{{ is_state("input_boolean.dyson_heater_fan_oscillating", "on") }}'
+                  is_oscillating:
+                    '{{ is_state("input_boolean.dyson_heater_fan_oscillating",
+                    "on") }}'
               - delay:
                   milliseconds: 500
               - service: script.dyson_heater_fan_send_command
                 data:
-                  command: '{{ "oscillate_off" if is_oscillating else "oscillate_on" }}'
+                  command:
+                    '{{ "oscillate_off" if is_oscillating else "oscillate_on" }}'
               - service: input_boolean.toggle
                 target:
                   entity_id: input_boolean.dyson_heater_fan_oscillating
@@ -155,7 +182,30 @@ script:
               - delay:
                   # The Dyson Heater Fan requires a break between speed commands
                   milliseconds: 500
-      - if: 
+          - conditions:
+              - '{{ command == "sync_temperature" }}'
+            sequence:
+              - entity_id: input_boolean.dyson_heater_fan_power
+                condition: state
+                state: "on"
+              - variables:
+                  increase_temperature:
+                    "{{ target_temperature > current_temperature }}"
+              - condition: "{{ target_temperature != current_temperature }}"
+              - service: script.dyson_heater_fan_send_command
+                data:
+                  command:
+                    '{{ "increase_temperature" if increase_temperature else
+                    "decrease_temperature" }}'
+              - service:
+                  '{{ "input_number.increment" if increase_temperature else
+                  "input_number.decrement" }}'
+                target:
+                  entity_id: input_number.dyson_heater_fan_temperature
+              - delay:
+                  # The Dyson Heater Fan requires a break between temperature commands
+                  milliseconds: 500
+      - if:
           - "{{ target_speed != current_speed }}"
           - condition: state
             entity_id: input_boolean.dyson_heater_fan_power
@@ -167,7 +217,38 @@ script:
                 command: sync_speed
             target:
               entity_id: script.dyson_heater_fan_toggle_state
+      - if:
+          - "{{ target_temperature != current_temperature }}"
+          - condition: state
+            entity_id: input_boolean.dyson_heater_fan_power
+            state: "on"
+        then:
+          - service: script.turn_on
+            data:
+              variables:
+                command: sync_temperature
+            target:
+              entity_id: script.dyson_heater_fan_toggle_state
     max: 5
+
+automation:
+  - id: dyson_heater_fan_sync_temperature
+    alias: Dyson Heater Fan - Sync Temperature
+    mode: restart
+    trigger:
+      - platform: state
+        entity_id: input_number.dyson_heater_fan_target_temperature
+    condition:
+      - condition: state
+        entity_id: input_boolean.dyson_heater_fan_power
+        state: "on"
+    action:
+      - service: script.turn_on
+        target:
+          entity_id: script.dyson_heater_fan_toggle_state
+        data:
+          variables:
+            command: sync_temperature
 
 fan:
   - platform: template

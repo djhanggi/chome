@@ -103,7 +103,6 @@ Keys should be sorted in the order specified in the .sort-order\*.yaml files.
   - Morning Start Time, Google Home, iOS
   - Offset lights from alarm
   - Disable morning blinds if earlier than sunrise
-- Dyson Heater Fan - Heat Mode
 - Reduce phone use
 - Morse code service
 

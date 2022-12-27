@@ -216,6 +216,7 @@ views:
               - entity: fan.dyson_fan
               - entity: climate.bedroom_ac
               - entity: fan.dyson_heater_fan
+              - entity: input_number.dyson_heater_fan_target_temperature
               - entity: humidifier.levoit_humidifier
           - title: Climate
             type: custom:popup-card
