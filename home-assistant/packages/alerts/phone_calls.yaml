@@ -1,12 +1,12 @@
 ---
 homeassistant:
   customize:
-    automation.notify_phone_at_home:
+    automation.alert_phone_call:
       icon: mdi:alarm-bell
 
 automation:
-  - id: notify_phone_at_home
-    alias: Notify Phone at Home
+  - id: alert_phone_call
+    alias: Alert - Phone Call
     mode: single
     trigger:
       - entity_id: sensor.scarif_phone_state

@@ -1,12 +1,12 @@
 ---
 homeassistant:
   customize:
-    automaiton.pagerduty_alert:
+    automation.alert_pagerduty:
       icon: mdi:alert
 
 automation:
-  - id: pagerduty_alert
-    alias: PagerDuty Alert
+  - id: alert_pagerduty
+    alias: Alert - PagerDuty
     trigger:
       - platform: webhook
         variables:
@@ -16,9 +16,6 @@ automation:
       - condition: state
         entity_id: person.djhanggi
         state: home
-      - condition: state
-        entity_id: sensor.phase_of_day
-        state: Daytime
     action:
       - service: notify.mobile_app_scarif
         data:
