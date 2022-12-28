@@ -1,0 +1,6 @@
+---
+logbook:
+  exclude:
+    entities:
+      - sensor.scarif_last_used_app
+      - binary_sensor.scarif_device_locked

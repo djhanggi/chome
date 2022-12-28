@@ -118,7 +118,8 @@ automation:
                 target:
                   entity_id: input_datetime.peloton_time
               - stop:
-          - conditions: '{{ trigger.id == "peloton_time" or trigger.id == "evening" }}'
+          - conditions:
+              '{{ trigger.id == "peloton_time" or trigger.id == "evening" }}'
             sequence:
               - condition: or
                 conditions:

@@ -4,6 +4,11 @@ homeassistant:
     automation.laptop_camera_in_use:
       icon: mdi:minus-circle
 
+logbook:
+  exclude:
+    entities:
+      - sensor.bzusc02ff0h3md6v_frontmost_app
+
 automation:
   - id: laptop_camera_in_use
     alias: Laptop Camera in Use

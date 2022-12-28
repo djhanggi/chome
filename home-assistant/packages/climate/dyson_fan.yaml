@@ -116,7 +116,7 @@ script:
                   "input_number.decrement" }}'
                 target:
                   entity_id: input_number.dyson_fan_speed
-      - if: 
+      - if:
           - "{{ target_speed != current_speed }}"
           - condition: state
             entity_id: input_boolean.dyson_fan_power

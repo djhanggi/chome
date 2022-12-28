@@ -46,7 +46,8 @@ automation:
             - delay:
                 minutes: 2
           until:
-            - '{{ states("sensor.kitchen_temperature_derivative") | float <= 0 }}'
+            - '{{ states("sensor.kitchen_temperature_derivative") | float <= 0
+              }}'
       - service: notify.notify
         data:
           data:

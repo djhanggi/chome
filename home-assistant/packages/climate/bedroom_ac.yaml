@@ -112,7 +112,7 @@ script:
                 state: "on"
               - entity_id: input_select.bedroom_ac_mode
                 condition: state
-                state: 
+                state:
                   - Cool
                   - Money Saver
               - variables:
@@ -143,14 +143,14 @@ script:
                   "Fan Only": "set_fan_only_mode",
                 } %}
                 {{ MODES[states("input_select.bedroom_ac_mode")] | default("Cool")  }}
-      - if: 
+      - if:
           - "{{ target_temperature != current_temperature }}"
           - condition: state
             entity_id: input_boolean.bedroom_ac_power
             state: "on"
           - entity_id: input_select.bedroom_ac_mode
             condition: state
-            state: 
+            state:
               - Cool
               - Money Saver
         then:

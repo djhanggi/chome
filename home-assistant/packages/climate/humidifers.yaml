@@ -1,0 +1,5 @@
+---
+logbook:
+  exclude:
+    entities:
+      - number.levoit_humidifier_mist_level

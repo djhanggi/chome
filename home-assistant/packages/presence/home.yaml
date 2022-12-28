@@ -34,7 +34,8 @@ automation:
           - service: scene.create
             data:
               scene_id: away_return_scene
-              snapshot_entities: "{{ light_entities + other_snapshot_entities }}"
+              snapshot_entities:
+                "{{ light_entities + other_snapshot_entities }}"
       - service: scene.apply
         data:
           entities: |
@@ -46,7 +47,8 @@ automation:
               {% endfor %}
             }
       - if:
-          - '{{ not is_state_attr("media_player.spotify_djhanggi", "source", "scarif") }}'
+          - '{{ not is_state_attr("media_player.spotify_djhanggi", "source",
+            "scarif") }}'
         then:
           - service: media_player.media_pause
             target:

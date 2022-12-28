@@ -25,7 +25,7 @@ automation:
       - if:
           - entity_id: sensor.phase_of_day
             condition: state
-            state: 
+            state:
               - Morning
               - Daytime
           - condition: state

@@ -27,14 +27,14 @@ automation:
         to: "off"
       - id: timer_started
         platform: event
-        event_type: 
+        event_type:
           - timer.started
           - timer.restarted
         event_data:
           entity_id: timer.desk_lamp_timer
       - id: timer_stopped
         platform: event
-        event_type: 
+        event_type:
           - timer.paused
           - timer.finished
           - timer.cancelled
@@ -48,48 +48,48 @@ automation:
           - Daytime
     action:
       - choose:
-        - conditions:
-            - '{{ trigger.id == "lamp_turned_on" }}'
-          sequence:
-            - service: timer.start
-              target: 
-                entity_id: timer.desk_lamp_timer
-        - conditions:
-            - '{{ trigger.id == "lamp_turned_off" }}'
-          sequence:
-            - service: timer.pause
-              target: 
-                entity_id: timer.desk_lamp_timer
-        - conditions:
-            - '{{ trigger.id == "timer_started" }}'
-          sequence:
-            - service: switch.turn_on
-              target: 
-                entity_id: switch.desk_lamp
-        - conditions:
-            - '{{ trigger.id == "timer_stopped" }}'
-          sequence:
-            - service: switch.turn_off
-              target: 
-                entity_id: switch.desk_lamp
+          - conditions:
+              - '{{ trigger.id == "lamp_turned_on" }}'
+            sequence:
+              - service: timer.start
+                target:
+                  entity_id: timer.desk_lamp_timer
+          - conditions:
+              - '{{ trigger.id == "lamp_turned_off" }}'
+            sequence:
+              - service: timer.pause
+                target:
+                  entity_id: timer.desk_lamp_timer
+          - conditions:
+              - '{{ trigger.id == "timer_started" }}'
+            sequence:
+              - service: switch.turn_on
+                target:
+                  entity_id: switch.desk_lamp
+          - conditions:
+              - '{{ trigger.id == "timer_stopped" }}'
+            sequence:
+              - service: switch.turn_off
+                target:
+                  entity_id: switch.desk_lamp
 
 template:
   - trigger:
-    - id: start
-      platform: homeassistant
-      event: start
-    - id: reset_day
-      entity_id: sensor.phase_of_day
-      platform: state
-      from: Sleeping
-      to:
-        - Morning
-        - Daytime
-    - id: timer_ended
-      platform: event
-      event_type: timer.finished
-      event_data:
-        entity_id: timer.desk_lamp_timer
+      - id: start
+        platform: homeassistant
+        event: start
+      - id: reset_day
+        entity_id: sensor.phase_of_day
+        platform: state
+        from: Sleeping
+        to:
+          - Morning
+          - Daytime
+      - id: timer_ended
+        platform: event
+        event_type: timer.finished
+        event_data:
+          entity_id: timer.desk_lamp_timer
     binary_sensor:
       - unique_id: desk_lamp_used_today
         name: Desk Lamp Used Today
