@@ -22,6 +22,7 @@ script:
             priority: high
             tag: script.find_scarif
             ttl: 60
+            timeout: 60
           message: Home Assistant
       - delay:
           minutes: 1
@@ -32,8 +33,3 @@ script:
             media_stream: alarm_stream
             tag: script.find_scarif
           message: command_volume_level
-      - service: notify.notify
-        data:
-          data:
-            tag: script.find_scarif
-          message: clear_notification

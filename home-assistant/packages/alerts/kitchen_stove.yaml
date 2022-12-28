@@ -47,7 +47,8 @@ automation:
                   data:
                     data:
                       tag: automation.alert_kitchen_stove
-                      ttl: 300
+                      ttl: 0
+                      timeout: 300
                     message: Stove may be running!
                 - repeat:
                     sequence:
