@@ -29,6 +29,8 @@ automation:
       event_type: ios.action_fired
     action:
       - service: script.spotify_meditate
+        data:
+          media_player_id: media_player.bedroom_speaker
   - id: ios_sleep
     alias: iOS - Sleep
     trigger:
