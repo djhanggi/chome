@@ -1,0 +1,9 @@
+---
+sensor:
+  - platform: citybikes
+    name: CitiBike
+    stations:
+      - f64c060aad3a6ed470ee3f04583cdfa3 # W 29 St & 9 Ave
+      - b44036ac71524aca434a01e90cd95e2b # W 30 St & 8 Ave
+      - 7ca4ed0b4fba2b2fb259ba84bd43e2ad # 8 Ave & W 31 St
+      - 690892feeba5b15469cd9aff7b53edff # 12 Ave & W 40 St
