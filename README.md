@@ -21,6 +21,7 @@ running the compose files. Manual setup includes:
     - Auto Entities Card
     - Browser Mod
     - Fold Entity Row Card
+    - Google Home
     - Spotcast
     - Sun Card
     - TV Remote Card
@@ -60,6 +61,7 @@ Keys should be sorted in the order specified in the .sort-order\*.yaml files.
 
 - zstyle for zsh + ohmyzsh
 - /mnt/{chome,docker} vs. on SSD
+  - Syncthing
 - Docker Networking
   - Want to minimize use of host and define manual Docker networks to isolate
     services
@@ -90,9 +92,11 @@ Keys should be sorted in the order specified in the .sort-order\*.yaml files.
 - Clean up space regularly
 - Serve NAS via Synology or Syncthing to devices
 - Serve photos/media via Plex and Photos equivalent
+  - PhotoPrism, Lychee
 - Auto-canonicalize photos
 - Encrypt /documents + setup protection rules
 - Set up file + photo serving and deprecate Google
+  - NextCloud
 
 ### Home Assistant
 
@@ -100,6 +104,7 @@ Keys should be sorted in the order specified in the .sort-order\*.yaml files.
 - Automated meditation
 - Sync Phone Alarms
   - Morning Start Time, Google Home, iOS
+  - https://wltd.org/posts/how-to-automatically-sync-ios-alarms-with-home-assistant
   - Offset lights from alarm
   - Disable morning blinds if earlier than sunrise
 - Reduce phone use

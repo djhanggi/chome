@@ -1,0 +1,11 @@
+---
+template:
+  - sensor:
+      - unique_id: next_alarm_time
+        name: Next Alarm Time
+        state: |
+          {% set bedroom_alarm_time = states("sensor.bedroom_speaker_alarms") | as_timestamp %}
+          {% set scarif_alarm_time = states("sensor.scarif_next_alarm") | as_timestamp %}
+          {% set morning_start_time = states("input_datetime.morning_start_time") | today_at | as_timestamp %}
+          {% set next_alarm = min([bedroom_alarm_time, scarif_alarm_time]) %}
+          {{ next_alarm | as_datetime | as_local }}
