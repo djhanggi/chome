@@ -59,6 +59,5 @@ automation:
           title: Headspace
           message: Headspace
           data:
-            tag: automation.play_headspace
             ttl: 3600
             timeout: 3
