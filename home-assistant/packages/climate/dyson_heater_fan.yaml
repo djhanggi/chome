@@ -43,13 +43,13 @@ input_number:
     name: Dyson Heater Fan - Temperature
     icon: mdi:thermometer
     min: 32
-    max: 90
+    max: 99
     step: 1
   dyson_heater_fan_target_temperature:
     name: Dyson Heater Fan - Target Temperature
     icon: mdi:thermometer
     min: 32
-    max: 90
+    max: 99
     step: 1
 
 input_select:
