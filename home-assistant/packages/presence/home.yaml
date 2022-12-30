@@ -27,6 +27,7 @@ automation:
         - switch.desk_lamp
         - switch.sunlight_lamp
         - switch.kitchen_lights
+        - fan.dyson_heater_fan
     action:
       - if:
           - '{{ trigger.id == "presence" }}'
