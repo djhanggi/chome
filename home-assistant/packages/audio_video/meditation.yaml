@@ -1,0 +1,71 @@
+---
+homeassistant:
+  customize:
+    automation.play_headspace:
+      icon: mdi:meditation
+
+input_datetime:
+  headspace_time:
+    name: Headspace Time
+    icon: mdi:weather-sunset-up
+    has_time: true
+    initial: "18:05:00"
+
+script:
+  spotify_meditate:
+    alias: Spotify Meditate
+    icon: mdi:meditation
+    mode: single
+    fields:
+      media_player_id:
+        description: The entity_id of the media_player
+    sequence:
+      - service: spotcast.start
+        data:
+          entity_id: "{{ media_player_id }}"
+          random_song: true
+          shuffle: true
+          uri: spotify:playlist:37i9dQZF1DWVS1recTqXhf
+      - delay:
+          minutes: 15
+      - service: media_player.media_pause
+        target:
+          entity_id: media_player.spotify_djhanggi
+
+automation:
+  - id: play_headspace
+    alias: Play Headspace
+    mode: single
+    trigger:
+      - id: reset_headspace_time
+        entity_id: sensor.phase_of_day
+        platform: state
+        from: Sleeping
+        to:
+          - Morning
+          - Daytime
+      - id: headspace_time
+        platform: time
+        at: input_datetime.headspace_time
+    action:
+      - if: '{{ trigger.id == "reset_headspace_time" }}'
+        then:
+          - service: input_datetime.set_datetime
+            data:
+              time: "18:05:00"
+            target:
+              entity_id: input_datetime.headspace_time
+          - stop: null
+      - wait_template: >
+          {{
+            is_state("person.djhanggi", "home") and
+            is_state("calendar.daniel_hanggi_braze_com", "off") and
+            is_state("binary_sensor.scarif_device_locked", "off") 
+          }}
+      - service: notify.mobile_app_scarif
+        data:
+          title: Headspace
+          data:
+            timeout: 3
+            ttl: 3600
+          message: Headspace
