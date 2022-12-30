@@ -17,6 +17,13 @@ automation:
     alias: Desk Lamp Timing
     mode: single
     trigger:
+      - id: reset_day
+        entity_id: sensor.phase_of_day
+        platform: state
+        from: Sleeping
+        to:
+          - Morning
+          - Daytime
       - id: lamp_turned_on
         entity_id: switch.desk_lamp
         platform: state
@@ -48,6 +55,12 @@ automation:
           - Daytime
     action:
       - choose:
+          - conditions:
+              - '{{ trigger.id == "reset_day" }}'
+            sequence:
+              - service: timer.cancel
+                target:
+                  entity_id: timer.desk_lamp_timer
           - conditions:
               - '{{ trigger.id == "lamp_turned_on" }}'
             sequence:
