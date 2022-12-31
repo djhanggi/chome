@@ -29,7 +29,7 @@ input_select:
 input_text:
 logbook:
 logger:
-  default: debug
+  default: info
 map:
 media_source:
 mobile_app:
