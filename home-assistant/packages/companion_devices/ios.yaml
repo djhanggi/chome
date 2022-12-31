@@ -1,58 +1,41 @@
 ---
 homeassistant:
   customize:
-    automation.ios_find_scarif:
-      icon: mdi:phone-alert
-    automation.ios_meditate:
-      icon: mdi:meditation
-    automation.ios_sleep:
-      icon: mdi:sleep
-    automation.ios_snooze:
-      icon: mdi:alarm-snooze
+    automation.ios_actions:
+      icon: mdi:apple-ios
 
 automation:
-  - id: ios_find_scarif
-    alias: iOS - Find Scarif
+  - id: ios_actions
+    alias: iOS Actions
+    mode: queued
     trigger:
-      platform: event
-      event_data:
-        actionName: iOS Find Scarif
-      event_type: ios.action_fired
+      - platform: event
+        event_type: ios.action_fired
     action:
-      - service: script.find_scarif
-  - id: ios_meditate
-    alias: iOS - Meditate
-    trigger:
-      platform: event
-      event_data:
-        actionName: iOS Meditate
-      event_type: ios.action_fired
-    action:
-      - service: script.spotify_meditate
-        data:
-          media_player_id: media_player.bedroom_speaker
-  - id: ios_sleep
-    alias: iOS - Sleep
-    trigger:
-      platform: event
-      event_data:
-        actionName: iOS Sleep
-      event_type: ios.action_fired
-    action:
-      - service: script.go_to_sleep
-  - id: ios_snooze
-    alias: iOS - Snooze
-    trigger:
-      platform: event
-      event_data:
-        actionName: iOS Snooze
-      event_type: ios.action_fired
-    action:
-      - service: script.snooze_morning_start_time
+      - variables:
+          action: "{{ trigger.event.data.actionName }}"
+      - choose:
+          - conditions: '{{ action == "ios_find_scarif" }}'
+            sequence:
+              - service: script.find_scarif
+          - conditions: '{{ action == "ios_spotify_meditate" }}'
+            sequence:
+              - service: script.spotify_meditate
+                data:
+                  media_player_id: media_player.bedroom_speaker
+          - conditions: '{{ action == "ios_go_to_sleep" }}'
+            sequence:
+              - service: script.go_to_sleep
+          - conditions: '{{ action == "ios_snooze_morning_start_time" }}'
+            sequence:
+              - service: script.snooze_morning_start_time
+        default:
+          - error: true
+            stop: "Unrecognized iOS action: {{ action }}"
 
 ios:
   actions:
-    - name: iOS Find Scarif
+    - name: ios_find_scarif
       icon:
         icon: mdi:phone-alert
         color: "#000000"
@@ -60,7 +43,7 @@ ios:
       label:
         color: "#000000"
         text: Find Scarif
-    - name: iOS Meditate
+    - name: ios_spotify_meditate
       icon:
         icon: mdi:meditation
         color: "#000000"
@@ -68,7 +51,7 @@ ios:
       label:
         color: "#000000"
         text: Meditate
-    - name: iOS Sleep
+    - name: ios_go_to_sleep
       icon:
         icon: mdi:sleep
         color: "#000000"
@@ -76,7 +59,7 @@ ios:
       label:
         color: "#000000"
         text: Sleep
-    - name: iOS Snooze
+    - name: ios_snooze_morning_start_time
       icon:
         icon: mdi:alarm-snooze
         color: "#000000"
