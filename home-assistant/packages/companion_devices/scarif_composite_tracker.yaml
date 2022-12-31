@@ -12,7 +12,7 @@ logbook:
 automation:
   - id: update_scarif_composite_tracker
     alias: Update Scarif Composite Tracker
-    mode: single
+    mode: queued
     trigger:
       - platform: homeassistant
         event: start

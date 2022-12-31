@@ -91,7 +91,7 @@ script:
 automation:
   - id: play_peloton_class
     alias: Play Peloton Class
-    mode: single
+    mode: queued
     trigger:
       - id: reset_peloton_time
         entity_id: sensor.phase_of_day

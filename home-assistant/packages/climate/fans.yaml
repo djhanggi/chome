@@ -7,7 +7,7 @@ homeassistant:
 automation:
   - id: oscillate_fans_on_start
     alias: Oscillate Fans on Start
-    mode: single
+    mode: queued
     trigger:
       - entity_id:
           - fan.dyson_fan

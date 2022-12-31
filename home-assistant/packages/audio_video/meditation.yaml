@@ -35,7 +35,7 @@ script:
 automation:
   - id: play_headspace
     alias: Play Headspace
-    mode: single
+    mode: queued
     trigger:
       - id: reset_headspace_time
         entity_id: sensor.phase_of_day

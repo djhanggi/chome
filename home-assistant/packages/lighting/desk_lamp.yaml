@@ -15,7 +15,7 @@ timer:
 automation:
   - id: desk_lamp_timing
     alias: Desk Lamp Timing
-    mode: single
+    mode: queued
     trigger:
       - id: reset_day
         entity_id: sensor.phase_of_day

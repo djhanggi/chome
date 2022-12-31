@@ -7,7 +7,7 @@ homeassistant:
 automation:
   - id: presence_bathroom_lights
     alias: Presence - Bathroom Lights
-    mode: single
+    mode: queued
     trigger:
       - id: enter
         entity_id: binary_sensor.aqara_motion_bathroom

@@ -7,7 +7,7 @@ homeassistant:
 automation:
   - id: presence_kitchen_lights
     alias: Presence - Kitchen Lights
-    mode: single
+    mode: queued
     trigger:
       - id: enter
         entity_id: binary_sensor.aqara_motion_kitchen
