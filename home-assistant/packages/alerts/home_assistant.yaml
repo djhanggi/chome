@@ -1,12 +1,12 @@
 ---
 homeassistant:
   customize:
-    automation.notify_on_system_change:
+    automation.alert_home_assistant:
       icon: mdi:bell-cancel
 
 automation:
-  - id: notify_on_system_change
-    alias: Notify on System Change
+  - id: alert_home_assistant
+    alias: Alert - Home Assistant
     mode: single
     trigger:
       - id: shutdown
@@ -19,12 +19,12 @@ automation:
       - service: notify.notify
         data:
           data:
-            tag: automation.notify_on_system_change
+            tag: automation.alert_home_assistant
           message: clear_notification
       - service: notify.notify
         data:
           data:
-            tag: automation.notify_on_system_change
+            tag: automation.alert_home_assistant
           message: |
             {% if trigger.id == "shutdown" %}
               Home Assistant is shutting down
