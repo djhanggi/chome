@@ -1,14 +1,14 @@
 ---
 homeassistant:
   customize:
-    automation.notify_ups_change:
+    automation.alert_ups:
       icon: mdi:battery-alert
     automation.ups_triggered_shutdown:
       icon: mdi:battery-alert
 
 automation:
-  - id: notify_ups_change
-    alias: Notify UPS Change
+  - id: alert_ups
+    alias: Alert - UPS
     mode: single
     trigger:
       - entity_id: sensor.ups_status
