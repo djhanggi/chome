@@ -96,6 +96,10 @@ Keys should be sorted in the order specified in the .sort-order\*.yaml files.
 
 ### Home Assistant
 
+- https://www.home-assistant.io/integrations/google_assistant/
+- Show Alert script
+- Health Automations - wait_for template
+- Prefix automations with package name? + Alerts vs. System/Server
 - UPS: Shut down Pi/Docker
 - Automated meditation
 - Sync Phone Alarms
@@ -124,6 +128,7 @@ Keys should be sorted in the order specified in the .sort-order\*.yaml files.
 - Research free + reputable news providers
 - Research privacy-focused keyboard for Android + iOS
 - RSS tool
+- Switch to E2E messaging app
 
 ### Bitwarden
 
