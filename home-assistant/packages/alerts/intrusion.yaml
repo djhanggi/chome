@@ -1,0 +1,33 @@
+---
+homeassistant:
+  customize:
+    automation.alert_phone_call:
+      icon: mdi:alarm-bell
+
+automation:
+  - id: alert_intrusion
+    alias: Alert - Intrusion
+    mode: single
+    trigger:
+      - id: motion
+        entity_id:
+          - sensor.aqara_motion_bathroom
+          - sensor.aqara_motion_kitchen
+        platform: state
+        to: "on"
+    condition:
+      - entity_id: person.djhanggi
+        condition: state
+        state: not_home
+    action:
+      - service: notify.mobile_app_scarif
+        data:
+          message: request_location_update
+      - delay:
+          seconds: 3
+      - condition: '{{ is_state("person.djhanggi", "not_home") }}'
+      - service: notify.notify
+        data:
+          message: Motion detected while not home
+          title: Motion detected
+      - scene: scene.away_return_scene
