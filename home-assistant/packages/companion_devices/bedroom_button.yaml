@@ -12,6 +12,7 @@ automation:
       - platform: event
         event_type: deconz_event
         variables:
+          device: "{{ trigger.event.data.id }}"
           event_time: "{{ trigger.event.time_fired | as_timestamp }}"
           press_type: |
             {% if trigger.event.data.event == 1002 %}
@@ -22,6 +23,7 @@ automation:
               long_press
             {% endif %}
     action:
+      - condition: '{{ device == "aqara_bedroom_switch" }}'
       - choose:
           - conditions: '{{ press_type == "single_press" }}'
             sequence:
