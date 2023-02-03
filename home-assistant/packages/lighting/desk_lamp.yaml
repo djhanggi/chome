@@ -64,9 +64,11 @@ automation:
           - conditions:
               - '{{ trigger.id == "lamp_turned_on" }}'
             sequence:
-              - service: timer.start
-                target:
-                  entity_id: timer.desk_lamp_timer
+              - if: '{{ not is_state("timer.desk_lamp_timer", "active") }}'
+                then:
+                  - service: timer.start
+                    target:
+                      entity_id: timer.desk_lamp_timer
           - conditions:
               - '{{ trigger.id == "lamp_turned_off" }}'
             sequence:
