@@ -55,6 +55,8 @@ automation:
                       - service: switch.toggle
                         target:
                           entity_id: switch.kitchen_lights
+                      - delay:
+                          seconds: 1
                     count: 2
             - delay:
                 minutes: 5
