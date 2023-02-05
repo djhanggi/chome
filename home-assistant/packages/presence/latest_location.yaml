@@ -1,0 +1,48 @@
+---
+template:
+  - sensor:
+      - unique_id: latest_location
+        name: Latest Location
+        state: "{{ latest_location }}"
+    trigger:
+      - platform: homeassistant
+        event: start
+        variables:
+          latest_location: Living Room
+      - entity_id:
+          - binary_sensor.aqara_motion_kitchen
+          - binary_sensor.aqara_motion_bathroom
+          - binary_sensor.aqara_vibration_desk_chair
+        platform: state
+        to: "on"
+        variables:
+          latest_location: |
+            {% set at_desk = is_state("sensor.latest_location", "Desk Chair") %} 
+            {% set on_laptop = is_state("binary_sensor.bzusc02ff0h3md6v_active", "on") %} 
+            {% if trigger.entity_id == "binary_sensor.aqara_motion_kitchen" %}
+              Kitchen
+            {% elif trigger.entity_id == "binary_sensor.aqara_motion_bathroom" %}
+              Bathroom
+            {% elif trigger.entity_id == "binary_sensor.aqara_vibration_desk_chair" %}
+              {% if at_desk and on_laptop %}
+                Living Room
+              {% elif not at_desk %}
+                Desk Chair
+              {% else %}
+                {{ states("sensor.latest_location") }}
+              {% endif %}
+            {% endif %}
+      - platform: state
+        entity_id: person.djhanggi
+        to: home
+        variables:
+          latest_location: Living Room
+      - platform: event
+        event_type: deconz_event
+        variables:
+          latest_location: |
+            {% if trigger.event.data.id == "aqara_bedroom_switch" %}
+              Bedroom
+            {% else %}
+              {{ states("sensor.latest_location") }}
+            {% endif %}

@@ -10,9 +10,13 @@ automation:
     mode: queued
     trigger:
       - id: enter
-        entity_id: binary_sensor.aqara_motion_kitchen
         platform: state
-        to: "on"
+        entity_id: sensor.latest_location
+        to: Kitchen
+      - id: clear
+        platform: state
+        entity_id: sensor.latest_location
+        from: Kitchen
       - id: clear
         entity_id: binary_sensor.aqara_motion_kitchen
         platform: state
