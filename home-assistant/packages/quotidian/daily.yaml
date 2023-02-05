@@ -22,33 +22,72 @@ automation:
         entity_id: sensor.phase_of_day
         from: Sleeping
         to: Morning
+      - id: scene_triggered
+        platform: event
+        event_type: call_service
+        event_data:
+          domain: scene
+          service: turn_on
+          service_data:
+            entity_id: scene.morning
     condition:
       - entity_id: person.djhanggi
         condition: state
         state: home
     action:
-      - scene: scene.morning
-      - if:
-          - '{{ is_state("input_boolean.open_blinds_in_morning", "on") }}'
-        then:
-          - scene: scene.ajar_blinds
-      - service: script.spotify_meditate
-        data:
-          media_player_id: media_player.bedroom_speaker
+      - choose:
+          - conditions: '{{ trigger.id == "scene_triggered" }}'
+            sequence:
+              - service: input_datetime.set_datetime
+                target:
+                  entity_id: input_datetime.morning_start_time
+                data:
+                  time: |
+                    {% set morning_start_time = as_timestamp(today_at(states('input_datetime.morning_start_time'))) %}
+                    {{ [morning_start_time, as_timestamp(now())] | min | timestamp_custom("%H:%M:%S") }}
+        default:
+          - scene: scene.morning
+          - if:
+              - '{{ is_state("input_boolean.open_blinds_in_morning", "on") }}'
+            then:
+              - scene: scene.ajar_blinds
+          - service: script.spotify_meditate
+            data:
+              media_player_id: media_player.bedroom_speaker
   - id: daytime
     alias: Daytime
     mode: single
     trigger:
-      - platform: state
+      - id: phase_of_day
+        platform: state
         entity_id: sensor.phase_of_day
         from: Morning
         to: Daytime
+      - id: scene_triggered
+        platform: event
+        event_type: call_service
+        event_data:
+          domain: scene
+          service: turn_on
+          service_data:
+            entity_id: scene.daytime
     condition:
       - entity_id: person.djhanggi
         condition: state
         state: home
     action:
-      - scene: scene.daytime
+      - choose:
+          - conditions: '{{ trigger.id == "scene_triggered" }}'
+            sequence:
+              - service: input_datetime.set_datetime
+                target:
+                  entity_id: input_datetime.morning_start_time
+                data:
+                  time: |
+                    {% set morning_start_time = as_timestamp(today_at(states('input_datetime.morning_start_time'))) %}
+                    {{ [morning_start_time, as_timestamp(now())] | min | timestamp_custom("%H:%M:%S") }}
+        default:
+          - scene: scene.daytime
   - id: evening
     alias: Evening
     mode: single
