@@ -30,24 +30,24 @@ automation:
                   - service: switch.turn_off
                     target:
                       entity_id: switch.living_room_cam
-                  - if:
-                      - entity_id: sensor.phase_of_day
-                        condition: state
-                        state:
-                          - Morning
-                          - Daytime
+              - if:
+                  - entity_id: sensor.phase_of_day
+                    condition: state
+                    state:
+                      - Morning
+                      - Daytime
+                  - condition: state
+                    entity_id: binary_sensor.desk_lamp_used_today
+                    state: "off"
+                  - condition: not
+                    conditions:
                       - condition: state
-                        entity_id: binary_sensor.desk_lamp_used_today
-                        state: "off"
-                      - condition: not
-                        conditions:
-                          - condition: state
-                            entity_id: timer.desk_lamp_timer
-                            state: active
-                    then:
-                      - service: timer.start
-                        target:
-                          entity_id: timer.desk_lamp_timer
+                        entity_id: timer.desk_lamp_timer
+                        state: active
+                then:
+                  - service: timer.start
+                    target:
+                      entity_id: timer.desk_lamp_timer
           - conditions: '{{ trigger.id == "clear" }}'
             sequence:
               - service: switch.turn_off
