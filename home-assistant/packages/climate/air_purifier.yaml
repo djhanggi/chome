@@ -1,0 +1,49 @@
+---
+homeassistant:
+  customize:
+    automation.purify_bedroom_air:
+      icon: mdi:air-filter
+
+automation:
+  - id: purify_bedroom_air
+    alias: Purify Bedroom Air
+    mode: queued
+    trigger:
+      - entity_id: sensor.levoit_air_purifier_air_quality
+        platform: numeric_state
+        below: 3
+        variables:
+          percentage: 0
+      - entity_id: sensor.levoit_air_purifier_air_quality
+        platform: numeric_state
+        above: 3
+        below: 10
+        variables:
+          percentage: 25
+      - entity_id: sensor.levoit_air_purifier_air_quality
+        platform: numeric_state
+        above: 10
+        below: 15
+        variables:
+          percentage: 50
+      - entity_id: sensor.levoit_air_purifier_air_quality
+        platform: numeric_state
+        above: 15
+        below: 20
+        variables:
+          percentage: 75
+      - entity_id: sensor.levoit_air_purifier_air_quality
+        platform: numeric_state
+        above: 20
+        variables:
+          percentage: 100
+    condition:
+      - entity_id: person.djhanggi
+        condition: state
+        state: home
+    action:
+      - service: fan.set_percentage
+        data:
+          percentage: "{{ percentage }}"
+        target:
+          entity_id: fan.levoit_air_purifier
