@@ -62,9 +62,14 @@ automation:
             is_state("calendar.daniel_hanggi_braze_com", "off") and
             is_state("binary_sensor.scarif_device_locked", "off") 
           }}
-      - service: media_player.media_pause
-        target:
-          entity_id: media_player.spotify_djhanggi
+      - if:
+          - condition: state
+            entity_id: media_player.spotify_djhanggi
+            state: playing
+        then:
+          - service: media_player.media_pause
+            target:
+              entity_id: media_player.spotify_djhanggi
       - service: notify.mobile_app_scarif
         data:
           title: Headspace
