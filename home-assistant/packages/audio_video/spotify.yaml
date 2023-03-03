@@ -19,22 +19,19 @@ automation:
         entity_id: person.djhanggi
         platform: state
         to: not_home
-      - id: tv
-        entity_id: remote.harmony
-        platform: state
-        to: "on"
       - id: hoth
         entity_id: media_player.cast_hoth
         platform: state
         to: "playing"
-    condition:
-      - condition: not
-        conditions:
-          - entity_id: media_player.spotify_djhanggi
-            condition: state
-            state: scarif
-            attribute: source
     action:
-      - service: media_player.media_pause
-        target:
-          entity_id: media_player.spotify_djhanggi
+      - variables:
+          source: '{{ state_attr("media_player.spotify_djhanggi", "source")}}'
+      - if:
+          - condition: or
+            conditions:
+              - '{{ trigger.id == "away" and source != "scarif" }}'
+              - '{{ trigger.id == "hoth" and source != "Hoth" }}'
+        then:
+          - service: media_player.media_pause
+            target:
+              entity_id: media_player.spotify_djhanggi
