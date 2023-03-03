@@ -9,39 +9,32 @@ automation:
     alias: Purify Bedroom Air
     mode: queued
     trigger:
-      - entity_id: sensor.levoit_air_purifier_air_quality
-        platform: numeric_state
-        below: 3
-        variables:
-          percentage: 0
-      - entity_id: sensor.levoit_air_purifier_air_quality
-        platform: numeric_state
-        above: 3
-        below: 10
-        variables:
-          percentage: 25
-      - entity_id: sensor.levoit_air_purifier_air_quality
-        platform: numeric_state
-        above: 10
-        below: 15
-        variables:
-          percentage: 50
-      - entity_id: sensor.levoit_air_purifier_air_quality
-        platform: numeric_state
-        above: 15
-        below: 20
-        variables:
-          percentage: 75
-      - entity_id: sensor.levoit_air_purifier_air_quality
-        platform: numeric_state
-        above: 20
-        variables:
-          percentage: 100
+      - id: air_quality_change
+        entity_id: sensor.levoit_air_purifier_air_quality
+        platform: state
+      - id: power_on
+        entity_id: fan.levoit_air_purifier
+        platform: state
+        to: "on"
     condition:
       - entity_id: person.djhanggi
         condition: state
         state: home
     action:
+      - variables:
+          percentage: |
+            {% set aqi = states("sensor.levoit_air_purifier_air_quality") | int %}
+            {% if aqi < 10 %}
+              0
+            {% elif aqi < 25 %}
+              25
+            {% elif aqi < 50 %}
+              50
+            {% elif aqi < 75 %}
+              75
+            {% else %}
+              100
+            {% endif %}
       - service: fan.set_percentage
         data:
           percentage: "{{ percentage }}"
