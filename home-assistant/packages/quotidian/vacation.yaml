@@ -39,6 +39,7 @@ script:
             - fan.dyson_heater_fan
             - humidifier.levoit_humidifier
             - remote.harmony
+            - switch.vornado_fan
   return_from_vacation:
     alias: Return from Vacation
     icon: mdi:airplane-off

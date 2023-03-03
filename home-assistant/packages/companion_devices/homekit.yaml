@@ -16,6 +16,7 @@ homekit:
         - switch.bedroom_plant_light
         - switch.sunlight_lamp
         - switch.desk_lamp
+        - switch.vornado_fan
         - cover.smart_roller_shade_curtain
         - climate.living_room_ac
         - climate.bedroom_ac
@@ -33,6 +34,8 @@ homekit:
       switch.sunlight_lamp:
         type: outlet
       switch.desk_lamp:
+        type: outlet
+      switch.vornado_fan:
         type: outlet
       cover.smart_roller_shade_curtain:
         name: Bedroom Blinds

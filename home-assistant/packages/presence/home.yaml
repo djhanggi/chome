@@ -23,11 +23,13 @@ automation:
       light_entities: '{{ states("sensor.active_lights") | from_json }}'
       other_snapshot_entities:
         - remote.harmony
+        - switch.vornado_fan
+        - fan.dyson_fan
+        - fan.dyson_heater_fan
       non_snapshot_entities:
         - switch.desk_lamp
         - switch.sunlight_lamp
         - switch.kitchen_lights
-        - fan.dyson_heater_fan
     action:
       - if:
           - '{{ trigger.id == "presence" }}'

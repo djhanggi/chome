@@ -160,6 +160,8 @@ scene:
         state: "on"
       switch.sunlight_lamp:
         state: "off"
+      switch.vornado_fan:
+        state: "on"
       humidifier.levoit_humidifier:
         state: "off"
   - id: evening
