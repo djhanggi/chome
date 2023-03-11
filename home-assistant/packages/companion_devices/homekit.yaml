@@ -22,7 +22,9 @@ homekit:
         - climate.bedroom_ac
         - fan.dyson_fan
         - fan.dyson_heater_fan
+        - fan.levoit_air_purifier
         - humidifier.levoit_humidifier
+        - switch.living_room_cam
         - remote.harmony
     entity_config:
       switch.kitchen_lights:
@@ -43,7 +45,11 @@ homekit:
         name: Living Room Fan
       fan.dyson_heater_fan:
         name: Bedroom Fan
+      fan.levoit_air_purifier:
+        name: Air Purifier
       humidifier.levoit_humidifier:
         name: Bedroom Humidifier
+      switch.living_room_cam:
+        type: switch
       remote.harmony:
         name: TV
