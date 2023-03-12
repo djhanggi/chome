@@ -48,7 +48,7 @@ automation:
         platform: state
         entity_id: binary_sensor.location_at_desk_chair
         to: "on"
-    condition:     
+    condition:
       - condition: state
         entity_id: sensor.phase_of_day
         state: Morning
