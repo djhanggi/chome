@@ -1,7 +1,9 @@
 ---
 title: CHOME
 views:
-  - title: Main
+  - theme: Backend-selected
+    path: main
+    title: Main
     icon: mdi:home-assistant
     badges: []
     cards:
@@ -10,6 +12,9 @@ views:
           - type: entities
             entities:
               - type: custom:fold-entity-row
+                head:
+                  entity: light.all_light_bulbs
+                open: true
                 entities:
                   - type: custom:fold-entity-row
                     head:
@@ -24,56 +29,55 @@ views:
                       entity: light.bathroom_lights
                   - entity: light.bedroom_lamp
                   - entity: light.bed
-                head:
-                  entity: light.all_light_bulbs
-                open: true
             state_color: false
           - type: entities
             entities:
               - switch.kitchen_lights
               - type: custom:fold-entity-row
-                entities:
-                  - entity: switch.desk_lamp
-                  - entity: switch.sunlight_lamp
                 head:
                   type: section
                   label: Sunlight Lamps
-              - name: Plant Lights
-                type: custom:fold-entity-row
                 entities:
-                  - switch.living_room_plant_light
-                  - switch.bedroom_plant_light
+                  - entity: timer.desk_lamp_timer
+                  - entity: switch.desk_lamp
+                  - entity: switch.sunlight_lamp
+              - type: custom:fold-entity-row
                 head:
                   type: section
                   label: Plant Lights
+                name: Plant Lights
+                entities:
+                  - switch.living_room_plant_light
+                  - switch.bedroom_plant_light
             show_header_toggle: false
           - type: entities
             entities:
-              - name: Adaptive Lighting
-                entity: switch.adaptive_lighting_all_light_bulbs
+              - entity: switch.adaptive_lighting_all_light_bulbs
+                name: Adaptive Lighting
                 tap_action:
                   action: more-info
-          - title: Adaptive Lighting
-            type: custom:popup-card
+          - type: custom:popup-card
+            title: Adaptive Lighting
+            entity: switch.adaptive_lighting_all_light_bulbs
+            dismissable: true
             card:
               type: entities
               entities:
-                - name: Sleep
-                  entity: switch.adaptive_lighting_sleep_mode_all_light_bulbs
-                - name: Brightness
-                  entity: switch.adaptive_lighting_adapt_brightness_all_light_bulbs
-                - name: Color
-                  entity: switch.adaptive_lighting_adapt_color_all_light_bulbs
-            dismissable: true
-            entity: switch.adaptive_lighting_all_light_bulbs
+                - entity: switch.adaptive_lighting_sleep_mode_all_light_bulbs
+                  name: Sleep
+                - entity: switch.adaptive_lighting_adapt_brightness_all_light_bulbs
+                  name: Brightness
+                - entity: switch.adaptive_lighting_adapt_color_all_light_bulbs
+                  name: Color
       - type: custom:auto-entities
+        card:
+          type: entities
         entities:
           - person.djhanggi
           - sensor.phase_of_day
-        card:
-          type: entities
+          - sensor.latest_location
         filter:
-          template: |
+          template: >
             {% if is_state("sensor.phase_of_day", "Sleeping") %}
               scene.morning
               scene.daytime
@@ -89,21 +93,27 @@ views:
               script.go_to_sleep
             {% endif %}
 
+
             {% if is_state("person.djhanggi", "not_home") %}
               {% if states("scene.away_return_scene") != "unknown" %}
                 scene.away_return_scene
               {% endif %}
             {% endif %}
 
-            {% set last_midnight = now().replace(hour=0, minute=0, second=0) | as_timestamp %} {% set last_peloton = state_attr("script.play_peloton_class", "last_triggered") | as_timestamp %}  {% if last_peloton < last_midnight %}
+
+            {% set last_midnight = now().replace(hour=0, minute=0, second=0) |
+            as_timestamp %} {% set last_peloton =
+            state_attr("script.play_peloton_class", "last_triggered") |
+            as_timestamp %}  {% if last_peloton < last_midnight or
+            is_state("script.play_peloton_class", "on") %}
               script.play_peloton_class
             {% endif %}
           include:
             - entity_id: input_datetime.morning_start_time
       - type: entities
         entities:
-          - name: Blinds
-            entity: cover.smart_roller_shade_curtain
+          - entity: cover.smart_roller_shade_curtain
+            name: Blinds
           - entity: scene.blinds_ajar
         show_header_toggle: false
       - type: vertical-stack
@@ -111,115 +121,120 @@ views:
           - type: entities
             entities:
               - entity: remote.harmony
-          - title: TV
-            type: custom:popup-card
+          - type: custom:popup-card
+            entity: remote.harmony
+            title: TV
+            dismissable: true
             card:
               type: vertical-stack
               cards:
                 - type: horizontal-stack
                   cards:
-                    - name: Volume +25
-                      type: button
-                      icon: mdi:volume-plus
+                    - show_name: true
                       show_icon: true
-                      show_name: true
+                      type: button
                       tap_action:
                         action: call-service
                         service: script.tv_change_volume
                         data:
                           delta: 25
-                    - name: Volume -25
-                      type: button
-                      icon: mdi:volume-minus
+                      name: Volume +25
+                      icon: mdi:volume-plus
+                    - show_name: true
                       show_icon: true
-                      show_name: true
+                      type: button
                       tap_action:
                         action: call-service
                         service: script.tv_change_volume
                         data:
                           delta: -25
-                - name: Hoth
-                  type: custom:tv-card
-                  back:
-                    service: androidtv.adb_command
-                    service_data:
-                      entity_id: media_player.android_tv_hoth
-                      command: BACK
-                  down:
-                    service: androidtv.adb_command
-                    service_data:
-                      entity_id: media_player.android_tv_hoth
-                      command: DOWN
+                      name: Volume -25
+                      icon: mdi:volume-minus
+                - type: custom:tv-card
                   entity: media_player.android_tv_hoth
-                  home:
-                    service: androidtv.adb_command
-                    service_data:
-                      entity_id: media_player.android_tv_hoth
-                      command: HOME
-                  left:
-                    service: androidtv.adb_command
-                    service_data:
-                      entity_id: media_player.android_tv_hoth
-                      command: LEFT
+                  name: Hoth
+                  tv: true
                   power:
                     service: androidtv.adb_command
                     service_data:
                       entity_id: media_player.android_tv_hoth
                       command: POWER
-                  right:
+                  back:
                     service: androidtv.adb_command
                     service_data:
+                      command: BACK
                       entity_id: media_player.android_tv_hoth
-                      command: RIGHT
-                  select:
+                  home:
                     service: androidtv.adb_command
                     service_data:
+                      command: HOME
                       entity_id: media_player.android_tv_hoth
-                      command: CENTER
-                  tv: true
                   up:
                     service: androidtv.adb_command
                     service_data:
-                      entity_id: media_player.android_tv_hoth
                       command: UP
-                  volume_down:
+                      entity_id: media_player.android_tv_hoth
+                  left:
                     service: androidtv.adb_command
                     service_data:
+                      command: LEFT
                       entity_id: media_player.android_tv_hoth
-                      command: VOLUME_DOWN
-                  volume_mute:
+                  select:
                     service: androidtv.adb_command
                     service_data:
+                      command: CENTER
                       entity_id: media_player.android_tv_hoth
-                      command: MUTE
+                  right:
+                    service: androidtv.adb_command
+                    service_data:
+                      command: RIGHT
+                      entity_id: media_player.android_tv_hoth
+                  down:
+                    service: androidtv.adb_command
+                    service_data:
+                      command: DOWN
+                      entity_id: media_player.android_tv_hoth
                   volume_up:
                     service: androidtv.adb_command
                     service_data:
-                      entity_id: media_player.android_tv_hoth
                       command: VOLUME_UP
-            dismissable: true
-            entity: remote.harmony
+                      entity_id: media_player.android_tv_hoth
+                  volume_down:
+                    service: androidtv.adb_command
+                    service_data:
+                      command: VOLUME_DOWN
+                      entity_id: media_player.android_tv_hoth
+                  volume_mute:
+                    service: androidtv.adb_command
+                    service_data:
+                      command: MUTE
+                      entity_id: media_player.android_tv_hoth
             left_button_action: {}
             right_button_action: {}
       - type: vertical-stack
         cards:
-          - name: Climate
-            type: button
-            entity: sensor.levoit_humidifier_current_humidity
+          - show_name: true
             show_icon: false
-            show_name: true
+            type: button
+            name: Climate
+            entity: sensor.levoit_humidifier_current_humidity
             tap_action:
               action: more-info
           - type: entities
             entities:
               - entity: climate.living_room_ac
               - entity: fan.dyson_fan
+              - entity: switch.vornado_fan
               - entity: climate.bedroom_ac
               - entity: fan.dyson_heater_fan
               - entity: input_number.dyson_heater_fan_target_temperature
               - entity: humidifier.levoit_humidifier
-          - title: Climate
-            type: custom:popup-card
+              - entity: fan.levoit_air_purifier
+              - entity: sensor.levoit_air_purifier_air_quality
+          - type: custom:popup-card
+            entity: sensor.levoit_humidifier_current_humidity
+            title: Climate
+            dismissable: true
             card:
               type: vertical-stack
               cards:
@@ -253,16 +268,15 @@ views:
                     - entity: script.dyson_heater_fan_correct_power
                 - type: entities
                   entities:
-                    - name: Humidifier out of Water
-                      entity: binary_sensor.levoit_humidifier_out_of_water
-                    - name: Humidifier Night Light
-                      entity: light.levoit_humidifier_night_light
-            dismissable: true
-            entity: sensor.levoit_humidifier_current_humidity
-    path: main
-    theme: Backend-selected
-  - title: Media
+                    - entity: binary_sensor.levoit_humidifier_out_of_water
+                      name: Humidifier out of Water
+                    - entity: light.levoit_humidifier_night_light
+                      name: Humidifier Night Light
+  - theme: Backend-selected
+    title: Media
+    path: media
     icon: mdi:play
+    subview: false
     badges: []
     cards:
       - type: entities
@@ -276,38 +290,38 @@ views:
           - entity: media_player.plex_hoth
           - entity: media_player.living_room_speaker
           - entity: media_player.bedroom_speaker
-    path: media
-    subview: false
-    theme: Backend-selected
-  - title: Other Devices
-    type: sidebar
+  - theme: Backend-selected
+    path: overview
+    title: Other Devices
     icon: mdi:devices
+    type: sidebar
     badges: []
     cards:
       - type: entities
         entities:
-          - name: scarif
-            entity: sensor.scarif_battery_level
-          - name: DND
-            entity: sensor.scarif_do_not_disturb_sensor
-          - name: Next Alarm
-            entity: sensor.scarif_next_alarm
+          - entity: sensor.scarif_battery_level
+            name: scarif
+          - entity: sensor.scarif_do_not_disturb_sensor
+            name: DND
+          - entity: sensor.scarif_next_alarm
+            name: Next Alarm
           - entity: input_datetime.next_alarm_time
           - entity: script.set_alarm_on_scarif
+          - entity: script.find_scarif
       - type: entities
         entities:
-          - name: cantonica
-            entity: sensor.cantonica_battery_level
-          - name: Focus
-            entity: binary_sensor.cantonica_focus
+          - entity: sensor.cantonica_battery_level
+            name: cantonica
+          - entity: binary_sensor.cantonica_focus
+            name: Focus
       - type: entities
         entities:
           - entity: switch.monitor
         show_header_toggle: false
         state_color: false
-    path: overview
-    theme: Backend-selected
-  - title: Automations
+  - theme: Backend-selected
+    title: Automations
+    path: automations
     icon: mdi:home-automation
     badges: []
     cards:
@@ -323,22 +337,21 @@ views:
           - entity: automation.evening
       - type: entities
         entities:
-          - entity: automation.presence_leave
           - entity: automation.presence_return
+          - entity: automation.presence_leave
       - type: entities
         entities:
-          - entity: automation.presence_bathroom_lights
-          - entity: automation.presence_kitchen_lights
-          - entity: automation.presence_cameras
-          - entity: automation.presence_desk_chair
+          - entity: automation.presence_bathroom
+          - entity: automation.presence_kitchen
+          - entity: automation.cameras
       - type: entities
         entities:
-          - entity: automation.pagerduty_alert
-          - entity: automation.notify_phone_at_home
-          - entity: automation.presence_kitchen_stove
+          - entity: automation.alert_pagerduty
+          - entity: automation.alert_kitchen_stove
+          - entity: automation.alert_phone_call
       - type: entities
         entities:
-          - entity: automation.turn_off_desk_lamp
+          - entity: automation.desk_lamp_timing
           - entity: automation.sync_next_alarm_time_from_scarif
           - entity: automation.laptop_camera_in_use
           - entity: automation.oscillate_fans_on_start
@@ -349,9 +362,9 @@ views:
           - entity: script.send_off_guest
           - entity: script.setup_vacation
           - entity: script.return_from_vacation
-    path: automations
-    theme: Backend-selected
-  - title: Miscellaneous
+  - theme: Backend-selected
+    title: Miscellaneous
+    path: miscellaneous
     icon: mdi:toolbox-outline
     badges: []
     cards:
@@ -386,5 +399,3 @@ views:
         entities:
           - entity: switch.party_lights
           - entity: input_number.party_lights_speed
-    path: miscellaneous
-    theme: Backend-selected

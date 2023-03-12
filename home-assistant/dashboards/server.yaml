@@ -124,7 +124,7 @@ views:
         entities:
           - name: PiHole
             entity: switch.bespin_pihole
-          - entity: script.snooze_pihole
+          - entity: script.pihole_snooze
           - name: Ads Blocked - Today
             entity: sensor.bespin_pihole_ads_blocked_today
           - name: DNS Queries - Today
@@ -176,4 +176,45 @@ views:
           - binary_sensor.bespin_nas_drive_3_exceeded_max_bad_sectors
           - binary_sensor.bespin_nas_drive_4_exceeded_max_bad_sectors
     path: nas
+    theme: Backend-selected
+  - title: Backups
+    type: sidebar
+    icon: mdi:backup-restore
+    badges: []
+    cards:
+      - type: entities
+        entities:
+          - automation.backup_home_assistant
+    path: backups
+    theme: Backend-selected
+  - title: Batteries
+    type: sidebar
+    icon: mdi:battery
+    badges: []
+    cards:
+      - type: entities
+        entities:
+          - entity: sensor.ups_battery_charge
+          - entity: sensor.ups_load
+          - entity: sensor.ups_status
+      - type: entities
+        entities:
+          - entity: sensor.sonoff_temperature_living_room_battery
+          - entity: sensor.aqara_vibration_desk_chair_battery
+          - entity: sensor.aqara_motion_kitchen_battery
+          - entity: sensor.aqara_temperature_kitchen_battery
+          - entity: sensor.aqara_motion_bathroom_battery
+          - entity: sensor.aqara_bedroom_switch_battery
+        view_layout:
+          position: main
+    path: batteries
+    theme: Backend-selected
+  - title: Plex
+    icon: mdi:plex
+    badges: []
+    cards:
+      - type: entities
+        entities:
+          - sensor.plex_chome
+    path: plex
     theme: Backend-selected

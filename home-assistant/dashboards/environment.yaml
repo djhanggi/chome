@@ -5,6 +5,12 @@ views:
     icon: mdi:earth
     badges: []
     cards:
+      - type: entities
+        entities:
+          - entity: sensor.citi_bike_nyc_citibike_f64c060aad3a6ed470ee3f04583cdfa3
+          - entity: sensor.citi_bike_nyc_citibike_7ca4ed0b4fba2b2fb259ba84bd43e2ad
+          - entity: sensor.citi_bike_nyc_citibike_b44036ac71524aca434a01e90cd95e2b
+          - entity: sensor.citi_bike_nyc_citibike_690892feeba5b15469cd9aff7b53edff
       - type: vertical-stack
         cards:
           - type: weather-forecast
@@ -17,5 +23,6 @@ views:
             hours_to_show: 24
       - type: iframe
         aspect_ratio: 50%
-        url: https://www.tidespro.com/us/new-york/the-battery-new-york-harbor/widget/tidetableweek?apikey=4112a76b444d4d74af97265b46547458
+        url: >-
+          https://www.tidespro.com/us/new-york/the-battery-new-york-harbor/widget/tidetableweek?apikey=4112a76b444d4d74af97265b46547458
     theme: Backend-selected
