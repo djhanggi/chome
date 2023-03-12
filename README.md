@@ -99,7 +99,7 @@ Keys should be sorted in the order specified in the .sort-order\*.yaml files.
 - https://www.home-assistant.io/integrations/google_assistant/
 - Show Alert script
 - Health Automations - wait_for template
-- Prefix automations with package name? + Alerts vs. System/Server
+- Standardize audio_video, quotidian, and companion_devices
 - UPS: Shut down Pi/Docker
 - Automated meditation
 - Sync Phone Alarms
@@ -108,6 +108,10 @@ Keys should be sorted in the order specified in the .sort-order\*.yaml files.
   - Disable morning blinds if earlier than sunrise
 - Reduce phone use
 - Morse code service
+- Fix return trigger happening while still on street
+- Delay Headspace
+- Delay Peloton (wait for 10 minute window)
+- Latest location triggers
 
 ### Miscellaneous
 
@@ -125,7 +129,7 @@ Keys should be sorted in the order specified in the .sort-order\*.yaml files.
   - Regularly purge chat applications
 - Use Proton Mail or self-hosted mail/calendar
 - Migrate Cornell Mail
-- Research free + reputable news providers
+- Research free + reputable news providers$$
 - Research privacy-focused keyboard for Android + iOS
 - RSS tool
 - Switch to E2E messaging app

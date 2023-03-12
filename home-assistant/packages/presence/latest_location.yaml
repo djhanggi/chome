@@ -3,46 +3,97 @@ template:
   - sensor:
       - unique_id: latest_location
         name: Latest Location
-        state: "{{ latest_location }}"
+        state: "{{ states('states.latest_locations') | from_json | last }}"
     trigger:
-      - platform: homeassistant
-        event: start
-        variables:
-          latest_location: Living Room
-      - entity_id:
-          - binary_sensor.aqara_motion_kitchen
-          - binary_sensor.aqara_motion_bathroom
-          - binary_sensor.aqara_vibration_desk_chair
-        platform: state
-        to: "on"
-        variables:
-          latest_location: |
-            {% set at_desk = is_state("sensor.latest_location", "Desk Chair") %} 
-            {% set on_laptop = is_state("binary_sensor.bzusc02ff0h3md6v_active", "on") %} 
-            {% if trigger.entity_id == "binary_sensor.aqara_motion_kitchen" %}
-              Kitchen
-            {% elif trigger.entity_id == "binary_sensor.aqara_motion_bathroom" %}
-              Bathroom
-            {% elif trigger.entity_id == "binary_sensor.aqara_vibration_desk_chair" %}
-              {% if at_desk and on_laptop %}
-                Living Room
-              {% elif not at_desk %}
-                Desk Chair
-              {% else %}
-                {{ states("sensor.latest_location") }}
-              {% endif %}
-            {% endif %}
       - platform: state
-        entity_id: person.djhanggi
+        entity_id: sensor.latest_locations
+  - sensor:
+      - unique_id: latest_locations
+        name: Latest Locations
+        state: |
+          {% set locations = states("sensor.latest_locations") | from_json %}
+          {% if trigger_id == "reset" %}
+            {% set locations = [] %}
+          {% endif %}
+          {% if trigger_id == "leave_home" %}
+            {% set locations = [] %}
+          {% endif %}
+          {% if trigger_id == "return_home" %}
+            {% set locations = ["living_room"] %}
+          {% endif %}
+          {% if trigger_id == "enter_kitchen" %}
+            {% set locations = locations + ["kitchen"] %}
+          {% endif %}
+          {% if trigger_id == "leave_kitchen" and "kitchen" in locations %}
+            {% set _ = locations.pop(locations.index("kitchen")) %}
+          {% endif %}
+          {% if trigger_id == "enter_bathroom" %}
+            {% set locations = locations + ["bathroom"] %}
+          {% endif %}
+          {% if trigger_id == "leave_bathroom" and "bathroom" in locations %}
+            {% set _ = locations.pop(locations.index("bathroom")) %}
+          {% endif %}
+          {% if trigger_id == "desk_chair" %}
+            {% set locations = locations + ["desk_chair"] %}
+          {% elif "desk_chair" in locations %}
+            {% set _ = locations.pop(locations.index("desk_chair")) %}
+          {% endif %}
+          {% if trigger_id == "bedroom_button" %}
+            {% set locations = locations + ["bedroom"] %}
+          {% elif locations "bedroom" in locations %}
+            {% set _ = locations.pop(locations.index("bedroom")) %}
+          {% endif %}
+          {{ locations | unique | list | to_json }}
+    trigger:
+      - variables:
+          trigger_id: reset
+        platform: homeassistant
+        event: start
+      - variables:
+          trigger_id: return_home
+        platform: state
+        entity_id: person.djhaggi
         to: home
-        variables:
-          latest_location: Living Room
+      - variables:
+          trigger_id: leave_home
+        platform: state
+        entity_id: person.djhanggi
+        to: not_home
+        for:
+          minutes: 2
+      - variables:
+          trigger_id: enter_kitchen
+        platform: state
+        entity_id: binary_sensor.aqara_motion_kitchen
+        to: "on"
+      - variables:
+          trigger_id: leave_kitchen
+        platform: state
+        entity_id: binary_sensor.aqara_motion_kitchen
+        to: "off"
+        for:
+          minutes: 5
+      - variables:
+          trigger_id: enter_bathroom
+        platform: state
+        entity_id: binary_sensor.aqara_motion_bathroom
+        to: "on"
+      - variables:
+          trigger_id: leave_bathroom
+        platform: state
+        entity_id: binary_sensor.aqara_motion_bathroom
+        to: "off"
+        for:
+          minutes: 5
+      - variables:
+          trigger_id: desk_chair
+        platform: state
+        entity_id: binary_sensor.aqara_vibration_desk_chair
+        to: "on"
       - platform: event
         event_type: deconz_event
         variables:
-          latest_location: |
+          trigger_id: |
             {% if trigger.event.data.id == "aqara_bedroom_switch" %}
-              Bedroom
-            {% else %}
-              {{ states("sensor.latest_location") }}
+              bedroom_button
             {% endif %}

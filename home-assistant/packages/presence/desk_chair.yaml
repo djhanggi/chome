@@ -9,17 +9,16 @@ automation:
     alias: Presence - Desk Chair
     mode: single
     trigger:
-      - id: enter
+      - id: sit_on_desk_chair
         platform: state
         entity_id: sensor.latest_location
-        to: Desk Chair
+        to: desk_chair
       - id: clear
-        platform: state
-        entity_id: sensor.latest_location
-        from: Desk Chair
+        platform: template
+        value_template: "{{ not 'desk_chair' in states('sensor.latest_locations') | from_json }}"
     action:
       - choose:
-          - conditions: '{{ trigger.id == "enter"}}'
+          - conditions: '{{ trigger.id == "sit_on_desk_chair"}}'
             sequence:
               - if:
                   - entity_id: sensor.phase_of_day

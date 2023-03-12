@@ -1,28 +1,21 @@
 ---
 homeassistant:
   customize:
-    automation.presence_kitchen_lights:
+    automation.presence_kitchen:
       icon: mdi:lightbulb-auto
 
 automation:
-  - id: presence_kitchen_lights
-    alias: Presence - Kitchen Lights
+  - id: presence_kitchen
+    alias: Presence - Kitchen
     mode: queued
     trigger:
-      - id: enter
+      - id: enter_kitchen
         platform: state
         entity_id: sensor.latest_location
-        to: Kitchen
+        to: kitchen
       - id: clear
-        platform: state
-        entity_id: sensor.latest_location
-        from: Kitchen
-      - id: clear
-        entity_id: binary_sensor.aqara_motion_kitchen
-        platform: state
-        for:
-          minutes: 5
-        from: "on"
+        platform: template
+        value_template: "{{ not 'kitchen' in states('sensor.latest_locations') | from_json }}"
     action:
       - service: |
           {% set is_evening = is_state("sensor.phase_of_day", "Evening") %}

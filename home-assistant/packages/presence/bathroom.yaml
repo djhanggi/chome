@@ -1,32 +1,25 @@
 ---
 homeassistant:
   customize:
-    automation.presence_bathroom_lights:
+    automation.presence_bathroom:
       icon: mdi:lightbulb-auto
 
 automation:
-  - id: presence_bathroom_lights
-    alias: Presence - Bathroom Lights
+  - id: presence_bathroom
+    alias: Presence - Bathroom
     mode: queued
     trigger:
-      - id: enter
+      - id: enter_bathroom
         platform: state
         entity_id: sensor.latest_location
-        to: Bathroom
+        to: bathroom
       - id: clear
-        platform: state
-        entity_id: sensor.latest_location
-        from: Bathroom
-      - id: clear
-        entity_id: binary_sensor.aqara_motion_bathroom
-        platform: state
-        for:
-          minutes: 5
-        from: "on"
+        platform: template
+        value_template: "{{ not 'bathroom' in states('sensor.latest_locations') | from_json }}"
     action:
       - service: |
           {% set is_sleeping = is_state("sensor.phase_of_day", "Sleeping") %}
-          {% if trigger.id == "enter" %}
+          {% if trigger.id == "enter_bathroom" %}
             {% if not is_sleeping %}
               homeassistant.turn_on
             {% endif %}
