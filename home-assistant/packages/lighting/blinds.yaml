@@ -7,8 +7,8 @@ scene:
         state: open
         current_position: 100
     icon: mdi:blinds-open
-  - id: Blinds - Ajar
-    name: Blinds - 4
+  - id: blinds_ajar
+    name: Blinds - Ajar
     entities:
       cover.smart_roller_shade_curtain:
         state: open
