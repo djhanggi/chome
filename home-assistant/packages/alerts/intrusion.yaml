@@ -1,20 +1,20 @@
 ---
 homeassistant:
   customize:
-    automation.alert_phone_call:
-      icon: mdi:alarm-bell
-
+    automation.alert_intrusion:
+      icon: mdi:shield-alert
 automation:
   - id: alert_intrusion
     alias: Alert - Intrusion
     mode: single
     trigger:
-      - id: motion
+      - id: location_detected
         entity_id:
-          - sensor.aqara_motion_bathroom
-          - sensor.aqara_motion_kitchen
+          - sensor.latest_location
         platform: state
-        to: "on"
+        not_to:
+          - Away
+          - Unknown
     condition:
       - entity_id: person.djhanggi
         condition: state
@@ -28,6 +28,6 @@ automation:
       - condition: '{{ is_state("person.djhanggi", "not_home") }}'
       - service: script.alert_send
         data:
-          tag: automation.alert_intrusion
           message: Motion detected while not home
+          tag: automation.alert_intrusion
       - scene: scene.away_return_scene

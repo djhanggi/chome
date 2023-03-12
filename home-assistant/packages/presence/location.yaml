@@ -78,7 +78,7 @@ template:
         state: |
           {% set location = states("sensor.latest_location") %}
           {% if trigger_id == "return_home" and location == "Away" %}
-            Living Room
+            Unknown
           {% elif trigger_id == "leave_home" %}
             Away
           {% elif trigger_id == "enter_kitchen" %}
