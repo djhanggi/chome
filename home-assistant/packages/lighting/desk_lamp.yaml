@@ -24,24 +24,14 @@ automation:
         to:
           - Morning
           - Daytime
-      - id: lamp_turned_on
-        entity_id: switch.desk_lamp
+      - platform: state
+        entity_id: binary_sensor.location_at_desk_chair
+      - entity_id: switch.desk_lamp
         platform: state
-        to: "on"
-      - id: lamp_turned_off
-        entity_id: switch.desk_lamp
-        platform: state
-        to: "off"
-      - id: timer_started
-        platform: event
+      - platform: event
         event_type:
           - timer.started
           - timer.restarted
-        event_data:
-          entity_id: timer.desk_lamp_timer
-      - id: timer_stopped
-        platform: event
-        event_type:
           - timer.paused
           - timer.finished
           - timer.cancelled
@@ -54,39 +44,34 @@ automation:
           - Morning
           - Daytime
     action:
-      - choose:
-          - conditions:
-              - '{{ trigger.id == "reset_day" }}'
-            sequence:
-              - service: timer.cancel
-                target:
-                  entity_id: timer.desk_lamp_timer
-          - conditions:
-              - '{{ trigger.id == "lamp_turned_on" }}'
-            sequence:
-              - if: '{{ not is_state("timer.desk_lamp_timer", "active") }}'
-                then:
-                  - service: timer.start
-                    target:
-                      entity_id: timer.desk_lamp_timer
-          - conditions:
-              - '{{ trigger.id == "lamp_turned_off" }}'
-            sequence:
-              - service: timer.pause
-                target:
-                  entity_id: timer.desk_lamp_timer
-          - conditions:
-              - '{{ trigger.id == "timer_started" }}'
-            sequence:
-              - service: switch.turn_on
-                target:
-                  entity_id: switch.desk_lamp
-          - conditions:
-              - '{{ trigger.id == "timer_stopped" }}'
-            sequence:
-              - service: switch.turn_off
-                target:
-                  entity_id: switch.desk_lamp
+      - if: '{{ trigger.id == "reset_day" }}'
+        then:
+          - service: timer.cancel
+            target:
+              entity_id: timer.desk_lamp_timer
+          - stop:
+      - variables:
+          at_desk_chair: '{{ is_state("binary_sensor.location_at_desk_chair", "on")}}'
+          has_used_lamp: '{{ is_state("binary_sensor.desk_lamp_used_today", "on") }}'
+      - service: |
+          {% if at_desk_chair and not has_used_lamp %}
+            switch.turn_on
+          {% else %}
+            switch.turn_off
+          {% endif %}
+        target:
+          entity_id: switch.desk_lamp
+      - variables:
+          lamp_on: '{{ is_state("switch.desk_lamp", "on")}}'
+          timer_active: '{{ not is_state("timer.desk_lamp_timer", "active") }}'
+      - service: |
+          {% if lamp_on and not timer_active %}
+            timer.start
+          {% elif not lamp_on and timer_active %}
+            timer.pause
+          {% elif has_used_lamp and timer_active %}
+            timer.finish
+          {% endif %}
 
 template:
   - trigger:

@@ -2,34 +2,23 @@
 homeassistant:
   customize:
     automation.presence_kitchen:
-      icon: mdi:lightbulb-auto
+      icon: mdi:fridge
 
 automation:
   - id: presence_kitchen
     alias: Presence - Kitchen
     mode: queued
     trigger:
-      - id: enter_kitchen
-        platform: state
-        entity_id: sensor.latest_location
-        to: kitchen
-      - id: clear
-        platform: template
-        value_template: |
-          {{ not (
-            is_state("sensor.latest_location", "kitchen") 
-            or 'kitchen' in states('sensor.latest_locations') | from_json) 
-          }}
+      - platform: state
+        entity_id: binary_sensor.location_in_kitchen
     action:
       - service: |
-          {% set is_evening = is_state("sensor.phase_of_day", "Evening") %}
-          {% set is_sleeping = is_state("sensor.phase_of_day", "Sleeping") %}
-          {% if trigger.id == "enter" %}
-            {% if not (is_evening or is_sleeping) %}
-              homeassistant.turn_on
-            {% endif %}
-          {% elif trigger.id == "clear" %}
-            homeassistant.turn_off
+          {% set in_kitchen = is_state("binary_sensor.location_in_kitchen", "on") %}
+          {% set is_daytime = is_state("sensor.phase_of_day", "Daytime") %}
+          {% if in_kitchen and is_daytime %}
+            switch.turn_on
+          {% else %}
+            switch.turn_off
           {% endif %}
         target:
           entity_id: switch.kitchen_lights

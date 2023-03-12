@@ -9,13 +9,13 @@ automation:
     alias: Air Purifier
     mode: queued
     trigger:
-      - id: air_quality_change
-        entity_id: sensor.levoit_air_purifier_air_quality
-        platform: state
-      - id: power_on
-        entity_id: fan.levoit_air_purifier
+      - platform: state
+        entity_id: binary_sensor.location_in_bedroom
+      - entity_id: fan.levoit_air_purifier
         platform: state
         to: "on"
+      - entity_id: sensor.levoit_air_purifier_air_quality
+        platform: state
     condition:
       - entity_id: person.djhanggi
         condition: state
@@ -23,8 +23,9 @@ automation:
     action:
       - variables:
           percentage: |
+            {% set in_bedroom = is_state("binary_sensor.location_in_bedroom", "on") %}
             {% set aqi = states("sensor.levoit_air_purifier_air_quality") | int %}
-            {% if aqi < 10 %}
+            {% if not in_bedroom or aqi < 10 %}
               0
             {% elif aqi < 25 %}
               25

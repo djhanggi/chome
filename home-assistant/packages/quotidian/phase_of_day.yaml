@@ -69,3 +69,30 @@ automation:
             {{ state_attr("sun.sun", "next_rising") | as_timestamp | timestamp_custom("%H:%M") }}
         target:
           entity_id: input_datetime.morning_start_time
+  - id: set_morning_start_time_from_scene
+    alias: Set Morning Start Time from Scene
+    trigger:
+      - id: scene_triggered
+        platform: event
+        event_type: call_service
+        event_data:
+          domain: scene
+          service: turn_on
+          service_data:
+            entity_id: scene.morning
+      - id: scene_triggered
+        platform: event
+        event_type: call_service
+        event_data:
+          domain: scene
+          service: turn_on
+          service_data:
+            entity_id: scene.daytime
+    action:
+      - service: input_datetime.set_datetime
+        target:
+          entity_id: input_datetime.morning_start_time
+        data:
+          time: |
+            {% set morning_start_time = as_timestamp(today_at(states('input_datetime.morning_start_time'))) %}
+            {{ [morning_start_time, as_timestamp(now())] | min | timestamp_custom("%H:%M:%S") }}

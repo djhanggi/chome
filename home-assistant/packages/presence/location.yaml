@@ -1,0 +1,146 @@
+---
+homeassistant:
+  customize:
+    binary_sensor.location_in_kitchen:
+      icon: mdi:fridge
+    binary_sensor.location_at_desk_chair:
+      icon: mdi:chair-rolling
+    binary_sensor.location_in_living_room:
+      icon: mdi:sofa
+    binary_sensor.location_in_bathroom:
+      icon: mdi:toilet
+    binary_sensor.location_in_bedroom:
+      icon: mdi:bed
+    sensor.latest_location:
+      icon: mdi:map-marker-star
+
+logbook:
+  exclude:
+    entities:
+      - sensor.latest_location
+
+template:
+  - binary_sensor:
+      - unique_id: location_in_living_room
+        name: Location - In Living Room
+        state: |
+          {{ 
+            is_state('sensor.latest_location', 'Living Room') or
+            is_state('sensor.latest_location', 'Desk Chair') or (
+              is_state('sensor.latest_location', 'Unknown') and
+              is_state('binary_sensor.location_in_living_room')
+            )
+          }}
+  - binary_sensor:
+      - unique_id: location_at_desk_chair
+        name: Location - At Desk Chair
+        state: |
+          {{ 
+            is_state('sensor.latest_location', 'Desk Chair') or (
+              is_state('sensor.latest_location', 'Unknown') and
+              is_state('binary_sensor.location_at_desk_chair')
+            )
+          }}
+  - binary_sensor:
+      - unique_id: location_in_kitchen
+        name: Location - In Kitchen
+        state: |
+          {{ 
+            is_state('binary_sensor.aqara_motion_kitchen', 'on') or
+            is_state('sensor.latest_location', 'Kitchen') or (
+              is_state('sensor.latest_location', 'Unknown') and
+              is_state('binary_sensor.location_in_kitchen')
+            )
+          }}
+  - binary_sensor:
+      - unique_id: location_in_bathroom
+        name: Location - In Bathroom
+        state: |
+          {{ 
+            is_state('binary_sensor.aqara_motion_bathroom', 'on') or
+            is_state('sensor.latest_location', 'Bathroom') or (
+              is_state('sensor.latest_location', 'Unknown') and
+              is_state('binary_sensor.location_in_bathroom')
+            )
+          }}
+  - binary_sensor:
+      - unique_id: location_in_bedroom
+        name: Location - In Bedroom
+        state: |
+          {{ is_state('sensor.latest_location', 'Bedroom') or (
+              is_state('sensor.latest_location', 'Unknown') and
+              is_state('binary_sensor.location_in_bedroom')
+            )
+          }}
+  - sensor:
+      - unique_id: latest_location
+        name: Latest Location
+        state: |
+          {% if trigger_id == "leave_home" %}
+            Not Home
+          {% elif trigger_id == "return_home" %}
+            Living Room
+          {% elif trigger_id == "enter_kitchen" %}
+            Kitchen
+          {% elif trigger_id == "enter_bathroom" %}
+            Bathroom
+          {% elif trigger_id == "desk_chair" %}
+            Desk Chair
+          {% elif trigger_id == "bedroom_button" %}
+            Bedroom
+          {% else %}
+            Unknown
+          {% endif %}
+    trigger:
+      - variables:
+          trigger_id: reset
+        platform: homeassistant
+        event: start
+      - variables:
+          trigger_id: return_home
+        platform: state
+        entity_id: person.djhaggi
+        to: home
+      - variables:
+          trigger_id: leave_home
+        platform: state
+        entity_id: person.djhanggi
+        to: not_home
+        for:
+          seconds: 90
+      - variables:
+          trigger_id: enter_kitchen
+        platform: state
+        entity_id: binary_sensor.aqara_motion_kitchen
+        to: "on"
+      - variables:
+          trigger_id: leave_kitchen
+        platform: state
+        entity_id: binary_sensor.aqara_motion_kitchen
+        to: "off"
+        for:
+          seconds: 90
+      - variables:
+          trigger_id: enter_bathroom
+        platform: state
+        entity_id: binary_sensor.aqara_motion_bathroom
+        to: "on"
+      - variables:
+          trigger_id: leave_bathroom
+        platform: state
+        entity_id: binary_sensor.aqara_motion_bathroom
+        to: "off"
+        for:
+          seconds: 90
+      - variables:
+          trigger_id: desk_chair
+        platform: state
+        entity_id: binary_sensor.aqara_vibration_desk_chair
+        to: "on"
+      - platform: event
+        event_type: deconz_event
+        variables:
+          trigger_id: |
+            {% if trigger.event.data.id == "aqara_bedroom_switch" %}
+              bedroom_button
+            {% endif %}
