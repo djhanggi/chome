@@ -3,6 +3,7 @@ script:
   alert_clear:
     alias: Alert - Clear
     mode: parallel
+    icon: mdi:alert-circle-check
     sequence:
       - service: notify.notify
         data:
@@ -12,6 +13,7 @@ script:
   alert_send:
     alias: Alert - Send
     mode: parallel
+    icon: mdi:alert-circle
     fields:
       tag:
         description: The tag to use for the notification

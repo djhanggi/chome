@@ -1,7 +1,7 @@
 ---
 homeassistant:
   customize:
-    automation.presence_eave:
+    automation.presence_leave:
       icon: mdi:location-exit
     automation.presence_return:
       icon: mdi:location-enter

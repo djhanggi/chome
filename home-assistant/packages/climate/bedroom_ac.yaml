@@ -49,7 +49,7 @@ script:
         data:
           command: toggle_power
   bedroom_ac_send_command:
-    alias: Bedroom AC - Send Commmand
+    alias: Bedroom AC - Send Command
     description: |
       Sends a command to the Bedroom AC, particularly to manage atomicity.
       Options include:

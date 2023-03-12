@@ -1,6 +1,8 @@
 ---
 homeassistant:
   customize:
+    automation.set_morning_start_time_from_scene:
+      icon: mdi:sun-clock
     automation.set_morning_start_time_to_sunrise:
       icon: mdi:weather-sunny
 
