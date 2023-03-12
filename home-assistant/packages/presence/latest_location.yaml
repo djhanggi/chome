@@ -25,7 +25,9 @@ template:
         state: |
           {% set locations = states("sensor.latest_locations") %}
           {% set locations = [] if locations == "unknown" else locations | from_json %}
-          {% if trigger_id == "reset" %}
+          {% if trigger_id == "idle" %}
+            {% set locations = locations | last %}
+          {% elif trigger_id == "reset" %}
             {% set locations = [] %}
           {% endif %}
           {% if trigger_id == "leave_home" %}
@@ -61,6 +63,12 @@ template:
           {% endif %}
           {{ locations | reverse | unique | reverse | list | to_json }}
     trigger:
+      - platform: template
+        value_template: "{{ states('sensor.latest_locations') }}"
+        for:
+          minutes: 5
+        variables:
+          trigger_id: idle
       - variables:
           trigger_id: reset
         platform: state
