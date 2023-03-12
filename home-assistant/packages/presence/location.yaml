@@ -69,7 +69,7 @@ template:
         state: |
           {{ is_state('sensor.latest_location', 'Bedroom') or (
               is_state('sensor.latest_location', 'Unknown') and
-              is_state('binary_sensor.location_in_bedroom')
+              is_state('binary_sensor.location_in_bedroom', "on")
             )
           }}
   - sensor:
