@@ -36,9 +36,9 @@ automation:
                     }}'
               - if: "{{ curtain_position != 0 }}"
                 then:
-                  - scene: scene.closed_blinds
+                  - scene: scene.blinds_closed
                 else:
-                  - scene: scene.open_blinds
+                  - scene: scene.blinds_open
           - conditions: '{{ press_type == "long_press" }}'
             sequence:
               - wait_for_trigger:

@@ -104,7 +104,7 @@ views:
         entities:
           - name: Blinds
             entity: cover.smart_roller_shade_curtain
-          - entity: scene.ajar_blinds
+          - entity: scene.blinds_ajar
         show_header_toggle: false
       - type: vertical-stack
         cards:

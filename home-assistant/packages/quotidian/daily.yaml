@@ -50,7 +50,7 @@ automation:
           - if:
               - '{{ is_state("input_boolean.open_blinds_in_morning", "on") }}'
             then:
-              - scene: scene.ajar_blinds
+              - scene: scene.blinds_ajar
           - service: script.spotify_meditate
             data:
               media_player_id: media_player.bedroom_speaker
@@ -105,7 +105,7 @@ automation:
         target:
           entity_id: group.lighting
       - scene: scene.evening
-      - scene: scene.closed_blinds
+      - scene: scene.blinds_closed
 
 scene:
   - id: morning

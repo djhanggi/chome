@@ -8,13 +8,13 @@ homeassistant:
 
 timer:
   desk_lamp_timer:
-    name: Desk Lamp Timer
+    name: Desk Lamp - Timer
     duration: "00:30:00"
     icon: mdi:sun-clock
 
 automation:
   - id: desk_lamp_timing
-    alias: Desk Lamp Timing
+    alias: Desk Lamp - Timing
     mode: queued
     trigger:
       - id: reset_day
@@ -107,5 +107,5 @@ template:
           entity_id: timer.desk_lamp_timer
     binary_sensor:
       - unique_id: desk_lamp_used_today
-        name: Desk Lamp Used Today
+        name: Desk Lamp - Used Today
         state: '{{ trigger.id == "timer_ended" }}'

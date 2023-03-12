@@ -1,21 +1,21 @@
 ---
 scene:
-  - id: open_blinds
-    name: Open Blinds
+  - id: blinds_open
+    name: Blinds - Open
     entities:
       cover.smart_roller_shade_curtain:
         state: open
         current_position: 100
     icon: mdi:blinds-open
-  - id: ajar_blinds
-    name: Ajar Blinds
+  - id: Blinds - Ajar
+    name: Blinds - 4
     entities:
       cover.smart_roller_shade_curtain:
         state: open
         current_position: 45
     icon: mdi:blinds-open
   - id: closed_blinds
-    name: Closed Blinds
+    name: Blinds - Closed
     entities:
       cover.smart_roller_shade_curtain:
         # The cover is basically always set to "closed" so the state must be
