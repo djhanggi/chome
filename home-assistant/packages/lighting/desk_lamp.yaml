@@ -40,9 +40,6 @@ automation:
           - timer.cancelled
         event_data:
           entity_id: timer.desk_lamp_timer
-      - id: desk_lamp_used_today
-        platform: state
-        entity_id: binary_sensor.desk_lamp_used_today
     condition:
       - condition: state
         entity_id: sensor.phase_of_day
