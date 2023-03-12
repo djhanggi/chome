@@ -15,7 +15,7 @@ timer:
 automation:
   - id: desk_lamp_timing
     alias: Desk Lamp - Timing
-    mode: queued
+    mode: restart
     trigger:
       - id: reset_day
         entity_id: sensor.phase_of_day
@@ -24,11 +24,14 @@ automation:
         to:
           - Morning
           - Daytime
-      - platform: state
-        entity_id: binary_sensor.location_at_desk_chair
-      - entity_id: switch.desk_lamp
+      - id: chair
         platform: state
-      - platform: event
+        entity_id: binary_sensor.location_at_desk_chair
+      - id: lamp
+        entity_id: switch.desk_lamp
+        platform: state
+      - id: timer
+        platform: event
         event_type:
           - timer.started
           - timer.restarted
@@ -51,27 +54,38 @@ automation:
               entity_id: timer.desk_lamp_timer
           - stop:
       - variables:
-          at_desk_chair: '{{ is_state("binary_sensor.location_at_desk_chair", "on")}}'
-          has_used_lamp: '{{ is_state("binary_sensor.desk_lamp_used_today", "on") }}'
+          at_desk_chair:
+            '{{ is_state("binary_sensor.location_at_desk_chair", "on")}}'
+          has_used_lamp:
+            '{{ is_state("binary_sensor.desk_lamp_used_today", "on") }}'
+          timer_active: '{{ is_state("timer.desk_lamp_timer", "active") }}'
+          lamp_on: |
+            {{ 
+              (trigger.id == "chair" and at_desk_chair and (not has_used_lamp or timer_active)) or
+              (trigger.id == "lamp" and is_state("switch.desk_lamp", "on")) or
+              (trigger.id == "timer" and timer_active)
+            }}
+          timer_service: |
+            {% if lamp_on and not timer_active %}
+              timer.start
+            {% elif not lamp_on and timer_active %}
+              timer.pause
+            {% elif has_used_lamp and timer_active %}
+              timer.finish
+            {% endif %}
       - service: |
-          {% if at_desk_chair and not has_used_lamp %}
+          {% if lamp_on %}
             switch.turn_on
           {% else %}
             switch.turn_off
           {% endif %}
         target:
           entity_id: switch.desk_lamp
-      - variables:
-          lamp_on: '{{ is_state("switch.desk_lamp", "on")}}'
-          timer_active: '{{ not is_state("timer.desk_lamp_timer", "active") }}'
-      - service: |
-          {% if lamp_on and not timer_active %}
-            timer.start
-          {% elif not lamp_on and timer_active %}
-            timer.pause
-          {% elif has_used_lamp and timer_active %}
-            timer.finish
-          {% endif %}
+      - if: '{{ timer_service != "" }}'
+        then:
+          - service: "{{ timer_service }}"
+            target:
+              entity_id: timer.desk_lamp_timer
 
 template:
   - trigger:
