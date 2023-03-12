@@ -16,7 +16,7 @@ automation:
         platform: homeassistant
         event: start
     action:
-      - service: script.send_alert
+      - service: script.alert_send
         data:
           tag: automation.alert_home_assistant
           message: |

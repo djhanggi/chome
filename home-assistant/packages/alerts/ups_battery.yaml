@@ -1,0 +1,23 @@
+---
+homeassistant:
+  customize:
+    automation.alert_ups_battery:
+      icon: mdi:battery-alert
+
+automation:
+  - id: alert_ups_battery
+    alias: Alert - UPS Battery
+    mode: single
+    trigger:
+      - entity_id: sensor.ups_status
+        platform: state
+    action:
+      - service: script.alert_send
+        data:
+          tag: automation.alert_ups
+          message: |
+            {% if not (states('sensor.ups_status') | regex_search('^Online')) %}
+              UPS is using battery
+            {% else %}
+              UPS is online
+            {% endif %}

@@ -43,7 +43,7 @@ automation:
           sequence:
             - if: '{{ is_state("binary_sensor.aqara_motion_kitchen", "off") }}'
               then:
-                - service: script.send_alert
+                - service: script.alert_send
                   data:
                     tag: automation.alert_kitchen_stove
                     message: Stove may be running
@@ -55,6 +55,6 @@ automation:
           until:
             - '{{ states("sensor.kitchen_temperature_derivative") | float <= 0
               }}'
-      - service: script.clear_alert
+      - service: script.alert_clear
         data:
           tag: automation.alert_kitchen_stove

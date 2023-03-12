@@ -1,7 +1,7 @@
 ---
 script:
-  clear_alert:
-    alias: Clear Alert
+  alert_clear:
+    alias: Alert - Clear
     mode: parallel
     sequence:
       - service: notify.notify
@@ -9,8 +9,8 @@ script:
           data:
             tag: "{{ tag | default(null) }}"
           message: clear_notification
-  send_alert:
-    alias: Send Alert
+  alert_send:
+    alias: Alert - Send
     mode: parallel
     fields:
       tag:
@@ -57,7 +57,7 @@ script:
               message: command_ringer_mode
       - parallel:
           - sequence:
-              - service: script.clear_alert
+              - service: script.alert_clear
                 data:
                   tag: "{{ tag }}"
               - variables:

@@ -25,7 +25,7 @@ automation:
                   {{ not is_state("sensor.scarif_ringer_mode", "normal") or
                   states("sensor.scarif_volume_level_ringer") | int < 5 }}
             then:
-              - service: script.send_alert
+              - service: script.alert_send
                 data:
                   tag: automation.alert_phone_call
                   message: scarif is ringing

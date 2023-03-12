@@ -17,7 +17,7 @@ automation:
         entity_id: person.djhanggi
         state: home
     action:
-      - service: script.send_alert
+      - service: script.alert_send
         data:
           tag: automation.alert_pagerduty
           title: PagerDuty
