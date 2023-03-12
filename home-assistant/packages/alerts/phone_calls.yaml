@@ -25,17 +25,14 @@ automation:
                   {{ not is_state("sensor.scarif_ringer_mode", "normal") or
                   states("sensor.scarif_volume_level_ringer") | int < 5 }}
             then:
-              - service: notify.mobile_app_cantonica
+              - service: script.send_alert
                 data:
+                  tag: automation.alert_phone_call
                   message: scarif is ringing
-              - service: switch.turn_on
-                target:
-                  entity_id: switch.party_lights
-              - delay:
-                  seconds: 5
-              - service: switch.turn_off
-                target:
-                  entity_id: switch.party_lights
+                  devices:
+                    - watch
+                    - laptop
+                  flash_lights: true
           - if:
               - condition: template
                 value_template: >

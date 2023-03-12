@@ -43,28 +43,18 @@ automation:
           sequence:
             - if: '{{ is_state("binary_sensor.aqara_motion_kitchen", "off") }}'
               then:
-                - service: notify.mobile_app_cantonica
+                - service: script.send_alert
                   data:
-                    data:
-                      tag: automation.alert_kitchen_stove
-                      ttl: 0
-                      timeout: 300
-                    message: Stove may be running!
-                - repeat:
-                    sequence:
-                      - service: switch.toggle
-                        target:
-                          entity_id: switch.kitchen_lights
-                      - delay:
-                          seconds: 1
-                    count: 2
+                    tag: automation.alert_kitchen_stove
+                    message: Stove may be running
+                    devices: watch
+                    flash_lights: true
+                    timeout: 300
             - delay:
                 minutes: 5
           until:
             - '{{ states("sensor.kitchen_temperature_derivative") | float <= 0
               }}'
-      - service: notify.mobile_app_cantonica
+      - service: script.clear_alert
         data:
-          data:
-            tag: automation.alert_kitchen_stove
-          message: clear_notification
+          tag: automation.alert_kitchen_stove

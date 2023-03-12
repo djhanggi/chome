@@ -17,32 +17,13 @@ automation:
         entity_id: person.djhanggi
         state: home
     action:
-      - service: notify.mobile_app_scarif
+      - service: script.send_alert
         data:
-          data:
-            command: normal
-          message: command_ringer_mode
-      - service: notify.notify
-        data:
-          data:
-            actions:
-              - title: Acknowledge
-                action: "{{ acknowledge_action_id }}"
-            tag: automation.pagerduty_alert
+          tag: automation.alert_pagerduty
+          title: PagerDuty
           message: "PagerDuty: {{ trigger.json.event.data.message }}"
-      - service: switch.turn_on
-        target:
-          entity_id: switch.party_lights
-      - wait_for_trigger:
-          - platform: event
-            event_data:
-              action: "{{ acknowledge_action_id }}"
-            event_type: mobile_app_notification_action
-      - service: switch.turn_off
-        target:
-          entity_id: switch.party_lights
-      - service: notify.notify
-        data:
-          data:
-            tag: automation.pagerduty_alert
-          message: clear_notification
+          flash_lights: true
+          unsilence_phone: true
+          use_speakers: true
+          ack_id: "{{ acknowledge_action_id }}"
+          sounds: speakers

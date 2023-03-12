@@ -1,0 +1,122 @@
+---
+script:
+  clear_alert:
+    alias: Clear Alert
+    mode: parallel
+    sequence:
+      - service: notify.notify
+        data:
+          data:
+            tag: "{{ tag | default(null) }}"
+          message: clear_notification
+  send_alert:
+    alias: Send Alert
+    mode: parallel
+    fields:
+      tag:
+        description: The tag to use for the notification
+        default: ""
+      title:
+        description: The title of the notification
+        default: ""
+      message:
+        description: The message to use in the alert
+        default: ""
+      devices:
+        description: |
+          The devices to send an alert to; if omitted, will be sent to all.
+          Any of:
+            - phone
+            - watch
+        default: null
+      ttl:
+        description: The TTL for the notification to be received before aborting
+        default: 0
+      timeout:
+        description:
+          The amount of time the notification will be present on the device
+        default: null
+      flash_lights:
+        description: Whether to flash the lights briefly.
+        default: false
+      unsilence_phone:
+        description: Whether to turn phone's ringer on.
+        default: false
+      use_speakers:
+        description: Whether to voice the message over speakers.
+        default: false
+      ack_id:
+        description: If set, actions will be repeated until this ack id is seen.
+    sequence:
+      - if: "{{ unsilence_phone | default(false) }}"
+        then:
+          - service: notify.mobile_app_scarif
+            data:
+              data:
+                command: normal
+              message: command_ringer_mode
+      - parallel:
+          - sequence:
+              - service: script.clear_alert
+                data:
+                  tag: "{{ tag }}"
+              - variables:
+                  notify_services: |
+                    {% set devices = devices | default([]) %}
+                    {% set services = [] %}
+                    {% if devices == [] %}
+                      {% set services = services + ["notify.notify"] %}
+                    {% endif %}
+                    {% if "phone" in devices %}
+                      {% set services = services + ["notify.mobile_app_scarif"] %}
+                    {% endif %}
+                    {% if "watch" in devices %}
+                      {% set services = services + ["notify.mobile_app_cantonica"] %}
+                    {% endif %}
+                    {% if "laptop" in devices %}
+                      {% set services = services + ["notify.mobile_app_bzusc02ff0h3md6v"] %}
+                    {% endif %}
+                    {{ services | unique | list }}
+              - repeat:
+                  for_each: "{{ notify_services }}"
+                  sequence:
+                    - service: "{{ repeat.item }}"
+                      data:
+                        title: "{{ title | default(tag) }}"
+                        message: "{{ message }}"
+                        data:
+                          tag: "{{ tag }}"
+                          ttl: "{{ ttl | default(0) }}"
+                          timeout: "{{ timeout | default(60 * 60 * 24)}}"
+                          actions:
+                            - action: "{{ ack_id | default('') }}"
+                              title: "Acknowledge"
+          - if: "{{ flash_lights | default(false) }}"
+            then:
+              - service: switch.turn_on
+                target:
+                  entity_id: switch.party_lights
+              - if: "{{ ack_id is defined }}"
+                then:
+                  - wait_for_trigger:
+                      - platform: event
+                        event_data:
+                          action: "{{ ack_id }}"
+                        event_type: mobile_app_notification_action
+                else:
+                  - delay:
+                      seconds: 1
+              - service: switch.turn_off
+                target:
+                  entity_id: switch.party_lights
+          - if: "{{ use_speakers | default(false) }}"
+            then:
+              - delay:
+                  seconds: 5
+              - service: tts.google_translate_say
+                data:
+                  entity_id:
+                    - media_player.living_room_speaker
+                    - media_player.bedroom_speaker
+                  cache: false
+                  message: "{{ message }}"

@@ -14,8 +14,9 @@ automation:
       - entity_id: sensor.ups_status
         platform: state
     action:
-      - service: notify.notify
+      - service: script.send_alert
         data:
+          tag: automation.alert_ups
           message: |
             {% if not (states('sensor.ups_status') | regex_search('^Online')) %}
               UPS is using battery
@@ -32,6 +33,7 @@ automation:
       - service: button.press
         target:
           entity_id: button.bespin_nas_shutdown
-      - service: notify.notify
+      - service: script.send_alert
         data:
+          tag: automation.alert_ups
           message: Shutting down NAS because of UPS battery

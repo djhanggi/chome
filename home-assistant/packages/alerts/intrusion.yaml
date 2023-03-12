@@ -26,8 +26,8 @@ automation:
       - delay:
           seconds: 3
       - condition: '{{ is_state("person.djhanggi", "not_home") }}'
-      - service: notify.notify
+      - service: script.send_alert
         data:
+          tag: automation.alert_intrusion
           message: Motion detected while not home
-          title: Motion detected
       - scene: scene.away_return_scene

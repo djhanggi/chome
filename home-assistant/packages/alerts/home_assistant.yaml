@@ -16,15 +16,9 @@ automation:
         platform: homeassistant
         event: start
     action:
-      - service: notify.notify
+      - service: script.send_alert
         data:
-          data:
-            tag: automation.alert_home_assistant
-          message: clear_notification
-      - service: notify.notify
-        data:
-          data:
-            tag: automation.alert_home_assistant
+          tag: automation.alert_home_assistant
           message: |
             {% if trigger.id == "shutdown" %}
               Home Assistant is shutting down
