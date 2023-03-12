@@ -1,12 +1,12 @@
 ---
 homeassistant:
   customize:
-    automation.server_backup_home_assistant:
+    automation.backup_home_assistant:
       icon: mdi:backup-restore
 
 automation:
-  - id: server_backup_home_assistant
-    alias: Server - Backup Home Assistant
+  - id: backup_home_assistant
+    alias: Backup - Home Assistant
     trigger:
       - platform: time
         at: "03:05:00"

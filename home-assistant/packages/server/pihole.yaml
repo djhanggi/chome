@@ -1,7 +1,7 @@
 ---
 script:
-  server_pihole_snooze:
-    alias: Server - PiHole - Snooze
+  pihole_snooze:
+    alias: PiHole - Snooze
     description: Snooze PiHole for 30 seconds
     icon: mdi:pi-hole
     fields:

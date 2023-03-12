@@ -1,12 +1,12 @@
 ---
 homeassistant:
   customize:
-    automation.climate_oscillate_fans_on_start:
+    automation.oscillate_fans_on_start:
       icon: mdi:fan
 
 automation:
-  - id: climate_oscillate_fans_on_start
-    alias: Climate - Oscillate Fans on Start
+  - id: oscillate_fans_on_start
+    alias: Oscillate Fans on Start
     mode: queued
     trigger:
       - entity_id:

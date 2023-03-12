@@ -1,12 +1,12 @@
 ---
 homeassistant:
   customize:
-    automation.server_ups_shut_down:
+    automation.ups_trigger_shut_down:
       icon: mdi:battery-alert
 
 automation:
-  - id: server_ups_shut_down
-    alias: Server - UPS - Shut-Down
+  - id: ups_trigger_shut_down
+    alias: UPS - Trigger Shut-Down
     trigger:
       - entity_id: sensor.ups_battery_charge
         platform: numeric_state
