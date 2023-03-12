@@ -1,6 +1,6 @@
 ---
 homekit:
-  - name: CHOME.HA Bridge
+  - name: HomeKit - CHOME.HA
     mode: bridge
     filter:
       include_entities:

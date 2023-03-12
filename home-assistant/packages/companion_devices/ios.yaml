@@ -6,7 +6,7 @@ homeassistant:
 
 automation:
   - id: ios_actions
-    alias: iOS Actions
+    alias: iOS - Actions
     mode: queued
     trigger:
       - platform: event

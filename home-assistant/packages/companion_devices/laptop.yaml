@@ -11,7 +11,7 @@ logbook:
 
 automation:
   - id: laptop_camera_in_use
-    alias: Laptop Camera in Use
+    alias: Laptop - Camera in Use
     trigger:
       - entity_id: binary_sensor.bzusc02ff0h3md6v_camera_in_use
         platform: state
