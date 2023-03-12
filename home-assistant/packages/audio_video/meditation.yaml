@@ -9,9 +9,40 @@ input_datetime:
     name: Headspace Time
     icon: mdi:weather-sunset-up
     has_time: true
-    initial: "18:05:00"
+    initial: "18:05:30"
 
 script:
+  play_headspace:
+    alias: Play Headspace
+    icon: mdi:meditation
+    mode: single
+    sequence:
+      - service: notify.mobile_app_scarif
+        data:
+          message: command_launch_app
+          data:
+            tag: script.play_headspace
+            package_name: com.getsomeheadspace.android
+      - service: notify.mobile_app_scarif
+        data:
+          title: Headspace
+          data:
+            timeout: 3
+            ttl: 3600
+          message: Headspace
+      - wait_template: |
+          {{ 
+            is_state("binary_sensor.scarif_device_locked", "off") and
+            is_state("sensor.scarif_last_used_app", "com.getsomeheadspace.android")
+          }}
+      - if:
+          - condition: state
+            entity_id: media_player.spotify_djhanggi
+            state: playing
+        then:
+          - service: media_player.media_pause
+            target:
+              entity_id: media_player.spotify_djhanggi
   spotify_meditate:
     alias: Spotify Meditate
     icon: mdi:meditation
@@ -52,28 +83,12 @@ automation:
         then:
           - service: input_datetime.set_datetime
             data:
-              time: "18:05:00"
+              time: "18:05:30"
             target:
               entity_id: input_datetime.headspace_time
-          - stop: null
-      - wait_template: >
-          {{
-            is_state("person.djhanggi", "home") and
-            is_state("calendar.daniel_hanggi_braze_com", "off") and
-            is_state("binary_sensor.scarif_device_locked", "off") 
-          }}
-      - if:
-          - condition: state
-            entity_id: media_player.spotify_djhanggi
-            state: playing
-        then:
-          - service: media_player.media_pause
-            target:
-              entity_id: media_player.spotify_djhanggi
-      - service: notify.mobile_app_scarif
+          - stop:
+      - service: script.schedule_script
         data:
-          title: Headspace
-          data:
-            timeout: 3
-            ttl: 3600
-          message: Headspace
+          script: script.play_headspace
+          bypass_calendar: '{{ trigger.id == "evening" }}'
+          window_minutes: 7

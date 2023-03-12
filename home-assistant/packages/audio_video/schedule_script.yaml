@@ -1,0 +1,45 @@
+---
+script:
+  schedule_script:
+    alias: Schedule Script
+    icon: mdi:schedule
+    mode: queued
+    description: >
+      Schedules a script to execute if at home, awake, and optionally, if there
+      is enough time in the calendar window.
+    fields:
+      script:
+        description: The entity_id of the script to schedule
+      window_minutes:
+        description: The window of time that must be available in calendar
+        default: 15
+      bypass_calendar:
+        description: Whether to bypass the calendar window in the execution
+        default: false
+    sequence:
+      - if: "{{ script is undefined}}"
+        then:
+          - stop: script is undefined
+            error: true
+      - if: |
+          {% set last_midnight = now().replace(hour=0, minute=0, second=0) | as_timestamp %}
+          {% set last_triggered = state_attr(script, "last_triggered") | default(0) | as_timestamp %} 
+          {{ last_midnight < last_triggered }}
+        then:
+          - stop: script has already been executed today
+      - wait_template: |
+          {% set at_home = is_state("person.djhanggi", "home") %}
+          {% set awake = is_state("input_boolean.is_sleeping", "off") %}
+          {% set bypass_calendar = bypass_calendar | default(false) %}
+          {% set in_event = is_state("calendar.daniel_hanggi_braze_com", "on") %}
+          {% set next_start = state_attr("calendar.daniel_hanggi_braze_com", "start_time") %}
+          {% set available_window_minutes = (as_timestamp(next_start) - as_timestamp(now())) / 60 %}
+          {% set window_minutes = window_minutes | default(15) %}
+          {{ 
+            at_home and awake and (
+              bypass_calendar or (not in_event and available_window_minutes >= window_minutes)
+            ) 
+          }}
+      - delay:
+          seconds: 90
+      - service: "{{ script }}"

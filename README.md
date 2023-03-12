@@ -97,13 +97,8 @@ Keys should be sorted in the order specified in the .sort-order\*.yaml files.
 ### Home Assistant
 
 - https://www.home-assistant.io/integrations/google_assistant/
-- Health Automations - wait_for template
-- Fix return trigger happening while still on street
-- Delay Headspace
-- Delay Peloton (wait for 10 minute window)
 - Standardize audio_video, quotidian, and companion_devices
 - UPS: Shut down Pi/Docker
-- Automated meditation
 - Sync Phone Alarms
   - Morning Start Time, Google Home, iOS
   - Offset lights from alarm

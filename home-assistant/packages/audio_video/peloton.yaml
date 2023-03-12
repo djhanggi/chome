@@ -58,6 +58,16 @@ script:
             # Navigate to Yoga
             - RIGHT
             - CENTER
+      - repeat:
+          sequence:
+            - service: androidtv.adb_command
+              data:
+                command: "{{ repeat.item }}"
+              target:
+                entity_id: media_player.android_tv_hoth
+            - delay:
+                milliseconds: 250
+          for_each:
             # Navigate to Filters
             - UP
             - RIGHT
@@ -65,9 +75,13 @@ script:
             # Navigate to Length
             - DOWN
             - CENTER
-            # Select 5- and 10-minute classes
-            - CENTER
+            # Filter by 10-minute classes
             - DOWN
+            - CENTER
+            - BACK
+            # Filter by Flow classes
+            - DOWN
+            - CENTER
             - CENTER
             - BACK
             # Filter by Not Taken
@@ -81,6 +95,16 @@ script:
             - DOWN
             - DOWN
             - CENTER
+      - repeat:
+          sequence:
+            - service: androidtv.adb_command
+              data:
+                command: "{{ repeat.item }}"
+              target:
+                entity_id: media_player.android_tv_hoth
+            - delay:
+                milliseconds: 750
+          for_each:
             # Go back to class page
             - BACK
             # Select first class
@@ -91,7 +115,7 @@ script:
 automation:
   - id: play_peloton_class
     alias: Play Peloton Class
-    mode: queued
+    mode: restart
     trigger:
       - id: reset_peloton_time
         entity_id: sensor.phase_of_day
@@ -109,38 +133,16 @@ automation:
         from: Daytime
         to: Evening
     action:
-      - choose:
-          - conditions: '{{ trigger.id == "reset_peloton_time" }}'
-            sequence:
-              - service: input_datetime.set_datetime
-                data:
-                  time: "12:00:30"
-                target:
-                  entity_id: input_datetime.peloton_time
-              - stop:
-          - conditions:
-              '{{ trigger.id == "peloton_time" or trigger.id == "evening" }}'
-            sequence:
-              - condition: or
-                conditions:
-                  - entity_id: person.djhanggi
-                    condition: state
-                    state: not_home
-                  - entity_id: calendar.daniel_hanggi_braze_com
-                    condition: state
-                    state: "on"
-                  - entity_id: sensor.phase_of_day
-                    condition: state
-                    state:
-                      - Morning
-                      - Sleeping
-                  - condition: template
-                    value_template: |
-                      {% set last_midnight = now().replace(hour=0, minute=0, second=0) | as_timestamp %}
-                      {% set last_peloton = state_attr("script.play_peloton_class",
-                      "last_triggered") | as_timestamp %} 
-                      {{ last_midnight < last_peloton }}
-              - stop:
-      - service: script.turn_on
-        target:
-          entity_id: script.play_peloton_class
+      - if: '{{ trigger.id == "reset_peloton_time" }}'
+        then:
+          - service: input_datetime.set_datetime
+            data:
+              time: "12:00:30"
+            target:
+              entity_id: input_datetime.peloton_time
+          - stop:
+      - service: script.schedule_script
+        data:
+          script: script.play_peloton_class
+          bypass_calendar: '{{ trigger.id == "evening" }}'
+          window_minutes: 14
