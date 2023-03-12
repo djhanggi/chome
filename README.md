@@ -97,8 +97,10 @@ Keys should be sorted in the order specified in the .sort-order\*.yaml files.
 ### Home Assistant
 
 - https://www.home-assistant.io/integrations/google_assistant/
-- Show Alert script
 - Health Automations - wait_for template
+- Fix return trigger happening while still on street
+- Delay Headspace
+- Delay Peloton (wait for 10 minute window)
 - Standardize audio_video, quotidian, and companion_devices
 - UPS: Shut down Pi/Docker
 - Automated meditation
@@ -108,10 +110,6 @@ Keys should be sorted in the order specified in the .sort-order\*.yaml files.
   - Disable morning blinds if earlier than sunrise
 - Reduce phone use
 - Morse code service
-- Fix return trigger happening while still on street
-- Delay Headspace
-- Delay Peloton (wait for 10 minute window)
-- Latest location triggers
 
 ### Miscellaneous
 
