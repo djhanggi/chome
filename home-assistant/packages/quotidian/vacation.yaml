@@ -18,8 +18,8 @@ script:
         target:
           entity_id:
             - input_boolean.open_blinds_in_morning
-            - automation.away
-            - automation.return
+            - automation.presence_leave
+            - automation.presence_return
             - automation.morning
             - automation.daytime
             - automation.evening
@@ -29,7 +29,7 @@ script:
         then:
           - service: automation.trigger
             target:
-              entity_id: automation.away
+              entity_id: automation.presence_leave
       - service: homeassistant.turn_off
         target:
           entity_id:

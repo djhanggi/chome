@@ -1,17 +1,17 @@
 ---
 homeassistant:
   customize:
-    automation.away:
+    automation.presence_eave:
       icon: mdi:location-exit
-    automation.return:
+    automation.presence_return:
       icon: mdi:location-enter
-    scene.away_return_scene:
-      friendly_name: Away - Return Scene
+    scene.presence_return_scene:
+      friendly_name: Presence - Return Scene
       icon: mdi:location-enter
 
 automation:
-  - id: away
-    alias: Away
+  - id: presence_leave
+    alias: Presence - Leave
     mode: single
     trigger:
       - id: presence
@@ -36,7 +36,7 @@ automation:
         then:
           - service: scene.create
             data:
-              scene_id: away_return_scene
+              scene_id: presence_return_scene
               snapshot_entities:
                 "{{ light_entities + other_snapshot_entities }}"
       - service: scene.apply
@@ -56,8 +56,8 @@ automation:
           - service: media_player.media_pause
             target:
               entity_id: media_player.spotify_djhanggi
-  - id: return
-    alias: Return
+  - id: presence_return
+    alias: Presence - Return
     mode: single
     trigger:
       - platform: state
@@ -65,7 +65,7 @@ automation:
         from: not_home
         to: home
     action:
-      - scene: scene.away_return_scene
+      - scene: scene.presence_return_scene
       - if:
           - '{{ is_state("sensor.phase_of_day", "Evening") }}'
         then:
@@ -74,7 +74,7 @@ automation:
               entity_id: automation.evening
       - service: scene.create
         data:
-          scene_id: away_return_scene
+          scene_id: presence_return_scene
           entities:
-            automation.return:
+            automation.presence_return:
               state: "on"

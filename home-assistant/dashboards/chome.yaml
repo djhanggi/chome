@@ -323,8 +323,8 @@ views:
           - entity: automation.evening
       - type: entities
         entities:
-          - entity: automation.away
-          - entity: automation.return
+          - entity: automation.presence_leave
+          - entity: automation.presence_return
       - type: entities
         entities:
           - entity: automation.presence_bathroom_lights
