@@ -3,7 +3,19 @@ template:
   - sensor:
       - unique_id: latest_location
         name: Latest Location
-        state: "{{ states('states.latest_locations') | from_json | last }}"
+        state: |
+          {% set current_location = states("sensor.latest_location") %}
+          {% if trigger.from_state.state == "unknown" or new_locations == "unknown" %}
+            unknown
+          {% else %}
+            {% set old_locations = trigger.from_state.state | from_json %}
+            {% set new_locations = trigger.to_state.state | from_json %}
+            {% if old_locations == new_locations + [current_location] %}
+              {{ current_location }}
+            {% else %}
+              {{ new_locations | last }}
+            {% endif %}
+          {% endif %}
     trigger:
       - platform: state
         entity_id: sensor.latest_locations
@@ -11,7 +23,8 @@ template:
       - unique_id: latest_locations
         name: Latest Locations
         state: |
-          {% set locations = states("sensor.latest_locations") | from_json %}
+          {% set locations = states("sensor.latest_locations") %}
+          {% set locations = [] if locations == "unknown" else locations | from_json %}
           {% if trigger_id == "reset" %}
             {% set locations = [] %}
           {% endif %}
@@ -22,7 +35,7 @@ template:
             {% set locations = ["living_room"] %}
           {% endif %}
           {% if trigger_id == "enter_kitchen" %}
-            {% set locations = locations + ["kitchen"] %}
+            {% set locations = locations + ["living_room", "kitchen"] %}
           {% endif %}
           {% if trigger_id == "leave_kitchen" and "kitchen" in locations %}
             {% set _ = locations.pop(locations.index("kitchen")) %}
@@ -34,17 +47,25 @@ template:
             {% set _ = locations.pop(locations.index("bathroom")) %}
           {% endif %}
           {% if trigger_id == "desk_chair" %}
-            {% set locations = locations + ["desk_chair"] %}
+            {% set locations = locations + ["living_room", "desk_chair"] %}
           {% elif "desk_chair" in locations %}
             {% set _ = locations.pop(locations.index("desk_chair")) %}
           {% endif %}
           {% if trigger_id == "bedroom_button" %}
+            {% if "living_room" in locations %}
+              {% set _ = locations.pop(locations.index("living_room")) %}
+            {% endif %}
             {% set locations = locations + ["bedroom"] %}
-          {% elif locations "bedroom" in locations %}
+          {% elif "bedroom" in locations %}
             {% set _ = locations.pop(locations.index("bedroom")) %}
           {% endif %}
-          {{ locations | unique | list | to_json }}
+          {{ locations | reverse | unique | reverse | list | to_json }}
     trigger:
+      - variables:
+          trigger_id: reset
+        platform: state
+        entity_id: sensor.latest_locations
+        to: unknown
       - variables:
           trigger_id: reset
         platform: homeassistant
@@ -60,7 +81,7 @@ template:
         entity_id: person.djhanggi
         to: not_home
         for:
-          minutes: 2
+          seconds: 90
       - variables:
           trigger_id: enter_kitchen
         platform: state
@@ -72,7 +93,7 @@ template:
         entity_id: binary_sensor.aqara_motion_kitchen
         to: "off"
         for:
-          minutes: 5
+          seconds: 90
       - variables:
           trigger_id: enter_bathroom
         platform: state
@@ -84,7 +105,7 @@ template:
         entity_id: binary_sensor.aqara_motion_bathroom
         to: "off"
         for:
-          minutes: 5
+          seconds: 90
       - variables:
           trigger_id: desk_chair
         platform: state

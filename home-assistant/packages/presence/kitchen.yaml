@@ -15,7 +15,11 @@ automation:
         to: kitchen
       - id: clear
         platform: template
-        value_template: "{{ not 'kitchen' in states('sensor.latest_locations') | from_json }}"
+        value_template: |
+          {{ not (
+            is_state("sensor.latest_location", "kitchen") 
+            or 'kitchen' in states('sensor.latest_locations') | from_json) 
+          }}
     action:
       - service: |
           {% set is_evening = is_state("sensor.phase_of_day", "Evening") %}
