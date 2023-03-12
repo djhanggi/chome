@@ -1,37 +1,37 @@
 ---
 homeassistant:
   customize:
-    automation.living_room_ac_sync_state:
+    automation.climate_living_room_ac_sync_state:
       icon: mdi:air-conditioner
-    switch.living_room_ac:
-      friendly_name: Living Room AC - Switch
+    switch.climate_living_room_ac:
+      friendly_name: Climate - Living Room AC - Switch
       icon: mdi:air-conditioner
 
 logbook:
   exclude:
     entities:
-      - input_boolean.living_room_ac_power
-      - input_number.living_room_ac_temperature
-      - script.living_room_ac_send_command
-      - script.living_room_ac_toggle_state
-      - switch.living_room_ac
+      - input_boolean.climate_living_room_ac_power
+      - input_number.climate_living_room_ac_temperature
+      - script.climate_living_room_ac_send_command
+      - script.climate_living_room_ac_toggle_state
+      - switch.climate_living_room_ac
 
 input_boolean:
-  living_room_ac_power:
-    name: Living Room AC - Power
+  climate_living_room_ac_power:
+    name: Climate - Living Room AC - Power
     icon: mdi:air-conditioner
 
 input_number:
-  living_room_ac_temperature:
-    name: Living Room AC - Temperature
+  climate_living_room_ac_temperature:
+    name: Climate - Living Room AC - Temperature
     icon: mdi:thermometer
     min: 60
     max: 90
     step: 1
 
 input_select:
-  living_room_ac_mode:
-    name: Living Room AC - Mode
+  climate_living_room_ac_mode:
+    name: Climate - Living Room AC - Mode
     icon: mdi:air-conditioner
     options:
       - Cool
@@ -39,18 +39,18 @@ input_select:
       - Fan Only
 
 script:
-  living_room_ac_correct_power:
-    alias: Living Room AC - Correct Power
+  climate_living_room_ac_correct_power:
+    alias: Climate - Living Room AC - Correct Power
     icon: mdi:power
     mode: single
     sequence:
       - wait_template:
-          '{{ is_state("script.living_room_ac_send_command", "off") }}'
-      - service: script.living_room_ac_send_command
+          '{{ is_state("script.climate_living_room_ac_send_command", "off") }}'
+      - service: script.climate_living_room_ac_send_command
         data:
           command: toggle_power
-  living_room_ac_send_command:
-    alias: Living Room AC - Send Commmand
+  climate_living_room_ac_send_command:
+    alias: Climate - Living Room AC - Send Commmand
     description: |
       Sends a command to the Living Room AC, particularly to manage atomicity.
       Options include:
@@ -73,8 +73,8 @@ script:
       # Delay to allow time for the AC to process the command.
       - delay:
           milliseconds: 750
-  living_room_ac_toggle_state:
-    alias: Living Room AC - Toggle State
+  climate_living_room_ac_toggle_state:
+    alias: Climate - Living Room AC - Toggle State
     icon: mdi:air-conditioner
     mode: queued
     fields:
@@ -90,29 +90,29 @@ script:
         then:
           - stop: command was not specified
       - wait_template:
-          '{{ is_state("script.living_room_ac_send_command", "off") }}'
+          '{{ is_state("script.climate_living_room_ac_send_command", "off") }}'
       - wait_template:
-          '{{ is_state("script.living_room_ac_correct_power", "off") }}'
+          '{{ is_state("script.climate_living_room_ac_correct_power", "off") }}'
       - variables:
           current_temperature:
-            '{{ states("input_number.living_room_ac_temperature") | int }}'
+            '{{ states("input_number.climate_living_room_ac_temperature") | int }}'
           target_temperature:
-            '{{ state_attr("climate.living_room_ac", "temperature") | int }}'
+            '{{ state_attr("climate.climate_living_room_ac", "temperature") | int }}'
       - choose:
           - conditions: "{{ command == 'toggle_power' }}"
             sequence:
-              - service: script.living_room_ac_send_command
+              - service: script.climate_living_room_ac_send_command
                 data:
                   command: PowerToggle
               - service: input_boolean.toggle
                 target:
-                  entity_id: input_boolean.living_room_ac_power
+                  entity_id: input_boolean.climate_living_room_ac_power
           - conditions: '{{ command == "sync_temperature" }}'
             sequence:
-              - entity_id: input_boolean.living_room_ac_power
+              - entity_id: input_boolean.climate_living_room_ac_power
                 condition: state
                 state: "on"
-              - entity_id: input_select.living_room_ac_mode
+              - entity_id: input_select.climate_living_room_ac_mode
                 condition: state
                 state:
                   - Cool
@@ -121,7 +121,7 @@ script:
                   increase_temperature:
                     "{{ target_temperature > current_temperature }}"
               - condition: "{{ target_temperature != current_temperature }}"
-              - service: script.living_room_ac_send_command
+              - service: script.climate_living_room_ac_send_command
                 data:
                   command:
                     '{{ "TempHotter" if increase_temperature else "TempCooler"
@@ -130,13 +130,13 @@ script:
                   '{{ "input_number.increment" if increase_temperature else
                   "input_number.decrement" }}'
                 target:
-                  entity_id: input_number.living_room_ac_temperature
+                  entity_id: input_number.climate_living_room_ac_temperature
       - if: '{{ command == "toggle_power" or command == "sync_mode" }}'
         then:
-          - entity_id: input_boolean.living_room_ac_power
+          - entity_id: input_boolean.climate_living_room_ac_power
             condition: state
             state: "on"
-          - service: script.living_room_ac_send_command
+          - service: script.climate_living_room_ac_send_command
             data:
               command: |
                 {% set MODES = {
@@ -144,13 +144,13 @@ script:
                 "Money Saver": "MoneySaverMode",
                 "Fan Only": "FanMode",
                 } %}
-                {{ MODES[states("input_select.living_room_ac_mode")] | default("Cool")  }}
+                {{ MODES[states("input_select.climate_living_room_ac_mode")] | default("Cool")  }}
       - if:
           - "{{ target_temperature != current_temperature }}"
-          - entity_id: input_boolean.living_room_ac_power
+          - entity_id: input_boolean.climate_living_room_ac_power
             condition: state
             state: "on"
-          - entity_id: input_select.living_room_ac_mode
+          - entity_id: input_select.climate_living_room_ac_mode
             condition: state
             state:
               - Cool
@@ -161,27 +161,27 @@ script:
               variables:
                 command: sync_temperature
             target:
-              entity_id: script.living_room_ac_toggle_state
+              entity_id: script.climate_living_room_ac_toggle_state
     max: 5
 
 automation:
-  - id: living_room_ac_sync_state
-    alias: Living Room AC - Sync State
+  - id: climate_living_room_ac_sync_state
+    alias: Climate - Living Room AC - Sync State
     mode: queued
     trigger:
       - id: temperature
-        entity_id: climate.living_room_ac
+        entity_id: climate.climate_living_room_ac
         platform: state
         attribute: temperature
       - id: mode
-        entity_id: input_select.living_room_ac_mode
+        entity_id: input_select.climate_living_room_ac_mode
         platform: state
     condition:
-      - entity_id: climate.living_room_ac
+      - entity_id: climate.climate_living_room_ac
         condition: state
         state: cool
     action:
-      - service: script.living_room_ac_toggle_state
+      - service: script.climate_living_room_ac_toggle_state
         data:
           command: |
             {% if trigger.id == "temperature" %}
@@ -193,31 +193,31 @@ automation:
 switch:
   - platform: template
     switches:
-      living_room_ac:
+      climate_living_room_ac:
         turn_off:
-          - entity_id: input_boolean.living_room_ac_power
+          - entity_id: input_boolean.climate_living_room_ac_power
             condition: state
             state: "on"
-          - service: script.living_room_ac_toggle_state
+          - service: script.climate_living_room_ac_toggle_state
             data:
               command: toggle_power
         turn_on:
-          - entity_id: input_boolean.living_room_ac_power
+          - entity_id: input_boolean.climate_living_room_ac_power
             condition: state
             state: "off"
-          - service: script.living_room_ac_toggle_state
+          - service: script.climate_living_room_ac_toggle_state
             data:
               command: toggle_power
         value_template: |
-          {{ is_state("input_boolean.living_room_ac_power", "on") }}
+          {{ is_state("input_boolean.climate_living_room_ac_power", "on") }}
 
 climate:
-  - unique_id: living_room_ac
+  - unique_id: climate_living_room_ac
     name: Living Room AC
     platform: generic_thermostat
     ac_mode: true
     cold_tolerance: 1
-    heater: switch.living_room_ac
+    heater: switch.climate_living_room_ac
     hot_tolerance: 1
     initial_hvac_mode: "off"
     max_temp: 90
@@ -225,4 +225,4 @@ climate:
       minutes: 2
     min_temp: 60
     precision: 1
-    target_sensor: sensor.sonoff_temperature_living_room_temperature
+    target_sensor: sensor.sonoff_temperature_climate_living_room_temperature

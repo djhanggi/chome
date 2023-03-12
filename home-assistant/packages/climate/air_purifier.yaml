@@ -1,12 +1,12 @@
 ---
 homeassistant:
   customize:
-    automation.purify_bedroom_air:
+    automation.climate_air_purifier:
       icon: mdi:air-filter
 
 automation:
-  - id: purify_bedroom_air
-    alias: Purify Bedroom Air
+  - id: climate_air_purifier
+    alias: Climate - Air Purifier
     mode: queued
     trigger:
       - id: air_quality_change

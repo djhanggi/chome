@@ -2,38 +2,38 @@
 logbook:
   exclude:
     entities:
-      - input_boolean.dyson_fan_power
-      - input_boolean.dyson_fan_oscillating
-      - input_number.dyson_fan_speed
-      - input_number.dyson_fan_target_speed
-      - script.dyson_fan_send_command
-      - script.dyson_fan_toggle_state
+      - input_boolean.climate_dyson_fan_power
+      - input_boolean.climate_dyson_fan_oscillating
+      - input_number.climate_dyson_fan_speed
+      - input_number.climate_dyson_fan_target_speed
+      - script.climate_dyson_fan_send_command
+      - script.climate_dyson_fan_toggle_state
 
 input_boolean:
-  dyson_fan_oscillating:
-    name: Dyson Fan - Oscillating
+  climate_dyson_fan_oscillating:
+    name: Climate - Dyson Fan - Oscillating
     icon: mdi:fan
-  dyson_fan_power:
-    name: Dyson Fan - Power
+  climate_dyson_fan_power:
+    name: Climate - Dyson Fan - Power
     icon: mdi:fan
 
 input_number:
-  dyson_fan_speed:
-    name: Dyson Fan - Speed
+  climate_dyson_fan_speed:
+    name: Climate - Dyson Fan - Speed
     icon: mdi:fan
     min: 1
     max: 10
     step: 1
-  dyson_fan_target_speed:
-    name: Dyson Fan - Target Speed
+  climate_dyson_fan_target_speed:
+    name: Climate - Dyson Fan - Target Speed
     icon: mdi:fan
     min: 1
     max: 10
     step: 1
 
 script:
-  dyson_fan_send_command:
-    alias: Dyson Fan - Send Command
+  climate_dyson_fan_send_command:
+    alias: Climate - Dyson Fan - Send Command
     description:
       Sends a command to the Dyson Fan, particularly to manage atomicity.
     icon: mdi:fan
@@ -42,20 +42,20 @@ script:
       - service: remote.send_command
         data:
           command: "{{ command }}"
-          device: !secret harmony_dyson_fan_device_id
+          device: !secret harmony_climate_dyson_fan_device_id
         target:
           entity_id: remote.harmony
-  dyson_fan_correct_power:
-    alias: Dyson Fan - Correct Power
+  climate_dyson_fan_correct_power:
+    alias: Climate - Dyson Fan - Correct Power
     icon: mdi:fan-alert
     mode: single
     sequence:
-      - wait_template: '{{ is_state("script.dyson_fan_send_command", "off") }}'
-      - service: script.dyson_fan_send_command
+      - wait_template: '{{ is_state("script.climate_dyson_fan_send_command", "off") }}'
+      - service: script.climate_dyson_fan_send_command
         data:
           command: PowerToggle
-  dyson_fan_toggle_state:
-    alias: Dyson Fan - Toggle State
+  climate_dyson_fan_toggle_state:
+    alias: Climate - Dyson Fan - Toggle State
     icon: mdi:fan
     mode: queued
     fields:
@@ -70,44 +70,44 @@ script:
           - "{{ command is undefined }}"
         then:
           - stop: command was not specified
-      - wait_template: '{{ is_state("script.dyson_fan_send_command", "off") }}'
-      - wait_template: '{{ is_state("script.dyson_fan_correct_power", "off") }}'
+      - wait_template: '{{ is_state("script.climate_dyson_fan_send_command", "off") }}'
+      - wait_template: '{{ is_state("script.climate_dyson_fan_correct_power", "off") }}'
       - variables:
-          current_speed: '{{ states("input_number.dyson_fan_speed") | int }}'
+          current_speed: '{{ states("input_number.climate_dyson_fan_speed") | int }}'
           target_speed:
-            '{{ states("input_number.dyson_fan_target_speed") | int }}'
+            '{{ states("input_number.climate_dyson_fan_target_speed") | int }}'
       - choose:
           - conditions:
               - '{{ command == "toggle_power" }}'
             sequence:
-              - service: script.dyson_fan_send_command
+              - service: script.climate_dyson_fan_send_command
                 data:
                   command: PowerToggle
               - service: input_boolean.toggle
                 target:
-                  entity_id: input_boolean.dyson_fan_power
+                  entity_id: input_boolean.climate_dyson_fan_power
           - conditions:
               - '{{ command == "toggle_oscillate" }}'
             sequence:
-              - entity_id: input_boolean.dyson_fan_power
+              - entity_id: input_boolean.climate_dyson_fan_power
                 condition: state
                 state: "on"
-              - service: script.dyson_fan_send_command
+              - service: script.climate_dyson_fan_send_command
                 data:
                   command: Oscillate
               - service: input_boolean.toggle
                 target:
-                  entity_id: input_boolean.dyson_fan_oscillating
+                  entity_id: input_boolean.climate_dyson_fan_oscillating
           - conditions:
               - '{{ command == "sync_speed" }}'
             sequence:
-              - entity_id: input_boolean.dyson_fan_power
+              - entity_id: input_boolean.climate_dyson_fan_power
                 condition: state
                 state: "on"
               - variables:
                   increase_speed: "{{ target_speed > current_speed }}"
               - condition: "{{ target_speed != current_speed }}"
-              - service: script.dyson_fan_send_command
+              - service: script.climate_dyson_fan_send_command
                 data:
                   command:
                     '{{ "FanModeUp" if increase_speed else "FanModeDown" }}'
@@ -115,11 +115,11 @@ script:
                   '{{ "input_number.increment" if increase_speed else
                   "input_number.decrement" }}'
                 target:
-                  entity_id: input_number.dyson_fan_speed
+                  entity_id: input_number.climate_dyson_fan_speed
       - if:
           - "{{ target_speed != current_speed }}"
           - condition: state
-            entity_id: input_boolean.dyson_fan_power
+            entity_id: input_boolean.climate_dyson_fan_power
             state: "on"
         then:
           - service: script.turn_on
@@ -127,42 +127,42 @@ script:
               variables:
                 command: sync_speed
             target:
-              entity_id: script.dyson_fan_toggle_state
+              entity_id: script.climate_dyson_fan_toggle_state
     max: 5
 
 fan:
   - platform: template
     fans:
-      dyson_fan:
-        unique_id: fan.dyson_fan
+      climate_dyson_fan:
+        unique_id: fan.climate_dyson_fan
         friendly_name: Dyson Fan
         value_template: |
-          {{ states("input_boolean.dyson_fan_power") }}
+          {{ states("input_boolean.climate_dyson_fan_power") }}
         oscillating_template: |
-          {{ is_state("input_boolean.dyson_fan_oscillating", "on") }}
+          {{ is_state("input_boolean.climate_dyson_fan_oscillating", "on") }}
         percentage_template: |
-          {{ states("input_number.dyson_fan_target_speed") | int * 10 }}
+          {{ states("input_number.climate_dyson_fan_target_speed") | int * 10 }}
         turn_on:
-          - entity_id: input_boolean.dyson_fan_power
+          - entity_id: input_boolean.climate_dyson_fan_power
             condition: state
             state: "off"
-          - service: script.dyson_fan_toggle_state
+          - service: script.climate_dyson_fan_toggle_state
             data:
               command: toggle_power
         turn_off:
-          - entity_id: input_boolean.dyson_fan_power
+          - entity_id: input_boolean.climate_dyson_fan_power
             condition: state
             state: "on"
-          - service: script.dyson_fan_toggle_state
+          - service: script.climate_dyson_fan_toggle_state
             data:
               command: toggle_power
           - service: input_boolean.turn_off
             target:
-              entity_id: input_boolean.dyson_fan_oscillating
+              entity_id: input_boolean.climate_dyson_fan_oscillating
         set_oscillating:
           - condition: |
-              {{ states("input_boolean.dyson_fan_oscillating") != oscillating }}
-          - service: script.dyson_fan_toggle_state
+              {{ states("input_boolean.climate_dyson_fan_oscillating") != oscillating }}
+          - service: script.climate_dyson_fan_toggle_state
             data:
               command: toggle_oscillate
         speed_count: 10
@@ -175,10 +175,10 @@ fan:
             data:
               value: "{{ target_speed }}"
             target:
-              entity_id: input_number.dyson_fan_target_speed
+              entity_id: input_number.climate_dyson_fan_target_speed
           - service: script.turn_on
             data:
               variables:
                 command: sync_speed
             target:
-              entity_id: script.dyson_fan_toggle_state
+              entity_id: script.climate_dyson_fan_toggle_state
