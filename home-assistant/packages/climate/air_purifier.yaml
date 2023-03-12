@@ -19,12 +19,20 @@ automation:
       - entity_id: fan.levoit_air_purifier
         platform: state
         to: "on"
-      - entity_id: sensor.levoit_air_purifier_air_quality
+      - id: aqi
+        entity_id: sensor.levoit_air_purifier_air_quality
         platform: state
     condition:
       - entity_id: person.djhanggi
         condition: state
         state: home
+      - condition: template
+        value_template: |
+          {% set last_trigger_time = state_attr("automation.air_purifier", "last_triggered") | default(0) %}
+          {{ 
+            trigger.id != "aqi" or 
+            ((now() | as_timestamp) - (last_trigger_time | as_timestamp)) > 5 * 60 
+          }}
     action:
       - variables:
           percentage: |

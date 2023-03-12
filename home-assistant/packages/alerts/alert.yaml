@@ -89,7 +89,7 @@ script:
                         data:
                           tag: "{{ tag }}"
                           ttl: "{{ ttl | default(0) }}"
-                          timeout: "{{ timeout | default(60 * 60 * 24)}}"
+                          timeout: "{{ timeout | default(24 * 60 * 60)}}"
                           actions:
                             - action: "{{ ack_id | default('') }}"
                               title: "Acknowledge"
