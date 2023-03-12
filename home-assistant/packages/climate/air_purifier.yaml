@@ -4,6 +4,11 @@ homeassistant:
     automation.air_purifier:
       icon: mdi:air-filter
 
+logbook:
+  exclude:
+    entities:
+      - automation.air_purifier
+
 automation:
   - id: air_purifier
     alias: Air Purifier
