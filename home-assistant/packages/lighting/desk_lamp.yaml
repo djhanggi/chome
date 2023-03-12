@@ -40,6 +40,9 @@ automation:
           - timer.cancelled
         event_data:
           entity_id: timer.desk_lamp_timer
+      - id: desk_lamp_used_today
+        platform: state
+        entity_id: binary_sensor.desk_lamp_used_today
     condition:
       - condition: state
         entity_id: sensor.phase_of_day
@@ -99,6 +102,15 @@ template:
         to:
           - Morning
           - Daytime
+      - id: lamp_turned_on
+        platform: state
+        entity_id: switch.desk_lamp
+        to: "on"
+      - id: timer_started
+        platform: event
+        event_type: timer.start
+        event_data:
+          entity_id: timer.desk_lamp_timer
       - id: timer_ended
         platform: event
         event_type: timer.finished
