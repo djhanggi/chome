@@ -9,13 +9,23 @@ automation:
     alias: Presence - Kitchen
     mode: queued
     trigger:
-      - platform: state
+      - id: enter
+        platform: state
         entity_id: binary_sensor.location_in_kitchen
+        to: "on"
+      - id: clear
+        platform: state
+        entity_id: binary_sensor.location_in_kitchen
+        to: "off"
+    condition:
+      - condition: or
+        conditions:
+          - '{{ trigger.id == "enter" and is_state("input_boolean.is_sleeping",
+            "off") }}'
+          - '{{ trigger.id == "clear" }}'
     action:
       - service: |
-          {% set in_kitchen = is_state("binary_sensor.location_in_kitchen", "on") %}
-          {% set is_daytime = is_state("sensor.phase_of_day", "Daytime") %}
-          {% if in_kitchen and is_daytime %}
+          {% if trigger.id == "enter" %}
             switch.turn_on
           {% else %}
             switch.turn_off
