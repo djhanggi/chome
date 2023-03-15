@@ -81,12 +81,11 @@ script:
             - BACK
             # Filter by Flow classes
             - DOWN
+            - DOWN
             - CENTER
             - CENTER
             - BACK
             # Filter by Not Taken
-            - DOWN
-            - DOWN
             - DOWN
             - DOWN
             - DOWN

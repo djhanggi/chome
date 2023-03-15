@@ -32,7 +32,9 @@ script:
           {% set awake = is_state("input_boolean.is_sleeping", "off") %}
           {% set bypass_calendar = bypass_calendar | default(false) %}
           {% set in_event = is_state("calendar.daniel_hanggi_braze_com", "on") %}
-          {% set next_start = state_attr("calendar.daniel_hanggi_braze_com", "start_time") %}
+          {% set next_start = 
+              state_attr("calendar.daniel_hanggi_braze_com", "start_time") | as_datetime | as_local 
+          %}
           {% set available_window_minutes = (as_timestamp(next_start) - as_timestamp(now())) / 60 %}
           {% set window_minutes = window_minutes | default(15) %}
           {{ 
@@ -41,5 +43,5 @@ script:
             ) 
           }}
       - delay:
-          seconds: 90
+          seconds: 15
       - service: "{{ script }}"
