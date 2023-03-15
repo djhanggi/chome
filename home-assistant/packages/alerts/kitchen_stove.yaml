@@ -16,7 +16,7 @@ sensor:
     unit_time: min
   - platform: history_stats
     name: Kitchen Presence Last 30 Minutes
-    entity_id: binary_sensor.aqara_motion_kitchen
+    entity_id: binary_sensor.location_in_kitchen
     state: "on"
     type: count
     end: "{{ now() }}"
