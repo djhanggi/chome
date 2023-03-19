@@ -9,26 +9,20 @@ automation:
     alias: Presence - Bathroom
     mode: queued
     trigger:
-      - id: enter
-        platform: state
-        entity_id: binary_sensor.location_in_bathroom
-        to: "on"
-      - id: clear
-        platform: state
+      - platform: template
+        template: |
+          {{ 
+            is_state("binary_sensor.location_in_bathroom", "on") and 
+            not is_state("input_boolean.phase_of_day", "Sleeping")
+          }}
+        variables:
+          service: light.turn_on
+      - platform: state
         entity_id: binary_sensor.location_in_bathroom
         to: "off"
-    condition:
-      - condition: or
-        conditions:
-          - '{{ trigger.id == "enter" and not is_state("sensor.phase_of_day",
-            "Sleeping")}}'
-          - '{{ trigger.id == "clear" }}'
+        variables: 
+          service: light.turn_off
     action:
-      - service: |
-          {% if trigger.id == "enter" %}
-            light.turn_on
-          {% else %}
-            light.turn_off
-          {% endif %}
+      - service: '{{ service }}'
         target:
           entity_id: light.bathroom_lights
