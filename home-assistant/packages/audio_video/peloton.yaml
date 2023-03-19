@@ -79,10 +79,11 @@ script:
             - DOWN
             - CENTER
             - BACK
-            # Filter by Flow classes
+            # Navigate to Type
             - DOWN
             - DOWN
             - CENTER
+            # Filter by Flow classes
             - CENTER
             - BACK
             # Filter by Not Taken
@@ -106,9 +107,9 @@ script:
           for_each:
             # Go back to class page
             - BACK
-            # Select first class
+            # Go down, select, and play third or so class (in case a live one is running)
+            - DOWN
             - CENTER
-            # Play first class
             - CENTER
 
 automation:
