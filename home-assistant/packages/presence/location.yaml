@@ -26,75 +26,60 @@ template:
         state: |
           {{ 
             is_state('sensor.latest_location', 'Living Room') or
-            is_state('sensor.latest_location', 'Desk Chair') or (
-              is_state('sensor.latest_location', 'Unknown') and
-              is_state('binary_sensor.location_in_living_room', "on")
-            )
+            is_state('sensor.latest_location', 'Desk Chair')
           }}
   - binary_sensor:
       - unique_id: location_at_desk_chair
         name: Location - At Desk Chair
         state: |
           {{ 
-            is_state('sensor.latest_location', 'Desk Chair') or (
-              is_state('sensor.latest_location', 'Unknown') and
-              is_state('binary_sensor.location_at_desk_chair', "on")
-            )
+            is_state('sensor.latest_location', 'Desk Chair') or
+            is_state('binary_sensor.aqara_vibration_desk_chair', 'on')
           }}
   - binary_sensor:
       - unique_id: location_in_kitchen
         name: Location - In Kitchen
         state: |
           {{ 
-            is_state('binary_sensor.aqara_motion_kitchen', 'on') or
-            is_state('sensor.latest_location', 'Kitchen') or (
-              is_state('sensor.latest_location', 'Unknown') and
-              is_state('binary_sensor.location_in_kitchen', "on")
-            )
+            is_state('sensor.latest_location', 'Kitchen') or
+            is_state('binary_sensor.aqara_motion_kitchen', 'on')
           }}
   - binary_sensor:
       - unique_id: location_in_bathroom
         name: Location - In Bathroom
         state: |
           {{ 
-            is_state('binary_sensor.aqara_motion_bathroom', 'on') or
-            is_state('sensor.latest_location', 'Bathroom') or (
-              is_state('sensor.latest_location', 'Unknown') and
-              is_state('binary_sensor.location_in_bathroom', "on")
-            )
+            is_state('sensor.latest_location', 'Bathroom') or
+            is_state('binary_sensor.aqara_motion_bathroom', 'on')
           }}
   - binary_sensor:
       - unique_id: location_in_bedroom
         name: Location - In Bedroom
         state: |
-          {{ is_state('sensor.latest_location', 'Bedroom') or (
-              is_state('sensor.latest_location', 'Unknown') and
-              is_state('binary_sensor.location_in_bedroom', "on")
-            )
+          {{ 
+            is_state('sensor.latest_location', 'Bedroom')
           }}
   - sensor:
       - unique_id: latest_location
         name: Latest Location
         state: |
           {% set location = states("sensor.latest_location") %}
-          {% if trigger_id == "return_home" and location == "Away" %}
-            Unknown
-          {% elif trigger_id == "leave_home" %}
-            Away
+          {% if trigger_id == "desk_chair" %}
+            Desk Chair
           {% elif trigger_id == "enter_kitchen" %}
             Kitchen
-          {% elif trigger_id == "clear_kitchen" and location == "Kitchen" %}
-            Unknown
           {% elif trigger_id == "enter_bathroom" %}
             Bathroom
-          {% elif trigger_id == "clear_bathroom" and location == "Bathroom" %}
-            Unknown
-          {% elif trigger_id == "desk_chair" %}
-            Desk Chair
-          {% elif trigger_id == "clear_desk_chair" and location == "Desk Chair" %}
-            Unknown
           {% elif trigger_id == "bedroom_button" %}
             Bedroom
+          {% 
+            elif 
+              trigger_id == "reset" or
+              trigger_id == "leave_home" or
+              trigger_id == "clear_kitchen" and location == "Kitchen" or
+              trigger_id == "clear_bathroom" and location == "Bathroom"
+          %}
+            Unknown
           {% else %}
             {{ location }}
           {% endif %}
@@ -103,11 +88,6 @@ template:
           trigger_id: reset
         platform: homeassistant
         event: start
-      - variables:
-          trigger_id: return_home
-        platform: state
-        entity_id: person.djhaggi
-        to: home
       - variables:
           trigger_id: leave_home
         platform: state
@@ -126,7 +106,7 @@ template:
         entity_id: binary_sensor.aqara_motion_kitchen
         to: "off"
         for:
-          seconds: 90
+          seconds: '{{ max(65, states("number.aqara_motion_kitchen_duration") | int) }}'
       - variables:
           trigger_id: enter_bathroom
         platform: state
@@ -138,19 +118,12 @@ template:
         entity_id: binary_sensor.aqara_motion_bathroom
         to: "off"
         for:
-          seconds: 90
+          seconds: '{{ max(65, states("number.aqara_motion_bathroom_duration") | int) }}'
       - variables:
           trigger_id: desk_chair
         platform: state
         entity_id: binary_sensor.aqara_vibration_desk_chair
         to: "on"
-      - variables:
-          trigger_id: clear_desk_chair
-        platform: state
-        entity_id: binary_sensor.aqara_vibration_desk_chair
-        to: "off"
-        for:
-          seconds: 90
       - platform: event
         event_type: deconz_event
         variables:
