@@ -79,13 +79,15 @@ script:
             - DOWN
             - CENTER
             - BACK
+            - PAUSE # Wait while the filter menu gets hidden
             # Navigate to Type
-            - DOWN
-            - DOWN
+            - DOWN 
+            - DOWN 
             - CENTER
             # Filter by Flow classes
             - CENTER
             - BACK
+            - PAUSE # Wait while the filter menu gets hidden
             # Filter by Not Taken
             - DOWN
             - DOWN
