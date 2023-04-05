@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<TaskerData sr="" dvi="1" tv="5.14.6">
+<TaskerData sr="" dvi="1" tv="6.0.10">
   <Profile sr="prof2" ve="2">
     <cdate>1635128266982</cdate>
     <edate>1645452645478</edate>
@@ -19,22 +18,36 @@
       <Int sr="arg5" val="0" />
     </State>
   </Profile>
+  <Profile sr="prof8" ve="2">
+    <cdate>1680664820834</cdate>
+    <edate>1680665120364</edate>
+    <flags>10</flags>
+    <id>8</id>
+    <mid0>7</mid0>
+    <nme>headspace</nme>
+    <App sr="con0" ve="2">
+      <cls0>com.getsomeheadspace.android.splash.SplashActivity</cls0>
+      <flags>2</flags>
+      <label0>Headspace</label0>
+      <pkg0>com.getsomeheadspace.android</pkg0>
+    </App>
+  </Profile>
   <Project sr="proj0" ve="2">
     <cdate>1635128242675</cdate>
-    <mdate>1645409365969</mdate>
+    <mdate>1680665110591</mdate>
     <name>Base</name>
-    <pids>2,9</pids>
-    <tids>4,5,3,6,11</tids>
+    <pids>2,8</pids>
+    <tids>4,5,3,7</tids>
     <Img sr="icon" ve="2">
       <nme>mw_action_home</nme>
     </Img>
   </Project>
   <Task sr="task3">
     <cdate>1635457049025</cdate>
-    <edate>1645408693251</edate>
+    <edate>1680665432617</edate>
     <id>3</id>
     <nme>djhanggi-airpods-connect</nme>
-    <pri>7</pri>
+    <pri>100</pri>
     <Action sr="act0" ve="7">
       <code>294</code>
       <se>false</se>
@@ -44,7 +57,35 @@
       <code>340</code>
       <Bundle sr="arg0">
         <Vals sr="val">
-          <net.dinglisch.android.tasker.RELEVANT_VARIABLES>&lt;StringArray sr=""&gt;&lt;_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES0&gt;%bt_address Address Bluetooth device's MAC address&lt;/_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES0&gt;&lt;_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES1&gt;%bt_alias Alias Optional bluetooth device's user given name&lt;/_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES1&gt;&lt;_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES2&gt;%bt_battery_level Battery Level % of battery available, or not set if unavailable. (Android 9+)&lt;/_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES2&gt;&lt;_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES3&gt;%bt_class Class The device's bluetooth class ID&lt;/_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES3&gt;&lt;_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES4&gt;%bt_class_name Class Name The device's bluetooth class name&lt;/_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES4&gt;&lt;_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES5&gt;%bt_connected Connected true if the BT device is connected, false otherwise&lt;/_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES5&gt;&lt;_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES6&gt;%bt_encrypted Encrypted true if there is at least one encrypted connection to this device, false otherwise&lt;/_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES6&gt;&lt;_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES7&gt;%bt_major_class Major Class The device's major bluetooth class ID&lt;/_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES7&gt;&lt;_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES8&gt;%bt_major_class_name Major Class Name The device's major bluetooth class name&lt;/_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES8&gt;&lt;_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES9&gt;%bt_name Name Bluetooth device's name&lt;/_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES9&gt;&lt;_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES10&gt;%bt_paired Paired true if the BT device is paired with your phone, false otherwise&lt;/_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES10&gt;&lt;_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES11&gt;%bt_signal_strength Signal Strength Strength of the connection in dBm. Only available for connected and scanned devices.&lt;/_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES11&gt;&lt;_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES12&gt;%bt_type Type Could be 'classic', 'le', 'dual' or 'unknown'&lt;/_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES12&gt;&lt;/StringArray&gt;</net.dinglisch.android.tasker.RELEVANT_VARIABLES>
+          <net.dinglisch.android.tasker.RELEVANT_VARIABLES> &lt;StringArray
+            sr=""&gt;&lt;_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES0&gt;%bt_address
+            Address Bluetooth device's MAC
+            address&lt;/_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES0&gt;&lt;_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES1&gt;%bt_alias
+            Alias Optional bluetooth device's user given
+            name&lt;/_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES1&gt;&lt;_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES2&gt;%bt_battery_level
+            Battery Level % of battery available, or not set if unavailable. (Android
+            9+)&lt;/_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES2&gt;&lt;_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES3&gt;%bt_class
+            Class The device's bluetooth class
+            ID&lt;/_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES3&gt;&lt;_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES4&gt;%bt_class_name
+            Class Name The device's bluetooth class
+            name&lt;/_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES4&gt;&lt;_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES5&gt;%bt_connected
+            Connected true if the BT device is connected, false
+            otherwise&lt;/_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES5&gt;&lt;_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES6&gt;%bt_encrypted
+            Encrypted true if there is at least one encrypted connection to this device, false
+            otherwise&lt;/_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES6&gt;&lt;_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES7&gt;%bt_major_class
+            Major Class The device's major bluetooth class
+            ID&lt;/_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES7&gt;&lt;_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES8&gt;%bt_major_class_name
+            Major Class Name The device's major bluetooth class
+            name&lt;/_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES8&gt;&lt;_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES9&gt;%bt_name
+            Name Bluetooth device's
+            name&lt;/_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES9&gt;&lt;_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES10&gt;%bt_paired
+            Paired true if the BT device is paired with your phone, false
+            otherwise&lt;/_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES10&gt;&lt;_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES11&gt;%bt_signal_strength
+            Signal Strength Strength of the connection in dBm. Only available for connected and
+            scanned
+            devices.&lt;/_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES11&gt;&lt;_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES12&gt;%bt_type
+            Type Could be 'classic', 'le', 'dual' or
+            'unknown'&lt;/_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES12&gt;&lt;/StringArray&gt;</net.dinglisch.android.tasker.RELEVANT_VARIABLES>
           <net.dinglisch.android.tasker.RELEVANT_VARIABLES-type>[Ljava.lang.String;</net.dinglisch.android.tasker.RELEVANT_VARIABLES-type>
         </Vals>
       </Bundle>
@@ -58,7 +99,7 @@
   </Task>
   <Task sr="task4">
     <cdate>1635128755600</cdate>
-    <edate>1645452692589</edate>
+    <edate>1680665351234</edate>
     <id>4</id>
     <nme>chome-vpn-on</nme>
     <pri>100</pri>
@@ -75,7 +116,7 @@
   </Task>
   <Task sr="task5">
     <cdate>1635128755600</cdate>
-    <edate>1645452663852</edate>
+    <edate>1680665353304</edate>
     <id>5</id>
     <nme>chome-vpn-off</nme>
     <pri>100</pri>
@@ -88,6 +129,56 @@
         </Vals>
       </Bundle>
       <Str sr="arg1" ve="3">WireGuardSetTunnel(false,chome)</Str>
+    </Action>
+  </Task>
+  <Task sr="task7">
+    <cdate>1680663919391</cdate>
+    <edate>1680665236544</edate>
+    <id>7</id>
+    <nme>play-headspace</nme>
+    <pri>100</pri>
+    <Action sr="act0" ve="7">
+      <code>30</code>
+      <Int sr="arg0" val="0" />
+      <Int sr="arg1" val="3" />
+      <Int sr="arg2" val="0" />
+      <Int sr="arg3" val="0" />
+      <Int sr="arg4" val="0" />
+    </Action>
+    <Action sr="act1" ve="7">
+      <code>985050481</code>
+      <Bundle sr="arg0">
+        <Vals sr="val">
+          <com.balda.meteotask.extra.INT_VERSION_CODE>99</com.balda.meteotask.extra.INT_VERSION_CODE>
+          <com.balda.meteotask.extra.INT_VERSION_CODE-type>java.lang.Integer</com.balda.meteotask.extra.INT_VERSION_CODE-type>
+          <com.balda.meteotask.extra.OPERATION>2</com.balda.meteotask.extra.OPERATION>
+          <com.balda.meteotask.extra.OPERATION-type>java.lang.Integer</com.balda.meteotask.extra.OPERATION-type>
+          <com.balda.touchtask.extra.SELECTION>550 1900</com.balda.touchtask.extra.SELECTION>
+          <com.balda.touchtask.extra.SELECTION-type>java.lang.String</com.balda.touchtask.extra.SELECTION-type>
+          <com.balda.touchtask.extra.SEL_METHOD>2</com.balda.touchtask.extra.SEL_METHOD>
+          <com.balda.touchtask.extra.SEL_METHOD-type>java.lang.Integer</com.balda.touchtask.extra.SEL_METHOD-type>
+          <com.balda.touchtask.extra.TAP_NUM>1</com.balda.touchtask.extra.TAP_NUM>
+          <com.balda.touchtask.extra.TAP_NUM-type>java.lang.String</com.balda.touchtask.extra.TAP_NUM-type>
+          <com.balda.touchtask.extra.TYPE>16</com.balda.touchtask.extra.TYPE>
+          <com.balda.touchtask.extra.TYPE-type>java.lang.Integer</com.balda.touchtask.extra.TYPE-type>
+          <com.balda.touchtask.extra.WAIT_REGEX>false</com.balda.touchtask.extra.WAIT_REGEX>
+          <com.balda.touchtask.extra.WAIT_REGEX-type>java.lang.Boolean</com.balda.touchtask.extra.WAIT_REGEX-type>
+          <com.twofortyfouram.locale.intent.extra.BLURB>Action: Tap Method: Point (x,y) Selection:
+            550 1900</com.twofortyfouram.locale.intent.extra.BLURB>
+          <com.twofortyfouram.locale.intent.extra.BLURB-type>java.lang.String</com.twofortyfouram.locale.intent.extra.BLURB-type>
+          <net.dinglisch.android.tasker.extras.VARIABLE_REPLACE_KEYS>com.balda.touchtask.extra.TAP_NUM
+            com.balda.touchtask.extra.SELECTION</net.dinglisch.android.tasker.extras.VARIABLE_REPLACE_KEYS>
+          <net.dinglisch.android.tasker.extras.VARIABLE_REPLACE_KEYS-type>java.lang.String
+          </net.dinglisch.android.tang.String
+          </net.dinglisch.andrKEYS-type>
+          <net.dinglisch.android.tasker.subbundled>true</net.dinglisch.android.tasker.subbundled>
+          <net.dinglisch.android.tasker.subbundled-type>java.lang.Boolean</net.dinglisch.android.tasker.subbundled-type>
+        </Vals>
+      </Bundle>
+      <Str sr="arg1" ve="3">com.balda.touchtask</Str>
+      <Str sr="arg2" ve="3">com.balda.touchtask.ui.FirePerformActions</Str>
+      <Int sr="arg3" val="30" />
+      <Int sr="arg4" val="1" />
     </Action>
   </Task>
 </TaskerData>
