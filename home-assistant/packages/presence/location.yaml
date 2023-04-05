@@ -26,7 +26,7 @@ template:
         state: |
           {{ 
             is_state('sensor.latest_location', 'Living Room') or
-            is_state('sensor.latest_location', 'Desk Chair')
+            is_state('binary_sensor.location_at_desk_chair', 'on')
           }}
   - binary_sensor:
       - unique_id: location_at_desk_chair
