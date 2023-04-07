@@ -113,6 +113,11 @@ script:
             - DOWN
             - CENTER
             - CENTER
+      - service: media_player.volume_set
+        target:
+          entity_id: media_player.cast_hoth
+        data:
+          volume_level: 0.40
 
 automation:
   - id: play_peloton_class
